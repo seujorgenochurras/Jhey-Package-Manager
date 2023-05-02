@@ -15,6 +15,18 @@ dependencies {
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
 }
 
+task fatJar(type: Jar, dependsOn: [':compileJava', ':processResources']) {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }}
+    from sourceSets.main.output.classesDirs
+    from sourceSets.main.output.resourcesDir
+    project.archivesBaseName = "CLI"
+    manifest {
+        attributes 'Implementation-Title': 'JPM',
+                'Implementation-Version': project.version,
+                'Main-Class': 'io.github.seujorgenochurras.Main'
+    }
+}
 test {
     useJUnitPlatform()
 }
