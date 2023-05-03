@@ -1,30 +1,38 @@
 package io.github.seujorgenochurras.command;
 
+import javax.naming.NameNotFoundException;
+import java.util.Objects;
+
 import static io.github.seujorgenochurras.command.CommandRegister.COMMANDS;
 
 public class CommandHandler {
 
    public static void handleCliText(String rawCliArgument) {
-      Command cliCommand = getCommandFromCliText(rawCliArgument);
-      cliCommand.invoke(rawCliArgument.split(" "));
+      AbstractCommand cliAbstractCommand = getCommandFromCliText(rawCliArgument);
+      cliAbstractCommand.invoke(rawCliArgument.split(" "));
    }
 
-   private static Command getCommandFromCliText(String rawCliArgument) {
+   private static AbstractCommand getCommandFromCliText(String rawCliArgument) {
       CliArgument cliArgument = new CliArgument(rawCliArgument);
       return cliArgument.getCorrespondentCommand();
    }
 
    private record CliArgument(String rootText) {
-      public String getFirstWord() {
-         return rootText.split(" ")[0].replaceAll("\\[|]", "");
+      public String getFirstArgument() {
+         return getCliArgumentByIndex(0);
+      }
+      public String getCliArgumentByIndex(int index){
+         return rootText.split(" ")[index].replaceAll("\\[|]", "");
       }
 
-      public Command getCorrespondentCommand() {
-         return COMMANDS.get(this.getFirstWord());
-      }
+      public AbstractCommand getCorrespondentCommand() throws NameNotFoundException {
+         AbstractCommand firstAbstractCommand = COMMANDS.get(this.getFirstArgument());
+         if(Objects.isNull(firstAbstractCommand)) throw new NameNotFoundException("Cli command not found");
 
+         AbstractCommand subAbstractCommand;
+         return null;
+      }
    }
-
 }
 
 
