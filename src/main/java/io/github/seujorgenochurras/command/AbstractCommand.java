@@ -6,12 +6,11 @@ import java.util.HashMap;
 
 public abstract class AbstractCommand {
    @Nullable
-   public static HashMap<String, AbstractCommand> subCommands;
+   public HashMap<String, AbstractCommand> subCommands = new HashMap<>();
 
    public abstract void invoke(String[] params);
 
    public boolean hasSubCommands(){
       return !subCommands.isEmpty();
    }
-
 }
