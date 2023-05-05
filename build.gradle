@@ -12,6 +12,7 @@ repositories {
 dependencies {
     implementation("de.codeshelf.consoleui:consoleui:0.0.13")
     implementation 'org.reflections:reflections:0.10.2'
+    implementation 'ch.qos.logback:logback-classic:1.4.6'
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'

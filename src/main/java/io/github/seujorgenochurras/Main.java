@@ -1,11 +1,16 @@
 package io.github.seujorgenochurras;
 
-import io.github.seujorgenochurras.command.reflections.register.CommandRegister;
+
+import static io.github.seujorgenochurras.command.reflections.register.CommandRegister.COMMANDS;
 
 public class Main {
    public static void main(String[] args) {
-      System.out.println(CommandRegister.commands);
-      System.out.println("\n\n");
-      CommandRegister.commands.forEach((s, command) -> System.out.println(command.subCommands));
+      try {
+         COMMANDS.get(args[0]).invoke(args);
+      } catch (NullPointerException e) {
+         System.out.println("Command not found!");
+      }catch (ArrayIndexOutOfBoundsException e){
+         System.out.println("No args provided");
+      }
    }
 }
