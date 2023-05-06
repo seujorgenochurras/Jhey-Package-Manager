@@ -6,7 +6,7 @@ import static io.github.seujorgenochurras.command.reflections.register.CommandRe
 public class Main {
    public static void main(String[] args) {
       try {
-         COMMANDS.get(args[0]).invoke(args);
+         COMMANDS.get("Cli").invoke(args);
       } catch (NullPointerException e) {
          System.out.println("Command not found!");
       }catch (ArrayIndexOutOfBoundsException e){

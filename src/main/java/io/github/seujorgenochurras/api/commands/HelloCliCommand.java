@@ -1,14 +1,17 @@
 package io.github.seujorgenochurras.api.commands;
 
-import io.github.seujorgenochurras.command.AbstractCommand;
+import io.github.seujorgenochurras.command.ICommand;
 
-public class HelloCliCommand extends AbstractCommand {
+public class HelloCliCommand implements ICommand {
 
-   public HelloCliCommand(){
-      super("Cli");
-   }
+
    @Override
    public void invoke(String[] params) {
       System.out.println("Hello CLI");
+   }
+
+   @Override
+   public String[] getNames() {
+      return new String[]{"Cli"};
    }
 }
