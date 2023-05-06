@@ -1,7 +1,6 @@
 package io.github.seujorgenochurras.api.commands;
 
 import io.github.seujorgenochurras.command.ICommand;
-import io.github.seujorgenochurras.command.annotation.SubCommand;
 
 public class HelloCommand implements ICommand {
 
@@ -15,7 +14,7 @@ public class HelloCommand implements ICommand {
       System.out.println("Hello");
    }
 
-   @SubCommand(name = "World")
+
    public static final class HelloWorldCommand implements ICommand{
       public HelloWorldCommand(){}
 

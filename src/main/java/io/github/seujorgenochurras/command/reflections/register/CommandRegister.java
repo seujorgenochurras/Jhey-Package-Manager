@@ -1,6 +1,5 @@
 package io.github.seujorgenochurras.command.reflections.register;
 
-import io.github.seujorgenochurras.command.AbstractCommand;
 import io.github.seujorgenochurras.command.ICommand;
 import io.github.seujorgenochurras.command.reflections.CommandReflector;
 

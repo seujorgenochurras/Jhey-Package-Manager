@@ -28,8 +28,8 @@ public final class CommandReflector {
               .finishFetch();
 
       return parseClassSetToCommandSet(rawCommandClasses);
-
    }
+
    private static Set<Class<? extends ICommand>> parseClassSetToCommandSet(Set<Class<?>> classSet){
     return classSet.stream().map(clazz -> (Class<? extends ICommand>) clazz).collect(Collectors.toSet());
    }
