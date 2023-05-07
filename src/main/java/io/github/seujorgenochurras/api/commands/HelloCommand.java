@@ -16,8 +16,6 @@ public class HelloCommand implements ICommand {
 
 
    public static final class HelloWorldCommand implements ICommand{
-      public HelloWorldCommand(){}
-
       @Override
       public String[] getNames() {
          return new String[]{"World"};

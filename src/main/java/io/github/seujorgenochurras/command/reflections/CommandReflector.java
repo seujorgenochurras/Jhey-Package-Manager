@@ -9,6 +9,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public final class CommandReflector {
+
+
+
    private CommandReflector(){}
 
 
@@ -30,10 +33,10 @@ public final class CommandReflector {
       return parseClassSetToCommandSet(rawCommandClasses);
    }
 
+   @SuppressWarnings("unchecked")
    private static Set<Class<? extends ICommand>> parseClassSetToCommandSet(Set<Class<?>> classSet){
     return classSet.stream().map(clazz -> (Class<? extends ICommand>) clazz).collect(Collectors.toSet());
    }
-
    private static Object tryToCreateAnInstanceOf(Class<?> classDefinition) {
       try {
          return classDefinition.getConstructor(null).newInstance();
