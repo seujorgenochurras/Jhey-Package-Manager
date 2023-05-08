@@ -5,13 +5,12 @@ import io.github.seujorgenochurras.command.CliHandler;
 
 import java.util.Arrays;
 
-import static io.github.seujorgenochurras.command.reflections.register.CommandRegister.COMMANDS;
-
 public class Main {
    public static void main(String[] args) {
 
       System.out.println(Arrays.toString(args));
       try {
+
          CliHandler.handleCliArguments(args);
 
       } catch (NullPointerException e) {

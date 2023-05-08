@@ -1,51 +1,59 @@
 package io.github.seujorgenochurras.command.arg;
 
-import io.github.seujorgenochurras.command.Flag;
+import io.github.seujorgenochurras.command.arg.flag.FlagPattern;
+import io.github.seujorgenochurras.command.arg.flag.FlagPatternCollection;
+import io.github.seujorgenochurras.command.reflections.ValidArgumentTypes;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
 
 
 public class CliArgumentBuilder {
-  private final List<Flag> flags = new ArrayList<>();
+   private final FlagPatternCollection flags = new FlagPatternCollection();
 
    private CliArgumentBuilder() {
    }
-   public static CliArgumentBuilder startBuild(){
+
+   public static CliArgumentBuilder startBuild() {
       return new CliArgumentBuilder();
    }
-   public FlagBuilder newFlag(){
-      return new FlagBuilder(this);
+
+   public FlagPatternBuilder newFlag() {
+      return new FlagPatternBuilder(this);
    }
-   private CliArgumentBuilder addFlag(Flag flag){
-      flags.add(flag);
+
+   private CliArgumentBuilder addFlag(FlagPattern flagPattern) {
+      flags.addFlag(flagPattern);
       return this;
    }
-   public CliArgument build(){
+
+   public CliArgument build() {
       return new CliArgument(flags);
    }
 
-   
-
-   public static class FlagBuilder{
+   public static class FlagPatternBuilder {
       private final CliArgumentBuilder cliArgumentBuilder;
 
-      private final Flag resultedFlag = new Flag();
+      private final FlagPattern resultedFlagPattern = new FlagPattern();
 
-      public FlagBuilder(CliArgumentBuilder cliArgumentBuilder) {
+      public FlagPatternBuilder(CliArgumentBuilder cliArgumentBuilder) {
          this.cliArgumentBuilder = cliArgumentBuilder;
       }
-      public FlagBuilder aliases(String ...aliases){
-         resultedFlag.setAliases(aliases);
-         return this;
-      }
-      public FlagBuilder argumentType(Class<?> argumentTypeClass){
-         resultedFlag.setArgumentType(argumentTypeClass);
+
+      public FlagPatternBuilder aliases(String... aliases) {
+         resultedFlagPattern.setAliases(Set.of(aliases));
          return this;
       }
 
-      public CliArgumentBuilder addFlag(){
-         return cliArgumentBuilder.addFlag(this.resultedFlag);
+      /***
+       * The default value is Boolean
+       */
+      public FlagPatternBuilder returnType(ValidArgumentTypes argumentType){
+         resultedFlagPattern.setArgumentType(argumentType);
+         return this;
+      }
+
+      public CliArgumentBuilder addFlag() {
+         return cliArgumentBuilder.addFlag(this.resultedFlagPattern);
       }
 
    }

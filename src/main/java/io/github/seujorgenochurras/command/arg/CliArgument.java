@@ -1,13 +1,11 @@
 package io.github.seujorgenochurras.command.arg;
 
-import io.github.seujorgenochurras.command.Flag;
-
-import java.util.List;
+import io.github.seujorgenochurras.command.arg.flag.FlagPatternCollection;
 
 public class CliArgument {
-   private final List<Flag> flagList;
+   private final FlagPatternCollection flags;
 
-   public CliArgument(List<Flag> flagList) {
-      this.flagList = flagList;
+   public CliArgument(FlagPatternCollection flags) {
+      this.flags = flags;
    }
 }

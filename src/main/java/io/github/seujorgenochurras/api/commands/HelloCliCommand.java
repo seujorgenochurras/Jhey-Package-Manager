@@ -3,12 +3,14 @@ package io.github.seujorgenochurras.api.commands;
 import io.github.seujorgenochurras.command.ICommand;
 import io.github.seujorgenochurras.command.arg.CliArgumentBuilder;
 import io.github.seujorgenochurras.command.arg.CliArgument;
+import io.github.seujorgenochurras.command.arg.flag.FlagPatternCollection;
 
 public class HelloCliCommand implements ICommand {
 
 
    @Override
-   public void invoke(String[] params) {
+   public void invoke(FlagPatternCollection flags) {
+      String messageFlag = flags.getFlagByName("force");
       System.out.println("Hello CLI");
    }
 
@@ -20,14 +22,13 @@ public class HelloCliCommand implements ICommand {
    public CliArgument getArgs(){
      return CliArgumentBuilder
               .startBuild()
+
               .newFlag()
               .aliases("-f", "--force")
-              .argumentType(String.class)
               .addFlag()
 
               .newFlag()
               .aliases("-m", "--message")
-              .argumentType(String.class)
               .addFlag()
 
               .newFlag()
