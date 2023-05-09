@@ -1,12 +1,12 @@
 package io.github.seujorgenochurras.command.arg.flag;
 
-import io.github.seujorgenochurras.command.reflections.ValidArgumentTypes;
+import io.github.seujorgenochurras.command.reflections.ValidFlagArgumentTypes;
 
 import java.util.Set;
 
 public class FlagPattern {
    private Set<String> aliases;
-   private ValidArgumentTypes argumentType = ValidArgumentTypes.BOOLEAN;
+   private ValidFlagArgumentTypes argumentType = ValidFlagArgumentTypes.BOOLEAN;
 
    public Set<String> getAliases() {
       return aliases;
@@ -17,11 +17,11 @@ public class FlagPattern {
       return this;
    }
 
-   public ValidArgumentTypes getArgumentType() {
+   public ValidFlagArgumentTypes getArgumentType() {
       return argumentType;
    }
 
-   public FlagPattern setArgumentType(ValidArgumentTypes argumentType) {
+   public FlagPattern setArgumentType(ValidFlagArgumentTypes argumentType) {
       this.argumentType = argumentType;
       return this;
    }

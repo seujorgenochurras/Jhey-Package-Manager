@@ -2,7 +2,7 @@ package io.github.seujorgenochurras.command.arg;
 
 import io.github.seujorgenochurras.command.arg.flag.FlagPattern;
 import io.github.seujorgenochurras.command.arg.flag.FlagPatternCollection;
-import io.github.seujorgenochurras.command.reflections.ValidArgumentTypes;
+import io.github.seujorgenochurras.command.reflections.ValidFlagArgumentTypes;
 
 import java.util.Set;
 
@@ -47,7 +47,7 @@ public class CliArgumentBuilder {
       /***
        * The default value is Boolean
        */
-      public FlagPatternBuilder returnType(ValidArgumentTypes argumentType){
+      public FlagPatternBuilder returnType(ValidFlagArgumentTypes argumentType){
          resultedFlagPattern.setArgumentType(argumentType);
          return this;
       }

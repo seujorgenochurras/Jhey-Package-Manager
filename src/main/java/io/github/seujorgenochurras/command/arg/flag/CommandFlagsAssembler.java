@@ -14,8 +14,6 @@ public class CommandFlagsAssembler {
       CommandFlags rawArgsAsCollection = parseRawCliArgsToFlagPattern();
 
       return CommandFlagsValidator.validate(rawArgsAsCollection);
-
-
    }
    private CommandFlags parseRawCliArgsToFlagPattern(){
       return new CommandFlags();
@@ -30,8 +28,6 @@ public class CommandFlagsAssembler {
          HashMap<String, String> flagNameAndValue;
 
       }
-      private Set<String> rawCliArgs
-
    }
 
    private static class CommandFlagsValidator{
