@@ -9,11 +9,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public final class CommandReflector {
-
-
-
    private CommandReflector(){}
-
 
    public static Set<ICommand> getAllCommandInstances(){
       Set<ICommand> result = new HashSet<>();
