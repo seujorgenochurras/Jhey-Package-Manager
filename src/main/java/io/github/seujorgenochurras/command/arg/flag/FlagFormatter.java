@@ -5,19 +5,22 @@ import static io.github.seujorgenochurras.command.reflections.ValidFlagArgumentT
 import io.github.seujorgenochurras.command.reflections.ValidFlagArgumentTypes;
 
 public class FlagFormatter {
-   private FlagPatternCollection flagPatterns;
+   private final FlagPatternCollection flagPatterns;
 
-   public CommandFlags formatString(String rawFlags){
+   public FlagFormatter(FlagPatternCollection flagPatterns) {
+      this.flagPatterns = flagPatterns;
+   }
+
+   public CommandArgs formatString(String rawFlags){
       String commandArgSeparatorRegex = "-|--(?=\\w)";
       String[] commandArgs = rawFlags.split(commandArgSeparatorRegex);
-      CommandFlags resultedFlags = new CommandFlags();
+      CommandArgs resultedFlags = new CommandArgs();
 
       for (String commandArg : commandArgs) {
          String flagNameAndValueSeparator = "=";
          String[] flagNameAndValue = commandArg.split(flagNameAndValueSeparator);
          String flagName = flagNameAndValue[0];
          String flagValue = flagNameAndValue[1];
-
          Flag flag = new FlagValidator(flagName, flagValue).validateAndGetFlag();
          resultedFlags.put(flagName, flag);
       }
@@ -31,9 +34,9 @@ public class FlagFormatter {
          this.flagName = flagName;
          this.flagValue = flagValue;
       }
-      public Flag validateAndGetFlag() throws FlagNotFound, IllegalFlagType {
-         if(!flagExists()) throw new FlagNotFound("Flag " + flagName + " not found in");
-         if(!isFlagValueValid()) throw new IllegalFlagType("Flag value " + flagValue + " is illegal in" + flagName);
+      public Flag validateAndGetFlag() throws FlagNotFoundException, IllegalFlagType {
+         if(!flagExists()) throw new FlagNotFoundException("Flag " + flagName + " not found");
+         if(!isFlagValueValid()) throw new IllegalFlagType("Flag value " + flagValue + " is illegal in flag -" + flagName);
 
          return new Flag(flagValue, flagName);
       }
@@ -56,7 +59,7 @@ public class FlagFormatter {
       }
 
       private ValidFlagArgumentTypes getFlagPatternReturnType(){
-         return getFlagPattern().getArgumentType();
+         return getFlagPattern().getFlagArgumentType();
       }
       private FlagPattern getFlagPattern(){
          return flagPatterns.getFlagByName(flagName);

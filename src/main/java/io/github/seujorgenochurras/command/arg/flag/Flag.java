@@ -1,7 +1,5 @@
 package io.github.seujorgenochurras.command.arg.flag;
 
-import jline.internal.Log;
-
 import java.util.logging.Logger;
 
 public class Flag {
@@ -20,7 +18,6 @@ public class Flag {
 
    public Flag() {
    }
-
    public Flag(Object value, String name) {
       this.value = value;
       this.name = name;
@@ -41,8 +38,6 @@ public class Flag {
    public double getValueAsDouble(){
       return tryCastValueTo(0.1);
    }
-
-
 
    @SuppressWarnings("unchecked")
    private <T> T tryCastValueTo (T t){

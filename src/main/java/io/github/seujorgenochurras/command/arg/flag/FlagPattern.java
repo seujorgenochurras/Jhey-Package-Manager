@@ -6,7 +6,7 @@ import java.util.Set;
 
 public class FlagPattern {
    private Set<String> aliases;
-   private ValidFlagArgumentTypes argumentType = ValidFlagArgumentTypes.BOOLEAN;
+   private ValidFlagArgumentTypes flagArgumentType = ValidFlagArgumentTypes.BOOLEAN;
 
    public Set<String> getAliases() {
       return aliases;
@@ -17,12 +17,12 @@ public class FlagPattern {
       return this;
    }
 
-   public ValidFlagArgumentTypes getArgumentType() {
-      return argumentType;
+   public ValidFlagArgumentTypes getFlagArgumentType() {
+      return flagArgumentType;
    }
 
-   public FlagPattern setArgumentType(ValidFlagArgumentTypes argumentType) {
-      this.argumentType = argumentType;
+   public FlagPattern setFlagArgumentType(ValidFlagArgumentTypes flagArgumentType) {
+      this.flagArgumentType = flagArgumentType;
       return this;
    }
 }
