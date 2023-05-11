@@ -1,13 +1,14 @@
 package io.github.seujorgenochurras;
 
-import io.github.seujorgenochurras.command.CliHandler;
+import io.github.seujorgenochurras.command.cli.CliHandler;
 
 
 public class Main {
    public static void main(String[] args) {
 
       try {
-         String[] aArgs = {"Cli", "-m=\"cokc\""};
+         String[] aArgs = {"Cli", "-f"};
+
          CliHandler.handleCliArguments(aArgs);
 
       } catch (NullPointerException e) {

@@ -1,6 +1,6 @@
 package io.github.seujorgenochurras.command.arg.flag;
 
-import io.github.seujorgenochurras.command.reflections.ValidFlagArgumentTypes;
+import io.github.seujorgenochurras.command.reflections.common.ValidFlagArgumentTypes;
 
 import java.util.Set;
 

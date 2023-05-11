@@ -1,8 +1,8 @@
 package io.github.seujorgenochurras.command.arg.flag;
 
-import static io.github.seujorgenochurras.command.reflections.ValidFlagArgumentTypes.*;
+import static io.github.seujorgenochurras.command.reflections.common.ValidFlagArgumentTypes.*;
 
-import io.github.seujorgenochurras.command.reflections.ValidFlagArgumentTypes;
+import io.github.seujorgenochurras.command.reflections.common.ValidFlagArgumentTypes;
 
 public class FlagFormatter {
    private final FlagPatternCollection flagPatterns;
@@ -26,6 +26,7 @@ public class FlagFormatter {
       }
       return resultedFlags;
    }
+
    private final class FlagValidator{
       private final String flagName;
       private final String flagValue;

@@ -4,15 +4,14 @@ import io.github.seujorgenochurras.command.ICommand;
 import io.github.seujorgenochurras.command.arg.CommandArgumentBuilder;
 import io.github.seujorgenochurras.command.arg.flag.CommandArgs;
 import io.github.seujorgenochurras.command.arg.flag.FlagPatternCollection;
-import io.github.seujorgenochurras.command.reflections.ValidFlagArgumentTypes;
+import io.github.seujorgenochurras.command.reflections.common.ValidFlagArgumentTypes;
 
 public class HelloCliCommand implements ICommand {
 
 
    @Override
    public void invoke(CommandArgs args) {
-      String message = args.getFlagByName("m").getValueAsString();
-      System.out.println("Hello " + message);
+      System.out.println(args.getFlagByName("-f"));
    }
 
    @Override
@@ -26,7 +25,7 @@ public class HelloCliCommand implements ICommand {
 
               .newFlag()
               .aliases("-m", "--message")
-              .returnType(ValidFlagArgumentTypes.STRING)
+              .argType(ValidFlagArgumentTypes.STRING)
               .addFlag()
 
               .newFlag()
