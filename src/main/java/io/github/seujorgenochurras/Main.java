@@ -2,14 +2,11 @@ package io.github.seujorgenochurras;
 
 import io.github.seujorgenochurras.command.cli.CliHandler;
 
-
 public class Main {
    public static void main(String[] args) {
 
       try {
-         String[] aArgs = {"Cli", "-f"};
-
-         CliHandler.handleCliArguments(aArgs);
+         CliHandler.handleCliArguments(args);
 
       } catch (NullPointerException e) {
          System.out.println("Command not found!");

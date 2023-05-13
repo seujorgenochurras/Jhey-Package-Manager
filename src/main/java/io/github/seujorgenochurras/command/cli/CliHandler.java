@@ -12,14 +12,12 @@ public class CliHandler {
 
    public static void handleCliArguments(String[] rawCliArgs){
       String cliArgsAsString = StringUtils.removeArraySyntaxFromRawStringArr(rawCliArgs);
-
       String[] cliCommandSeparatedFromFlags = cliArgsAsString.split("-", 2);
 
       int commandNameIndex = 0;
       int commandArgsIndex = 1;
 
       String commandName = cliCommandSeparatedFromFlags[commandNameIndex].trim();
-
       String commandFlags = cliCommandSeparatedFromFlags[commandArgsIndex].trim();
 
       ICommand command = COMMANDS.get(commandName);
