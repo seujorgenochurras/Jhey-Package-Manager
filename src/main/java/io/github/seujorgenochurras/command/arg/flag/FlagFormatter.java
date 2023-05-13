@@ -1,8 +1,8 @@
 package io.github.seujorgenochurras.command.arg.flag;
 
-import static io.github.seujorgenochurras.command.reflections.ValidFlagArgumentTypes.*;
+import static io.github.seujorgenochurras.command.reflections.common.ValidFlagArgumentTypes.*;
 
-import io.github.seujorgenochurras.command.reflections.ValidFlagArgumentTypes;
+import io.github.seujorgenochurras.command.reflections.common.ValidFlagArgumentTypes;
 
 public class FlagFormatter {
    private final FlagPatternCollection flagPatterns;
@@ -20,12 +20,20 @@ public class FlagFormatter {
          String flagNameAndValueSeparator = "=";
          String[] flagNameAndValue = commandArg.split(flagNameAndValueSeparator);
          String flagName = flagNameAndValue[0];
-         String flagValue = flagNameAndValue[1];
+         String flagValue = tryGetFlagValue(flagNameAndValue);
          Flag flag = new FlagValidator(flagName, flagValue).validateAndGetFlag();
          resultedFlags.put(flagName, flag);
       }
       return resultedFlags;
    }
+   private String tryGetFlagValue(String[] flagNameAndValue){
+      try {
+         return flagNameAndValue[1];
+      }catch (IndexOutOfBoundsException e){
+         return null;
+      }
+   }
+
    private final class FlagValidator{
       private final String flagName;
       private final String flagValue;
@@ -36,7 +44,8 @@ public class FlagFormatter {
       }
       public Flag validateAndGetFlag() throws FlagNotFoundException, IllegalFlagType {
          if(!flagExists()) throw new FlagNotFoundException("Flag " + flagName + " not found");
-         if(!isFlagValueValid()) throw new IllegalFlagType("Flag value " + flagValue + " is illegal in flag -" + flagName);
+         if(!isFlagValueValid())
+            throw new IllegalFlagType("Type of value (" + getFlagValueType() + ") is illegal in flag -" + flagName);
 
          return new Flag(flagValue, flagName);
       }
@@ -46,11 +55,16 @@ public class FlagFormatter {
 
       public ValidFlagArgumentTypes getFlagValueType(){
          ValidFlagArgumentTypes flagArgReturnType = null;
-         if(flagValue == null) flagArgReturnType = BOOLEAN;
-         else if(flagValue.startsWith("\"")) flagArgReturnType = STRING;
-         else if(flagValue.contains(".") && !Double.isNaN(Double.parseDouble(flagValue))) flagArgReturnType = DOUBLE;
-         else if(flagValue.split("\\d").length != 0 && !Double.isNaN(Double.parseDouble(flagValue))) flagArgReturnType = INTEGER;
 
+         if(flagValue == null) flagArgReturnType = BOOLEAN;
+         else if(flagValue.matches("[0-9]")){
+            if(flagValue.split(".").length != 0){
+               flagArgReturnType = DOUBLE;
+            }else {
+               flagArgReturnType = INTEGER;
+            }
+         }
+         else flagArgReturnType = STRING;
          return flagArgReturnType;
       }
 

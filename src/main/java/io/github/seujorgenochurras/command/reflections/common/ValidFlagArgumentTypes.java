@@ -1,4 +1,4 @@
-package io.github.seujorgenochurras.command.reflections;
+package io.github.seujorgenochurras.command.reflections.common;
 
 public enum ValidFlagArgumentTypes {
    INTEGER(Integer.class),

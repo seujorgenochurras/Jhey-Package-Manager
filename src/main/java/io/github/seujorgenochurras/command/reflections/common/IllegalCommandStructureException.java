@@ -1,4 +1,4 @@
-package io.github.seujorgenochurras.command.reflections;
+package io.github.seujorgenochurras.command.reflections.common;
 
 public class IllegalCommandStructureException extends RuntimeException{
    public IllegalCommandStructureException() {

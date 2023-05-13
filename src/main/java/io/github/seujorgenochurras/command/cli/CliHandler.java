@@ -1,17 +1,19 @@
-package io.github.seujorgenochurras.command;
+package io.github.seujorgenochurras.command.cli;
 
-import io.github.seujorgenochurras.command.reflections.register.CommandRegister;
+import io.github.seujorgenochurras.command.ICommand;
+import io.github.seujorgenochurras.command.cli.utils.StringUtils;
+
 import java.util.Arrays;
 
 import static io.github.seujorgenochurras.command.reflections.register.CommandRegister.COMMANDS;
 
 public class CliHandler {
+   private CliHandler(){}
 
    public static void handleCliArguments(String[] rawCliArgs){
-
-      String cliArgsAsString = Arrays.toString(rawCliArgs);
-      cliArgsAsString = cliArgsAsString.replace("[", "").replace("]", "").replace(",", "");
+      String cliArgsAsString = StringUtils.removeArraySyntaxFromRawStringArr(rawCliArgs);
       String[] cliCommandSeparatedFromFlags = cliArgsAsString.split("-", 2);
+
       int commandNameIndex = 0;
       int commandArgsIndex = 1;
 
@@ -20,7 +22,5 @@ public class CliHandler {
 
       ICommand command = COMMANDS.get(commandName);
       command.invoke(command.flagFormatter().formatString(commandFlags));
-
    }
-
 }

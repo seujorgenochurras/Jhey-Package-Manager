@@ -1,14 +1,12 @@
 package io.github.seujorgenochurras;
 
-import io.github.seujorgenochurras.command.CliHandler;
-
+import io.github.seujorgenochurras.command.cli.CliHandler;
 
 public class Main {
    public static void main(String[] args) {
 
       try {
-         String[] aArgs = {"Cli", "-m=\"cokc\""};
-         CliHandler.handleCliArguments(aArgs);
+         CliHandler.handleCliArguments(args);
 
       } catch (NullPointerException e) {
          System.out.println("Command not found!");

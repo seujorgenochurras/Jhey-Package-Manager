@@ -2,6 +2,7 @@ package io.github.seujorgenochurras.command.reflections;
 
 
 import io.github.seujorgenochurras.command.ICommand;
+import io.github.seujorgenochurras.command.reflections.common.IllegalCommandStructureException;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;

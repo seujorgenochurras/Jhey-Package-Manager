@@ -4,7 +4,7 @@ import io.github.seujorgenochurras.command.ICommand;
 import io.github.seujorgenochurras.command.arg.CommandArgumentBuilder;
 import io.github.seujorgenochurras.command.arg.flag.CommandArgs;
 import io.github.seujorgenochurras.command.arg.flag.FlagPatternCollection;
-import io.github.seujorgenochurras.command.reflections.ValidFlagArgumentTypes;
+import io.github.seujorgenochurras.command.reflections.common.ValidFlagArgumentTypes;
 
 public class HelloWorldDummyCommand implements ICommand {
 
@@ -30,7 +30,7 @@ public class HelloWorldDummyCommand implements ICommand {
 
               .newFlag()
               .aliases("-m", "--message")
-              .returnType(ValidFlagArgumentTypes.STRING)
+              .argType(ValidFlagArgumentTypes.STRING)
               .addFlag()
               .build();
    }
