@@ -12,7 +12,7 @@ public class FlagFormatter {
    }
 
    public CommandArgs formatString(String rawFlags){
-      String commandArgSeparatorRegex = "-|--(?=\\w)";
+      String commandArgSeparatorRegex = "(-\\w=)|--\\w+=";
       String[] commandArgs = rawFlags.split(commandArgSeparatorRegex);
       CommandArgs resultedFlags = new CommandArgs();
 
