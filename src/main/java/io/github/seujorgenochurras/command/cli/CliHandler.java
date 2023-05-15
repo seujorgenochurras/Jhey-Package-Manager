@@ -1,5 +1,6 @@
 package io.github.seujorgenochurras.command.cli;
 
+import io.github.seujorgenochurras.command.toolbox.CommandToolBox;
 import io.github.seujorgenochurras.command.ICommand;
 import io.github.seujorgenochurras.command.cli.utils.StringUtils;
 
@@ -19,6 +20,7 @@ public class CliHandler {
       String commandFlags = cliCommandSeparatedFromFlags[commandArgsIndex].trim();
 
       ICommand command = COMMANDS.get(commandName);
-      command.invoke(command.flagFormatter().formatString(commandFlags));
+      CommandToolBox toolBox = new CommandToolBox(command.flagFormatter().formatString(commandFlags));
+      command.invoke(toolBox);
    }
 }

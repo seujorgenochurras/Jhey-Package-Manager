@@ -1,4 +1,4 @@
-package io.github.seujorgenochurras.command.arg.flag;
+package io.github.seujorgenochurras.command.arg.flag.pattern;
 
 import java.util.HashMap;
 

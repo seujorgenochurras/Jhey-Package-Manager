@@ -18,33 +18,31 @@ public class Flag {
 
    public Flag() {
    }
+
    public Flag(Object value, String name) {
       this.value = value;
       this.name = name;
    }
    public String getValueAsString(){
-
-      return tryCastValueTo("");
+      return tryCastValueTo(String.class);
    }
    public int getValueAsInteger(){
-      return tryCastValueTo(-1);
+      return tryCastValueTo(Integer.class);
    }
    public boolean getValueAsBoolean(){
-      return tryCastValueTo(false);
-   }
-   public <T> T getValueAs(T t){
-      return tryCastValueTo(t);
+      return tryCastValueTo(Boolean.class);
    }
    public double getValueAsDouble(){
-      return tryCastValueTo(0.1);
+      return tryCastValueTo(Double.class);
    }
-
-   @SuppressWarnings("unchecked")
-   private <T> T tryCastValueTo (T t){
+   public <T> T getValueAs(Class<T> t){
+      return tryCastValueTo(t);
+   }
+   private <T> T tryCastValueTo (Class<T> classToCast){
       try {
-         return (T) value;
+         return classToCast.cast(value);
       }catch (ClassCastException e){
-         logger.severe("Cannot cast value to " + t.getClass().getName());
+         logger.severe("Cannot cast value to " + classToCast.getName());
          throw e;
       }
    }

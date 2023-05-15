@@ -1,7 +1,11 @@
-package io.github.seujorgenochurras.command.arg.flag;
+package io.github.seujorgenochurras.command.arg.flag.format;
 
 import static io.github.seujorgenochurras.command.reflections.common.ValidFlagArgumentTypes.*;
 
+import io.github.seujorgenochurras.command.arg.CommandArgs;
+import io.github.seujorgenochurras.command.arg.flag.Flag;
+import io.github.seujorgenochurras.command.arg.flag.pattern.FlagPattern;
+import io.github.seujorgenochurras.command.arg.flag.pattern.FlagPatternCollection;
 import io.github.seujorgenochurras.command.reflections.common.ValidFlagArgumentTypes;
 
 public class FlagFormatter {
@@ -49,16 +53,16 @@ public class FlagFormatter {
 
          return new Flag(flagValue, flagName);
       }
+
       private boolean isFlagValueValid(){
          return getFlagValueType().equals(getFlagPatternReturnType());
       }
 
       public ValidFlagArgumentTypes getFlagValueType(){
-         ValidFlagArgumentTypes flagArgReturnType = null;
-
+         ValidFlagArgumentTypes flagArgReturnType;
          if(flagValue == null) flagArgReturnType = BOOLEAN;
-         else if(flagValue.matches("[0-9]")){
-            if(flagValue.split(".").length != 0){
+         else if(flagValue.matches("\\d")){
+            if(flagValue.split("\\.").length != 0){
                flagArgReturnType = DOUBLE;
             }else {
                flagArgReturnType = INTEGER;
