@@ -1,8 +1,8 @@
 package io.github.seujorgenochurras.command.dummy;
 
+import io.github.seujorgenochurras.command.CommandToolBox;
 import io.github.seujorgenochurras.command.ICommand;
 import io.github.seujorgenochurras.command.arg.CommandArgumentBuilder;
-import io.github.seujorgenochurras.command.arg.flag.CommandArgs;
 import io.github.seujorgenochurras.command.arg.flag.FlagPatternCollection;
 import io.github.seujorgenochurras.command.reflections.common.ValidFlagArgumentTypes;
 
@@ -14,8 +14,8 @@ public class HelloWorldDummyCommand implements ICommand {
    }
 
    @Override
-   public void invoke(CommandArgs args) {
-      String message = args.getFlagByName("-m").getValueAsString();
+   public void invoke(CommandToolBox toolBox) {
+      String message = toolBox.commandArgs().getFlagByName("-m").getValueAsString();
       if(message == null) {
          System.out.println("Hello World");
       } else {

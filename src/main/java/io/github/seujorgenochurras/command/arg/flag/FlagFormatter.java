@@ -49,16 +49,16 @@ public class FlagFormatter {
 
          return new Flag(flagValue, flagName);
       }
+
       private boolean isFlagValueValid(){
          return getFlagValueType().equals(getFlagPatternReturnType());
       }
 
       public ValidFlagArgumentTypes getFlagValueType(){
-         ValidFlagArgumentTypes flagArgReturnType = null;
-
+         ValidFlagArgumentTypes flagArgReturnType;
          if(flagValue == null) flagArgReturnType = BOOLEAN;
-         else if(flagValue.matches("[0-9]")){
-            if(flagValue.split(".").length != 0){
+         else if(flagValue.matches("\\d")){
+            if(flagValue.split("\\.").length != 0){
                flagArgReturnType = DOUBLE;
             }else {
                flagArgReturnType = INTEGER;
