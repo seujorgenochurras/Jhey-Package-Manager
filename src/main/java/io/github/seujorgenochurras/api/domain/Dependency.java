@@ -10,6 +10,18 @@ public class Dependency {
    @SerializedName("latestVersion")
    private String latestVersion;
 
+   @SerializedName("id")
+   private String identifier;
+
+   public String getIdentifier() {
+      return identifier;
+   }
+
+   public Dependency setIdentifier(String identifier) {
+      this.identifier = identifier;
+      return this;
+   }
+
    public String getGroupName() {
       return groupName;
    }

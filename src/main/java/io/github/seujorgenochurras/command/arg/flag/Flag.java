@@ -18,6 +18,7 @@ public class Flag {
 
    public Flag() {
    }
+
    public Flag(Object value, String name) {
       this.value = value;
       this.name = name;

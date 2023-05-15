@@ -8,7 +8,7 @@ import io.github.seujorgenochurras.api.domain.MavenResponse;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
 
-public class DependencyService {
+public class MavenService {
 
    public ArrayList<Dependency> searchForDependency(String dependencyName){
       return searchForDependency(dependencyName, 10);

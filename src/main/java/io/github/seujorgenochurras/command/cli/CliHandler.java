@@ -1,6 +1,6 @@
 package io.github.seujorgenochurras.command.cli;
 
-import io.github.seujorgenochurras.command.CommandToolBox;
+import io.github.seujorgenochurras.command.toolbox.CommandToolBox;
 import io.github.seujorgenochurras.command.ICommand;
 import io.github.seujorgenochurras.command.cli.utils.StringUtils;
 

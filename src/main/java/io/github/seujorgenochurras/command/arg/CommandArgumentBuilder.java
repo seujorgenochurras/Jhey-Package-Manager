@@ -1,7 +1,7 @@
 package io.github.seujorgenochurras.command.arg;
 
-import io.github.seujorgenochurras.command.arg.flag.FlagPattern;
-import io.github.seujorgenochurras.command.arg.flag.FlagPatternCollection;
+import io.github.seujorgenochurras.command.arg.flag.pattern.FlagPattern;
+import io.github.seujorgenochurras.command.arg.flag.pattern.FlagPatternCollection;
 import io.github.seujorgenochurras.command.reflections.common.ValidFlagArgumentTypes;
 
 import java.util.Arrays;

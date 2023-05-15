@@ -1,7 +1,8 @@
 package io.github.seujorgenochurras.command;
 
-import io.github.seujorgenochurras.command.arg.flag.FlagFormatter;
-import io.github.seujorgenochurras.command.arg.flag.FlagPatternCollection;
+import io.github.seujorgenochurras.command.arg.flag.format.FlagFormatter;
+import io.github.seujorgenochurras.command.arg.flag.pattern.FlagPatternCollection;
+import io.github.seujorgenochurras.command.toolbox.CommandToolBox;
 
 public interface ICommand {
 

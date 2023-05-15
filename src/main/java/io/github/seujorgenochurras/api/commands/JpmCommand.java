@@ -1,55 +1,42 @@
 package io.github.seujorgenochurras.api.commands;
 
-import de.codeshelf.consoleui.prompt.ConsolePrompt;
-import de.codeshelf.consoleui.prompt.PromtResultItemIF;
-import de.codeshelf.consoleui.prompt.builder.ListPromptBuilder;
-import de.codeshelf.consoleui.prompt.builder.PromptBuilder;
+
 import io.github.seujorgenochurras.api.domain.Dependency;
-import io.github.seujorgenochurras.api.service.DependencyService;
-import io.github.seujorgenochurras.command.CommandToolBox;
+import io.github.seujorgenochurras.api.service.MavenService;
+import io.github.seujorgenochurras.command.toolbox.CommandConsole;
+import io.github.seujorgenochurras.command.toolbox.CommandToolBox;
 import io.github.seujorgenochurras.command.ICommand;
 import io.github.seujorgenochurras.command.arg.CommandArgumentBuilder;
-import io.github.seujorgenochurras.command.arg.flag.FlagPatternCollection;
+import io.github.seujorgenochurras.command.arg.flag.pattern.FlagPatternCollection;
 import io.github.seujorgenochurras.command.reflections.common.ValidFlagArgumentTypes;
+import io.github.seujorgenochurras.command.toolbox.builders.ConsoleListBuilder;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class JpmCommand implements ICommand {
 
-   private final DependencyService dependencyService = new DependencyService();
+   private final MavenService mavenService = new MavenService();
    @Override
    public void invoke(CommandToolBox toolBox) {
-      String libName = toolBox.commandArgs().getFlagByName("i").getValueAsString();
+      String libName = toolBox.commandArgs.getFlagByName("i").getValueAsString();
 
-      ArrayList<Dependency> dependenciesFound = dependencyService.searchForDependency(libName);
+      ArrayList<Dependency> dependenciesFound = mavenService.searchForDependency(libName);
 
-      ConsolePrompt prompt = new ConsolePrompt();
-      PromptBuilder promptBuilder = prompt.getPromptBuilder();
-      ListPromptBuilder listPrompt = promptBuilder
-              .createListPrompt()
-              .name("dependence")
-              .message("Found 10 libs").pageSize(10);
+     CommandConsole commandConsole = toolBox.commandConsole;
 
-      dependenciesFound.forEach(dependency -> {
-         String dependencyName = dependency.getArtifact();
-         String dependencyGroupName = dependency.getGroupName();
-         String dependencyVersion = dependency.getLatestVersion();
+     ConsoleListBuilder listBuilder =  commandConsole
+             .addNewListPrompt()
+              .message("Found " + dependenciesFound.size() + " libs")
+              .pageSize(5);
 
-         String dependencyIdentifier = dependencyGroupName + ":" + dependencyName + ":" + dependencyVersion;
-         listPrompt
-                 .newItem()
-                 .text(dependencyIdentifier)
-                 .name(dependencyIdentifier)
-                 .add();
-      });
-      listPrompt.addPrompt();
+     dependenciesFound.forEach(dependency ->
+             listBuilder.newItem()
+             .name(dependency.getIdentifier())
+             .add());
 
-      try {
-      HashMap<String, ? extends PromtResultItemIF> result = prompt.prompt(promptBuilder.build());
-      }catch (IOException e){
-      }
+      String dependencyChosen = commandConsole.prompt(listBuilder).getResult();
+
+      System.out.println(dependencyChosen);
    }
 
    @Override
@@ -60,10 +47,6 @@ public class JpmCommand implements ICommand {
               .newFlag()
               .aliases("-i", "--install")
               .argType(ValidFlagArgumentTypes.STRING)
-              .addFlag()
-              .newFlag()
-              .aliases("-f", "--force")
-              .argType(ValidFlagArgumentTypes.BOOLEAN)
               .addFlag()
 
               .build();
