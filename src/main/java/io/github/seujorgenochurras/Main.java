@@ -8,5 +8,6 @@ public class Main {
       AnsiConsole.systemInstall(); //needed because windows has no AnsiConsole by default
 
       CliHandler.handleCliArguments(args);
+
    }
 }

@@ -13,6 +13,12 @@ public class Dependency {
    @SerializedName("id")
    private String identifier;
 
+   private String fullName;
+
+   public String getFullName() {
+      return identifier + ":" + latestVersion;
+   }
+
    public String getIdentifier() {
       return identifier;
    }

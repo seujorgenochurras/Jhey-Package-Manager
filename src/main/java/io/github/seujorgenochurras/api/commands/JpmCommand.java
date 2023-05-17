@@ -2,8 +2,10 @@ package io.github.seujorgenochurras.api.commands;
 
 
 import io.github.seujorgenochurras.api.domain.Dependency;
+import io.github.seujorgenochurras.api.service.DependencyService;
 import io.github.seujorgenochurras.api.service.MavenService;
 import io.github.seujorgenochurras.command.toolbox.CommandConsole;
+import static io.github.seujorgenochurras.command.toolbox.CommandConsole.*;
 import io.github.seujorgenochurras.command.toolbox.CommandToolBox;
 import io.github.seujorgenochurras.command.ICommand;
 import io.github.seujorgenochurras.command.arg.CommandArgumentBuilder;
@@ -16,27 +18,63 @@ import java.util.ArrayList;
 public class JpmCommand implements ICommand {
 
    private final MavenService mavenService = new MavenService();
+
+   private CommandToolBox toolBox;
+   private DependencyService dependencyService;
    @Override
    public void invoke(CommandToolBox toolBox) {
-      String libName = toolBox.commandArgs.getFlagByName("i").getValueAsString();
+      this.toolBox = toolBox;
 
-      ArrayList<Dependency> dependenciesFound = mavenService.searchForDependency(libName);
+      Dependency userDependency = DependencyPrompter
+              .startChain()
 
-     CommandConsole commandConsole = toolBox.commandConsole;
+              .searchForDependency(libName)
+              .promptDependencies()
+              .getDependencyChosen()
+              .promptDependencyVersion()
+              .getAsDependencyObject();
 
-     ConsoleListBuilder listBuilder =  commandConsole
-             .addNewListPrompt()
-              .message("Found " + dependenciesFound.size() + " libs")
-              .pageSize(5);
 
-     dependenciesFound.forEach(dependency ->
-             listBuilder.newItem()
-             .name(dependency.getIdentifier())
-             .add());
+      ArrayList<Dependency> dependenciesFound = searchForDependency(libName);
+      ConsolePromptAnswer dependencyNameChosen = promptDependenciesToUser(dependenciesFound);
+      Dependency dependencyChosen = parseDependencyNameToObject(dependencyNameChosen, dependenciesFound);
+      ConsolePromptAnswer dependencyVersionChosen = promptVersionForDepencency(dependencyChosen);
+      GradlewFile gradlewFile = toolBox.gradlewFile;
+      String dependencyChosenFullName = dependencyChosen.getIdentifier() + ":" + dependencyVersionChosen.getResult();
+      gradlewFile.addDependency(dependencyChosenFullName);
 
-      String dependencyChosen = commandConsole.prompt(listBuilder).getResult();
 
       System.out.println(dependencyChosen);
+   }
+
+   private Dependency getDependencyChosen(){
+      String flagDependencyName = toolBox.commandArgs.getFlagByName("i").getValueAsString();
+
+      ArrayList<Dependency> dependenciesFound = mavenService.searchForDependency(flagDependencyName);
+      setDependencyService(dependenciesFound);
+
+      String dependencyChosenName = promptDependency(dependenciesFound).getResult();
+
+      return dependencyService.getDependencyByFullName(dependencyChosenName);
+   }
+
+   private ConsolePromptAnswer promptDependency(ArrayList<Dependency> dependenciesToPrompt){
+      CommandConsole commandConsole = toolBox.commandConsole;
+
+      ConsoleListBuilder listBuilder =  commandConsole
+              .addNewListPrompt()
+              .message("Found " + dependenciesToPrompt.size() + " libs")
+              .pageSize(5);
+
+      dependenciesToPrompt.forEach(dependency ->
+              listBuilder.newItem()
+                      .name(dependency.getFullName())
+                      .add());
+
+      return commandConsole.prompt(listBuilder);
+   }
+   private void setDependencyService(ArrayList<Dependency> dependencies){
+      this.dependencyService = new DependencyService(dependencies);
    }
 
    @Override
