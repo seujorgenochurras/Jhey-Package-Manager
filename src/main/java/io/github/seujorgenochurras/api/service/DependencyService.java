@@ -1,20 +1,21 @@
 package io.github.seujorgenochurras.api.service;
 
-import io.github.seujorgenochurras.api.domain.Dependency;
+import io.github.seujorgenochurras.api.domain.AbstractDependency;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 public class DependencyService {
-   private final ArrayList<Dependency> dependencies;
+   private final List<? extends AbstractDependency> dependencies;
 
-   public DependencyService(ArrayList<Dependency> dependencies) {
+   public DependencyService(List<? extends AbstractDependency> dependencies) {
       this.dependencies = dependencies;
    }
-   public Dependency getDependencyByFullName(String dependencyFullName){
-      for (Dependency dependency : dependencies){
-         if(dependency.getFullName().equals(dependencyFullName))
-            return dependency;
+
+   public AbstractDependency getDependencyByFullName(String dependencyFullName){
+      for (AbstractDependency Dependency : dependencies){
+         if(Dependency.getFullName().equals(dependencyFullName))
+            return Dependency;
       }
       throw new NoSuchElementException("Dependency not found");
    }

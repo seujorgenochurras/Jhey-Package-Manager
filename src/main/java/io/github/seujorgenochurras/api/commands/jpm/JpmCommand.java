@@ -1,6 +1,7 @@
-package io.github.seujorgenochurras.api.commands;
+package io.github.seujorgenochurras.api.commands.jpm;
 
 
+import io.github.seujorgenochurras.api.domain.AbstractDependency;
 import io.github.seujorgenochurras.api.domain.Dependency;
 import io.github.seujorgenochurras.api.service.DependencyService;
 import io.github.seujorgenochurras.api.service.MavenService;
@@ -25,26 +26,19 @@ public class JpmCommand implements ICommand {
    public void invoke(CommandToolBox toolBox) {
       this.toolBox = toolBox;
 
-      Dependency userDependency = DependencyPrompter
-              .startChain()
+      ArrayList<Dependency> dependenciesFound = mavenService.searchForDependency("libName");
 
-              .searchForDependency(libName)
-              .promptDependencies()
+      AbstractDependency DependencyChosen = DependencyPrompter
+              .startPrompt()
+              .promptDependencies(dependenciesFound)
               .getDependencyChosen()
-              .promptDependencyVersion()
-              .getAsDependencyObject();
+              .promptVersion()
+              .finishPromptAndGetChosenDependency();
+//
+//      DependencyManagerFile dependencyManagerFile = toolBox.getDependencyManagerFile();
+//      dependencyManagerFile.addDependency(DependencyChosen);
 
-
-      ArrayList<Dependency> dependenciesFound = searchForDependency(libName);
-      ConsolePromptAnswer dependencyNameChosen = promptDependenciesToUser(dependenciesFound);
-      Dependency dependencyChosen = parseDependencyNameToObject(dependencyNameChosen, dependenciesFound);
-      ConsolePromptAnswer dependencyVersionChosen = promptVersionForDepencency(dependencyChosen);
-      GradlewFile gradlewFile = toolBox.gradlewFile;
-      String dependencyChosenFullName = dependencyChosen.getIdentifier() + ":" + dependencyVersionChosen.getResult();
-      gradlewFile.addDependency(dependencyChosenFullName);
-
-
-      System.out.println(dependencyChosen);
+      System.out.println(DependencyChosen);
    }
 
    private Dependency getDependencyChosen(){

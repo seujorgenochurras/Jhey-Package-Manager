@@ -2,7 +2,7 @@ package io.github.seujorgenochurras.api.domain;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Dependency {
+public class Dependency extends AbstractDependency {
    @SerializedName("g")
    private String groupName;
    @SerializedName("a")
@@ -13,46 +13,35 @@ public class Dependency {
    @SerializedName("id")
    private String identifier;
 
-   private String fullName;
-
-   public String getFullName() {
-      return identifier + ":" + latestVersion;
-   }
-
    public String getIdentifier() {
       return identifier;
    }
 
-   public Dependency setIdentifier(String identifier) {
-      this.identifier = identifier;
-      return this;
+   @Override
+   public String getVersion() {
+      return latestVersion;
    }
 
+   @Override
+   public String getArtifactName() {
+      return artifact;
+   }
+
+   @Override
    public String getGroupName() {
       return groupName;
    }
 
-   public Dependency setGroupName(String groupName) {
+   public void setGroupName(String groupName) {
       this.groupName = groupName;
-      return this;
    }
 
-   public String getArtifact() {
-      return artifact;
-   }
-
-   public Dependency setArtifact(String artifact) {
+   public void setArtifact(String artifact) {
       this.artifact = artifact;
-      return this;
    }
 
-   public String getLatestVersion() {
-      return latestVersion;
-   }
-
-   public Dependency setLatestVersion(String latestVersion) {
+   public void setVersion(String latestVersion) {
       this.latestVersion = latestVersion;
-      return this;
    }
 
    @Override
