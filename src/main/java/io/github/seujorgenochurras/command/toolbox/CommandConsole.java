@@ -16,14 +16,12 @@ public class CommandConsole extends ConsolePrompt {
    private static final Logger logger = Logger.getLogger(CommandConsole.class.getName());
 
 
-   public ConsolePromptAnswer prompt(CommandConsoleBuilder builder){
+   public ConsolePromptAnswer prompt(CommandConsoleBuilder builder) {
       return new ConsolePromptAnswer(prompt(builder.build()));
    }
-
    @Override
    public HashMap<String, ? extends PromtResultItemIF> prompt(List<PromptableElementIF> promptableElementList)  {
       try {
-         System.out.println(promptableElementList.size());
         return super.prompt(promptableElementList);
       }catch (IOException e){
          logger.severe("Something went terrible wrong when prompting");
@@ -49,7 +47,9 @@ public class CommandConsole extends ConsolePrompt {
       }
 
       public String getResult(){
-         return rawResult.toString();
+         int firstStringQuote = rawResult.toString().indexOf("'")+1;
+         int secondStringQuote = rawResult.toString().indexOf("'", firstStringQuote);
+         return rawResult.toString().substring(firstStringQuote, secondStringQuote);
       }
 
    }
