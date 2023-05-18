@@ -1,4 +1,4 @@
-package io.github.seujorgenochurras.api.commons;
+package io.github.seujorgenochurras.api.util;
 
 import java.io.IOException;
 import java.net.URI;

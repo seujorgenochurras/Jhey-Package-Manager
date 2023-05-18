@@ -13,9 +13,8 @@ import java.util.stream.Collectors;
 public final class ConsoleListBuilder implements CommandConsoleBuilder {
 
    private final String listMessage;
-
    private PageSizeType pageSizeType = PageSizeType.ABSOLUTE;
-   private final List<String> availableChoices = new ArrayList<>();
+   private final List<Choice> availableChoices = new ArrayList<>();
    private String listName = "defaultName";
    private int pageSize = 5;
 
@@ -38,7 +37,7 @@ public final class ConsoleListBuilder implements CommandConsoleBuilder {
       return this;
    }
 
-   private ConsoleListBuilder addItem(String item) {
+   private ConsoleListBuilder addChoice(Choice item) {
       this.availableChoices.add(item);
       return this;
    }
@@ -54,7 +53,7 @@ public final class ConsoleListBuilder implements CommandConsoleBuilder {
    }
 
    private List<ListItemIF> parseChoicesListToItemList(){
-      return availableChoices.stream().map(choiceName -> new ListItem(choiceName, choiceName))
+      return availableChoices.stream().map(choice -> new ListItem(choice.name, choice.value))
       .collect(Collectors.toList());
    }
 
@@ -62,6 +61,8 @@ public final class ConsoleListBuilder implements CommandConsoleBuilder {
 
       private final ConsoleListBuilder consoleListBuilder;
       private String name;
+
+      private String value;
 
       public ConsoleListItem(ConsoleListBuilder consoleListBuilder) {
          this.consoleListBuilder = consoleListBuilder;
@@ -72,8 +73,16 @@ public final class ConsoleListBuilder implements CommandConsoleBuilder {
          return this;
       }
 
+      public ConsoleListItem value(String value){
+         this.value = value;
+         return this;
+      }
       public ConsoleListBuilder add() {
-         return consoleListBuilder.addItem(this.name);
+         if(value == null){
+            return consoleListBuilder.addChoice(new Choice(name, name));
+         }
+         return consoleListBuilder.addChoice(new Choice(name, value));
       }
    }
+   private record Choice(String name, String value){}
 }
