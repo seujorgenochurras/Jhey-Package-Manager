@@ -23,25 +23,31 @@ public class Flag {
       this.value = value;
       this.name = name;
    }
-   public String getValueAsString(){
+
+   public String getValueAsString() {
       return tryCastValueTo(String.class);
    }
-   public int getValueAsInteger(){
+
+   public int getValueAsInteger() {
       return tryCastValueTo(Integer.class);
    }
-   public boolean getValueAsBoolean(){
+
+   public boolean getValueAsBoolean() {
       return tryCastValueTo(Boolean.class);
    }
-   public double getValueAsDouble(){
+
+   public double getValueAsDouble() {
       return tryCastValueTo(Double.class);
    }
-   public <T> T getValueAs(Class<T> t){
+
+   public <T> T getValueAs(Class<T> t) {
       return tryCastValueTo(t);
    }
-   private <T> T tryCastValueTo (Class<T> classToCast){
+
+   private <T> T tryCastValueTo(Class<T> classToCast) {
       try {
          return classToCast.cast(value);
-      }catch (ClassCastException e){
+      } catch (ClassCastException e) {
          logger.severe("Cannot cast value to " + classToCast.getName());
          throw e;
       }

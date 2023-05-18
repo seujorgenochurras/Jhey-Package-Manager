@@ -11,12 +11,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DependencyPrompter {
-   private DependencyService dependencyService;
    private DependencyChosen dependencyChosen;
 
    private static final CommandConsole console = new CommandConsole();
 
-   private DependencyPrompter() {}
+   private DependencyPrompter() {
+   }
 
    public static DependencyPrompter startPrompt() {
       return new DependencyPrompter();
@@ -34,7 +34,7 @@ public class DependencyPrompter {
                       .add());
 
 
-      this.dependencyService = new DependencyService(dependencies);
+      DependencyService dependencyService = new DependencyService(dependencies);
 
       IDependency dependencyChosenAsDependency = dependencyService.getDependencyByFullName(console.prompt(listBuilder).getResult());
       dependencyChosen = new DependencyChosen(dependencyChosenAsDependency);

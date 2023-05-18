@@ -10,9 +10,10 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public final class CommandReflector {
-   private CommandReflector(){}
+   private CommandReflector() {
+   }
 
-   public static Set<ICommand> getAllCommandInstances(){
+   public static Set<ICommand> getAllCommandInstances() {
       Set<ICommand> result = new HashSet<>();
 
       getAllCommandClasses().forEach(commandClass ->
@@ -21,7 +22,7 @@ public final class CommandReflector {
       return result;
    }
 
-   private static Set<Class<? extends ICommand>> getAllCommandClasses(){
+   private static Set<Class<? extends ICommand>> getAllCommandClasses() {
       Set<Class<?>> rawCommandClasses = ClassFetcher
               .startFetch()
               .getAllSubClassesOf(ICommand.class)
@@ -31,9 +32,10 @@ public final class CommandReflector {
    }
 
    @SuppressWarnings("unchecked")
-   private static Set<Class<? extends ICommand>> parseClassSetToCommandSet(Set<Class<?>> classSet){
-    return classSet.stream().map(clazz -> (Class<? extends ICommand>) clazz).collect(Collectors.toSet());
+   private static Set<Class<? extends ICommand>> parseClassSetToCommandSet(Set<Class<?>> classSet) {
+      return classSet.stream().map(clazz -> (Class<? extends ICommand>) clazz).collect(Collectors.toSet());
    }
+
    private static Object tryToCreateAnInstanceOf(Class<?> classDefinition) {
       try {
          return classDefinition.getConstructor(null).newInstance();

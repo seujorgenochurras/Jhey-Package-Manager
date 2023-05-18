@@ -1,6 +1,6 @@
 package io.github.seujorgenochurras.command.arg.flag.format;
 
-public class IllegalFlagType extends RuntimeException{
+public class IllegalFlagType extends RuntimeException {
    public IllegalFlagType() {
    }
 

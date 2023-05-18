@@ -14,7 +14,7 @@ public class MavenResponse {
    }
 
 
-   public static final class ResponseDependencies{
+   public static final class ResponseDependencies {
       @SerializedName("docs")
       private ArrayList<Dependency> dependencies;
 

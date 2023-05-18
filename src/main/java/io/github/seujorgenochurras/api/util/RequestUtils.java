@@ -10,10 +10,12 @@ import java.util.logging.Logger;
 
 public class RequestUtils {
 
-   private RequestUtils(){}
+   private RequestUtils() {
+   }
+
    private static final Logger logger = Logger.getLogger(RequestUtils.class.getName());
 
-   public static HttpResponse<String> makeGetRequestTo(String uri){
+   public static HttpResponse<String> makeGetRequestTo(String uri) {
       HttpClient client = HttpClient.newHttpClient();
       HttpRequest request = HttpRequest
               .newBuilder()
@@ -21,20 +23,21 @@ public class RequestUtils {
               .uri(tryGetUriFromString(uri))
               .build();
       try {
-      return client.send(request, HttpResponse.BodyHandlers.ofString());
+         return client.send(request, HttpResponse.BodyHandlers.ofString());
 
-      }catch (IOException | InterruptedException e){
+      } catch (IOException | InterruptedException e) {
          logger.severe("Something went wrong " + e.getMessage());
          e.printStackTrace();
          Thread.currentThread().interrupt();
          return null;
       }
    }
-   private static URI tryGetUriFromString(String uri){
+
+   private static URI tryGetUriFromString(String uri) {
       try {
          return new URI(uri);
-      }catch (URISyntaxException e){
-         logger.severe("Cannot parse String " + uri + " to uri" );
+      } catch (URISyntaxException e) {
+         logger.severe("Cannot parse String " + uri + " to uri");
          e.printStackTrace();
          Thread.currentThread().interrupt();
          return null;

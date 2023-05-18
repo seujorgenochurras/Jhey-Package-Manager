@@ -52,9 +52,9 @@ public final class ConsoleListBuilder implements CommandConsoleBuilder {
       return List.of(buildResult);
    }
 
-   private List<ListItemIF> parseChoicesListToItemList(){
+   private List<ListItemIF> parseChoicesListToItemList() {
       return availableChoices.stream().map(choice -> new ListItem(choice.name, choice.value))
-      .collect(Collectors.toList());
+              .collect(Collectors.toList());
    }
 
    public static final class ConsoleListItem {
@@ -73,16 +73,19 @@ public final class ConsoleListBuilder implements CommandConsoleBuilder {
          return this;
       }
 
-      public ConsoleListItem value(String value){
+      public ConsoleListItem value(String value) {
          this.value = value;
          return this;
       }
+
       public ConsoleListBuilder add() {
-         if(value == null){
+         if (value == null) {
             return consoleListBuilder.addChoice(new Choice(name, name));
          }
          return consoleListBuilder.addChoice(new Choice(name, value));
       }
    }
-   private record Choice(String name, String value){}
+
+   private record Choice(String name, String value) {
+   }
 }

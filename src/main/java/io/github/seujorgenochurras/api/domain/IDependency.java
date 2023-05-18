@@ -1,15 +1,14 @@
 package io.github.seujorgenochurras.api.domain;
 
 public interface IDependency {
-     String getVersion();
+   String getVersion();
 
-     String getArtifactName();
+   String getArtifactName();
 
-     String getGroupName();
+   String getGroupName();
 
 
-
-    default String getFullName(){
-        return getGroupName() + ":" + getArtifactName() + ":" + getVersion();
-    }
+   default String getFullName() {
+      return getGroupName() + ":" + getArtifactName() + ":" + getVersion();
+   }
 }

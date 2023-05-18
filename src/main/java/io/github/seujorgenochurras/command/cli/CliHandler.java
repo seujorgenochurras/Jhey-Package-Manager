@@ -7,9 +7,10 @@ import io.github.seujorgenochurras.command.cli.utils.StringUtils;
 import static io.github.seujorgenochurras.command.reflections.register.CommandRegister.COMMANDS;
 
 public class CliHandler {
-   private CliHandler(){}
+   private CliHandler() {
+   }
 
-   public static void handleCliArguments(String ...rawCliArgs){
+   public static void handleCliArguments(String... rawCliArgs) {
       String cliArgsAsString = StringUtils.removeArraySyntaxFromRawStringArr(rawCliArgs);
       String[] cliCommandSeparatedFromFlags = cliArgsAsString.split("-", 2);
 

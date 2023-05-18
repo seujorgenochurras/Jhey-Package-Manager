@@ -19,35 +19,38 @@ public class CommandConsole extends ConsolePrompt {
    public ConsolePromptAnswer prompt(CommandConsoleBuilder builder) {
       return new ConsolePromptAnswer(prompt(builder.build()));
    }
+
    @Override
-   public HashMap<String, ? extends PromtResultItemIF> prompt(List<PromptableElementIF> promptableElementList)  {
+   public HashMap<String, ? extends PromtResultItemIF> prompt(List<PromptableElementIF> promptableElementList) {
       try {
-        return super.prompt(promptableElementList);
-      }catch (IOException e){
+         return super.prompt(promptableElementList);
+      } catch (IOException e) {
          logger.severe("Something went terrible wrong when prompting");
          e.printStackTrace();
          Thread.currentThread().interrupt();
          return new HashMap<>();
       }
    }
-   public PreConsoleListBuilder addNewListPrompt(){
+
+   public PreConsoleListBuilder addNewListPrompt() {
       return new PreConsoleListBuilder();
    }
 
-   public static final class PreConsoleListBuilder{
-      public ConsoleListBuilder message(String message){
+   public static final class PreConsoleListBuilder {
+      public ConsoleListBuilder message(String message) {
          return new ConsoleListBuilder(message);
       }
    }
 
-   public static final class ConsolePromptAnswer{
+   public static final class ConsolePromptAnswer {
       private final HashMap<String, ? extends PromtResultItemIF> rawResult;
+
       public ConsolePromptAnswer(HashMap<String, ? extends PromtResultItemIF> rawResult) {
          this.rawResult = rawResult;
       }
 
-      public String getResult(){
-         int firstStringQuote = rawResult.toString().indexOf("'")+1;
+      public String getResult() {
+         int firstStringQuote = rawResult.toString().indexOf("'") + 1;
          int secondStringQuote = rawResult.toString().indexOf("'", firstStringQuote);
          return rawResult.toString().substring(firstStringQuote, secondStringQuote);
       }

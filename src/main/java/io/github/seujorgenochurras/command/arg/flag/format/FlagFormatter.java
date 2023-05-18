@@ -15,7 +15,7 @@ public class FlagFormatter {
       this.flagPatterns = flagPatterns;
    }
 
-   public CommandArgs formatString(String rawFlags){
+   public CommandArgs formatString(String rawFlags) {
       String commandArgSeparatorRegex = "(-\\w=)|--\\w+=";
       String[] commandArgs = rawFlags.split(commandArgSeparatorRegex);
       CommandArgs resultedFlags = new CommandArgs();
@@ -30,15 +30,16 @@ public class FlagFormatter {
       }
       return resultedFlags;
    }
-   private String tryGetFlagValue(String[] flagNameAndValue){
+
+   private String tryGetFlagValue(String[] flagNameAndValue) {
       try {
          return flagNameAndValue[1];
-      }catch (IndexOutOfBoundsException e){
+      } catch (IndexOutOfBoundsException e) {
          return null;
       }
    }
 
-   private final class FlagValidator{
+   private final class FlagValidator {
       private final String flagName;
       private final String flagValue;
 
@@ -46,40 +47,41 @@ public class FlagFormatter {
          this.flagName = flagName;
          this.flagValue = flagValue;
       }
+
       public Flag validateAndGetFlag() throws FlagNotFoundException, IllegalFlagType {
-         if(!flagExists()) throw new FlagNotFoundException("Flag " + flagName + " not found");
-         if(!isFlagValueValid())
+         if (!flagExists()) throw new FlagNotFoundException("Flag " + flagName + " not found");
+         if (!isFlagValueValid())
             throw new IllegalFlagType("Type of value (" + getFlagValueType() + ") is illegal in flag -" + flagName);
 
          return new Flag(flagValue, flagName);
       }
 
-      private boolean isFlagValueValid(){
+      private boolean isFlagValueValid() {
          return getFlagValueType().equals(getFlagPatternReturnType());
       }
 
-      public ValidFlagArgumentTypes getFlagValueType(){
+      public ValidFlagArgumentTypes getFlagValueType() {
          ValidFlagArgumentTypes flagArgReturnType;
-         if(flagValue == null) flagArgReturnType = BOOLEAN;
-         else if(flagValue.matches("\\d")){
-            if(flagValue.split("\\.").length != 0){
+         if (flagValue == null) flagArgReturnType = BOOLEAN;
+         else if (flagValue.matches("\\d")) {
+            if (flagValue.split("\\.").length != 0) {
                flagArgReturnType = DOUBLE;
-            }else {
+            } else {
                flagArgReturnType = INTEGER;
             }
-         }
-         else flagArgReturnType = STRING;
+         } else flagArgReturnType = STRING;
          return flagArgReturnType;
       }
 
-      private boolean flagExists(){
+      private boolean flagExists() {
          return flagPatterns.containsKey(flagName);
       }
 
-      private ValidFlagArgumentTypes getFlagPatternReturnType(){
+      private ValidFlagArgumentTypes getFlagPatternReturnType() {
          return getFlagPattern().getFlagArgumentType();
       }
-      private FlagPattern getFlagPattern(){
+
+      private FlagPattern getFlagPattern() {
          return flagPatterns.getFlagByName(flagName);
       }
    }
