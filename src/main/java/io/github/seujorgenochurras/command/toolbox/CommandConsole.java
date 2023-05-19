@@ -4,6 +4,7 @@ import de.codeshelf.consoleui.elements.PromptableElementIF;
 import de.codeshelf.consoleui.prompt.ConsolePrompt;
 import de.codeshelf.consoleui.prompt.PromtResultItemIF;
 import io.github.seujorgenochurras.command.toolbox.builders.CommandConsoleBuilder;
+import io.github.seujorgenochurras.command.toolbox.builders.ConsoleConfirmBuilder;
 import io.github.seujorgenochurras.command.toolbox.builders.ConsoleListBuilder;
 
 import java.io.IOException;
@@ -36,6 +37,11 @@ public class CommandConsole extends ConsolePrompt {
       return new PreConsoleListBuilder();
    }
 
+   public ConsoleConfirmBuilder addNewConfirmBuilder(){
+      return new ConsoleConfirmBuilder();
+   }
+
+
    public static final class PreConsoleListBuilder {
       public ConsoleListBuilder message(String message) {
          return new ConsoleListBuilder(message);
@@ -50,10 +56,15 @@ public class CommandConsole extends ConsolePrompt {
       }
 
       public String getResult() {
-         int firstStringQuote = rawResult.toString().indexOf("'") + 1;
-         int secondStringQuote = rawResult.toString().indexOf("'", firstStringQuote);
-         return rawResult.toString().substring(firstStringQuote, secondStringQuote);
+         return removeGarbageFromRawResult();
       }
 
+      private String removeGarbageFromRawResult(){
+         String onlyResultString = rawResult.toString().split("=")[2];
+         return onlyResultString.replaceAll("[}']", "");
+      }
+      public boolean getResultAsBoolean(){
+        return getResult().equals("YES");
+      }
    }
 }

@@ -36,6 +36,7 @@ public final class CommandReflector {
       return classSet.stream().map(clazz -> (Class<? extends ICommand>) clazz).collect(Collectors.toSet());
    }
 
+   @SuppressWarnings("ConfusingArgumentToVarargsMethod")
    private static Object tryToCreateAnInstanceOf(Class<?> classDefinition) {
       try {
          return classDefinition.getConstructor(null).newInstance();

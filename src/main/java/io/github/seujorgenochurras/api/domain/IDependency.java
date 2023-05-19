@@ -7,7 +7,6 @@ public interface IDependency {
 
    String getGroupName();
 
-
    default String getFullName() {
       return getGroupName() + ":" + getArtifactName() + ":" + getVersion();
    }

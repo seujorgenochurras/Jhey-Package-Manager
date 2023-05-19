@@ -2,13 +2,13 @@ package io.github.seujorgenochurras.api.service;
 
 import io.github.seujorgenochurras.api.domain.IDependency;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.NoSuchElementException;
 
 public class DependencyService {
-   private final List<? extends IDependency> dependencies;
+   private final Collection<? extends IDependency> dependencies;
 
-   public DependencyService(List<? extends IDependency> dependencies) {
+   public DependencyService(Collection<? extends IDependency> dependencies) {
       this.dependencies = dependencies;
    }
 

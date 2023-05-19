@@ -7,7 +7,7 @@ public class StringUtils {
    }
 
    public static String removeArraySyntaxFromRawStringArr(String rawStringArr) {
-      String stringArrSyntaxRegex = "\\[|]|,";
+      String stringArrSyntaxRegex = "[\\[\\],]";
       return rawStringArr.replaceAll(stringArrSyntaxRegex, "");
    }
 
