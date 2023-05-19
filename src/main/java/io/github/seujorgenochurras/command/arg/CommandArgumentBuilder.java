@@ -47,16 +47,17 @@ public class CommandArgumentBuilder {
          resultedFlagPattern.setAliases(aliasesSet);
          return this;
       }
-      private Set<String> removeDashesFromAliases(String... aliases){
+
+      private Set<String> removeDashesFromAliases(String... aliases) {
          return Arrays.stream(aliases)
                  .map(alias -> alias.replace("-", ""))
-                  .collect(Collectors.toSet());
+                 .collect(Collectors.toSet());
       }
 
       /**
        * The default value is Boolean
        */
-      public FlagPatternBuilder argType(ValidFlagArgumentTypes argumentType){
+      public FlagPatternBuilder argType(ValidFlagArgumentTypes argumentType) {
          resultedFlagPattern.setFlagArgumentType(argumentType);
          return this;
       }

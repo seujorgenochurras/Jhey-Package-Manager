@@ -1,6 +1,6 @@
 package io.github.seujorgenochurras.api.command.jpm;
 
-
+import io.github.seujorgenochurras.api.command.jpm.prompt.MavenPrompter;
 import io.github.seujorgenochurras.api.domain.IDependency;
 import io.github.seujorgenochurras.api.domain.Dependency;
 import io.github.seujorgenochurras.api.service.MavenService;
@@ -21,15 +21,16 @@ public class JpmCommand implements ICommand {
 
       ArrayList<Dependency> dependenciesFound = mavenService.searchForDependency(libName);
 
-      IDependency dependencyChosen = DependencyPrompter
-              .startPrompt()
-              .promptDependencies(dependenciesFound)
-              .getDependencyChosen()
-              .promptVersion()
-              .finishPromptAndGetChosenDependency();
+      IDependency dependencyChosen = MavenPrompter
+         .startPrompt()
+         .promptDependencyCollection(dependenciesFound)
+         .promptVersion()
+         .getResultedDependency();
+
+
 
       //      DependencyManagerFile dependencyManagerFile = toolBox.getDependencyManagerFile();
-//      dependencyManagerFile.addDependency(DependencyChosen);
+//      dependencyManagerFile.addDependency(DependencyChosenPrompter);
 
       System.out.println(dependencyChosen.getFullName());
    }

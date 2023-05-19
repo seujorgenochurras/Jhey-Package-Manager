@@ -32,7 +32,7 @@ public class MavenService {
    public ArrayList<SimpleDependency> searchVersionsOf(IDependency dependency) {
       String requestUri = MAVEN_DOMAIN + "select?q=g:"
               + dependency.getGroupName()
-              + "+AND+" +"a:"
+              + "+AND+" + "a:"
               + dependency.getArtifactName()
               + "&core=gav";
 
@@ -48,11 +48,11 @@ public class MavenService {
       @SerializedName("response")
       private SimpleMavenResponseDependencies simpleMavenResponseDependencies;
 
-      public ArrayList<SimpleDependency> getSimpleDependencies(){
+      public ArrayList<SimpleDependency> getSimpleDependencies() {
          return simpleMavenResponseDependencies.simpleDependencies;
       }
 
-      private static final class SimpleMavenResponseDependencies{
+      private static final class SimpleMavenResponseDependencies {
          @SerializedName("docs")
          private ArrayList<SimpleDependency> simpleDependencies;
       }

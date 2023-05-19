@@ -12,7 +12,7 @@ public interface ICommand {
 
    FlagPatternCollection commandArgsPattern();
 
-  default FlagFormatter flagFormatter(){
+   default FlagFormatter flagFormatter() {
       return new FlagFormatter(this.commandArgsPattern());
    }
 

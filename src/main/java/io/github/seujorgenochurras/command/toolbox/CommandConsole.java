@@ -4,6 +4,7 @@ import de.codeshelf.consoleui.elements.PromptableElementIF;
 import de.codeshelf.consoleui.prompt.ConsolePrompt;
 import de.codeshelf.consoleui.prompt.PromtResultItemIF;
 import io.github.seujorgenochurras.command.toolbox.builders.CommandConsoleBuilder;
+import io.github.seujorgenochurras.command.toolbox.builders.ConsoleConfirmBuilder;
 import io.github.seujorgenochurras.command.toolbox.builders.ConsoleListBuilder;
 
 import java.io.IOException;
@@ -19,38 +20,51 @@ public class CommandConsole extends ConsolePrompt {
    public ConsolePromptAnswer prompt(CommandConsoleBuilder builder) {
       return new ConsolePromptAnswer(prompt(builder.build()));
    }
+
    @Override
-   public HashMap<String, ? extends PromtResultItemIF> prompt(List<PromptableElementIF> promptableElementList)  {
+   public HashMap<String, ? extends PromtResultItemIF> prompt(List<PromptableElementIF> promptableElementList) {
       try {
-        return super.prompt(promptableElementList);
-      }catch (IOException e){
+         return super.prompt(promptableElementList);
+      } catch (IOException e) {
          logger.severe("Something went terrible wrong when prompting");
          e.printStackTrace();
          Thread.currentThread().interrupt();
          return new HashMap<>();
       }
    }
-   public PreConsoleListBuilder addNewListPrompt(){
+
+   public PreConsoleListBuilder addNewListPrompt() {
       return new PreConsoleListBuilder();
    }
 
-   public static final class PreConsoleListBuilder{
-      public ConsoleListBuilder message(String message){
+   public ConsoleConfirmBuilder addNewConfirmBuilder(){
+      return new ConsoleConfirmBuilder();
+   }
+
+
+   public static final class PreConsoleListBuilder {
+      public ConsoleListBuilder message(String message) {
          return new ConsoleListBuilder(message);
       }
    }
 
-   public static final class ConsolePromptAnswer{
+   public static final class ConsolePromptAnswer {
       private final HashMap<String, ? extends PromtResultItemIF> rawResult;
+
       public ConsolePromptAnswer(HashMap<String, ? extends PromtResultItemIF> rawResult) {
          this.rawResult = rawResult;
       }
 
-      public String getResult(){
-         int firstStringQuote = rawResult.toString().indexOf("'")+1;
-         int secondStringQuote = rawResult.toString().indexOf("'", firstStringQuote);
-         return rawResult.toString().substring(firstStringQuote, secondStringQuote);
+      public String getResult() {
+         return removeGarbageFromRawResult();
       }
 
+      private String removeGarbageFromRawResult(){
+         String onlyResultString = rawResult.toString().split("=")[2];
+         return onlyResultString.replaceAll("[}']", "");
+      }
+      public boolean getResultAsBoolean(){
+        return getResult().equals("YES");
+      }
    }
 }

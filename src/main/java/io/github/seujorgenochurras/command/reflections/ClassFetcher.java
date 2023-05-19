@@ -14,22 +14,22 @@ public class ClassFetcher {
       this.packageToFetch = packageToFetch;
    }
 
-   public static ClassFetcher startFetch(){
+   public static ClassFetcher startFetch() {
       final String basePackage = "io";
       return new ClassFetcher(basePackage);
    }
 
-   public static ClassFetcher startFetchForPackage(String packageName){
+   public static ClassFetcher startFetchForPackage(String packageName) {
       return new ClassFetcher(packageName);
    }
 
-   public ClassFetcher getAllSubClassesOf(Class<?> clazz){
+   public ClassFetcher getAllSubClassesOf(Class<?> clazz) {
       Reflections reflections = new Reflections(packageToFetch);
       fetchedClasses.addAll(reflections.getSubTypesOf(clazz));
       return this;
    }
 
-   public Set<Class<?>> finishFetch(){
+   public Set<Class<?>> finishFetch() {
       return fetchedClasses;
    }
 }
