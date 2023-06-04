@@ -9,8 +9,8 @@ import io.github.seujorgenochurras.command.ICommand;
 import io.github.seujorgenochurras.command.arg.CommandArgumentBuilder;
 import io.github.seujorgenochurras.command.arg.flag.pattern.FlagPatternCollection;
 import io.github.seujorgenochurras.command.reflections.common.ValidFlagArgumentTypes;
-import io.github.seujorgenochurras.domain.GradleDependency;
-import io.github.seujorgenochurras.domain.GradlewBuildFile;
+import io.github.seujorgenochurras.domain.dependency.DependencyBuilder;
+import io.github.seujorgenochurras.mapper.DependencyManagerFile;
 
 import java.util.ArrayList;
 
@@ -31,11 +31,12 @@ public class JpmCommand implements ICommand {
 
 
 
-      GradlewBuildFile dependencyManagerFile = toolBox.gradlewBuildFile;
-      dependencyManagerFile.addDependency(new GradleDependency()
-              .setGroupName(dependencyChosen.getGroupName())
-              .setArtifact(dependencyChosen.getArtifactName())
-              .setVersion(dependencyChosen.getVersion()));
+       DependencyManagerFile dependencyManagerFile = toolBox.dependencyManager;
+      dependencyManagerFile.addDependency(DependencyBuilder.startBuild()
+              .group(dependencyChosen.getGroupName())
+              .artifact(dependencyChosen.getArtifactName())
+              .version(dependencyChosen.getVersion())
+              .buildResult());
 
       System.out.println(dependencyChosen.getFullName());
    }

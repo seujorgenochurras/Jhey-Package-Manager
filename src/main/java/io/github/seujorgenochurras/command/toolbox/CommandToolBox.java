@@ -1,7 +1,8 @@
 package io.github.seujorgenochurras.command.toolbox;
 
 import io.github.seujorgenochurras.command.arg.CommandArgs;
-import io.github.seujorgenochurras.domain.GradlewBuildFile;
+import io.github.seujorgenochurras.manager.DependencyManager;
+import io.github.seujorgenochurras.mapper.DependencyManagerFile;
 
 public class CommandToolBox {
 
@@ -9,10 +10,9 @@ public class CommandToolBox {
    public final CommandArgs commandArgs;
    public final CommandConsole commandConsole = new CommandConsole();
 
-   public final GradlewBuildFile gradlewBuildFile;
+   public final DependencyManagerFile dependencyManager = DependencyManager.getDependencyManagerFile(".");
 
-   public CommandToolBox(CommandArgs commandArgs, GradlewBuildFile gradlewBuildFile) {
+   public CommandToolBox(CommandArgs commandArgs) {
       this.commandArgs = commandArgs;
-      this.gradlewBuildFile = gradlewBuildFile;
    }
 }
