@@ -1,5 +1,6 @@
 package io.github.seujorgenochurras.command.reflections.register;
 
+import io.github.seujorgenochurras.api.command.jpm.JpmCommand;
 import io.github.seujorgenochurras.command.ICommand;
 import io.github.seujorgenochurras.command.reflections.CommandReflector;
 
@@ -11,7 +12,7 @@ public class CommandRegister {
    public static final HashMap<String, ICommand> COMMANDS = new HashMap<>();
 
    static {
-      registerCommands();
+      COMMANDS.put( "jpm", new JpmCommand());
    }
 
    private static void registerCommands(){
