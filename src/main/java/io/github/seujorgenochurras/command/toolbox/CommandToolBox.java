@@ -9,8 +9,8 @@ public class CommandToolBox {
 
    public final CommandArgs commandArgs;
    public final CommandConsole commandConsole = new CommandConsole();
-
-   public final DependencyManagerFile dependencyManager = DependencyManager.getDependencyManagerFile(".");
+   public final String currentDirPath = System.getProperty("user.dir");
+   public final DependencyManagerFile dependencyManager = DependencyManager.getDependencyManagerFile(currentDirPath);
 
    public CommandToolBox(CommandArgs commandArgs) {
       this.commandArgs = commandArgs;
