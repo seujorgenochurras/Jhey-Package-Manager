@@ -15,48 +15,47 @@ import io.github.seujorgenochurras.mapper.DependencyManagerFile;
 import java.util.ArrayList;
 
 public class JpmCommand implements ICommand {
-   private final MavenService mavenService = new MavenService();
+    private final MavenService mavenService = new MavenService();
 
-   @Override
-   public void invoke(CommandToolBox toolBox) {
-      String libName = toolBox.commandArgs.getFlagByName("i").getValueAsString();
+    @Override
+    public void invoke(CommandToolBox toolBox) {
+        String libName = toolBox.commandArgs.getFlagByName("i").getValueAsString();
 
-      ArrayList<Dependency> dependenciesFound = mavenService.searchForDependency(libName);
+        ArrayList<Dependency> dependenciesFound = mavenService.searchForDependency(libName);
 
-      IDependency dependencyChosen = MavenPrompter
-         .startPrompt()
-         .promptDependencyCollection(dependenciesFound)
-         .promptVersion()
-         .getResultedDependency();
+        IDependency dependencyChosen = MavenPrompter
+                .startPrompt()
+                .promptDependencyCollection(dependenciesFound)
+                .promptVersion()
+                .getResultedDependency();
 
 
+        DependencyManagerFile dependencyManagerFile = toolBox.dependencyManager;
+        dependencyManagerFile.addDependency(DependencyBuilder.startBuild()
+                .group(dependencyChosen.getGroupName())
+                .artifact(dependencyChosen.getArtifactName())
+                .version(dependencyChosen.getVersion())
+                .buildResult());
 
-       DependencyManagerFile dependencyManagerFile = toolBox.dependencyManager;
-      dependencyManagerFile.addDependency(DependencyBuilder.startBuild()
-              .group(dependencyChosen.getGroupName())
-              .artifact(dependencyChosen.getArtifactName())
-              .version(dependencyChosen.getVersion())
-              .buildResult());
+        System.out.println("Successfully installed " + dependencyChosen.getFullName());
+    }
 
-      System.out.println(dependencyChosen.getFullName());
-   }
+    @Override
+    public FlagPatternCollection commandArgsPattern() {
+        return CommandArgumentBuilder
+                .startBuild()
 
-   @Override
-   public FlagPatternCollection commandArgsPattern() {
-      return CommandArgumentBuilder
-              .startBuild()
+                .newFlag()
+                .aliases("-i", "--install")
+                .argType(ValidFlagArgumentTypes.STRING)
+                .addFlag()
 
-              .newFlag()
-              .aliases("-i", "--install")
-              .argType(ValidFlagArgumentTypes.STRING)
-              .addFlag()
+                .build();
+    }
 
-              .build();
-   }
-
-   @Override
-   public String[] getNames() {
-      return new String[]{"jpm"};
-   }
+    @Override
+    public String[] getNames() {
+        return new String[]{"jpm"};
+    }
 
 }
