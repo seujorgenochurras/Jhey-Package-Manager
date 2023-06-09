@@ -1,6 +1,12 @@
 # Jhey-Package-Manager
 jpm (jhey package manager) is a CLI tool to add maven dependencies in your projects
 <br> <br>
+
+# Usage
+  ![](https://github.com/seujorgenochurras/Jhey-Package-Manager/blob/main/jpm-showcase.gif) 
+  <br>
+   ```java -jar <jar name> jpm -i=<dependency name> ``` in a terminal inside your project.<br>
+   The jar needs to be in the same folder where the dependency manager file is.
 # Why?
   I've always found annoying the way gralde/maven works when dealing with implementing dependencies. <br>
   I never remember the f\*cking implementation string (which is like io.github.google.code.gson:gson:1.0.0)<br><br>
@@ -38,6 +44,3 @@ jpm (jhey package manager) is a CLI tool to add maven dependencies in your proje
   - No auto-update/update command
   - No error checking (if something goes wrong you are receiving the whole stack trace)
   - Primitive af
-# Usage
-   ```java -jar <jar name> jpm -i=<dependency name> ``` in a terminal inside your project.<br>
-   The jar needs to be in the same folder where the dependency manager file is.
