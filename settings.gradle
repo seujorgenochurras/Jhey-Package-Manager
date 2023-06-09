@@ -1,2 +1,5 @@
 rootProject.name = 'cli-test'
+include 'jpm-cli'
+include 'java-dependency-manager'
+include 'jpm-version-api'
 

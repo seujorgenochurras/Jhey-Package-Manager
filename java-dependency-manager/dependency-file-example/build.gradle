@@ -1,0 +1,20 @@
+plugins {
+    id 'org.springframework.boot' version '3.0.2'
+    id 'java-library'
+    id 'maven-publish'
+    id 'signing'
+}
+
+group 'io.github.seujorgenochurras'
+version '1.2.1'
+
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation ("org.seleniumhq.selenium:selenium-java:4.8.1")
+    implementation ('com.google.code.gson:gson:2.10.1')
+    implementation ('io.github.seujorgenochurras:selenium-custom-elements:0.1.0')
+}
