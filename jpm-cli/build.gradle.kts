@@ -15,8 +15,6 @@ dependencies {
     implementation ("ch.qos.logback:logback-classic:1.4.7")
     implementation ("com.google.code.gson:gson:2.10.1")
     implementation ("io.github.seujorgenochurras:java-dependency-manager:0.4.3")
-    testImplementation(platform("org.junit:junit-bom:5.9.1"))
-    testImplementation(platform("org.junit.jupiter:junit-jupiter"))
 }
 
 tasks.test {

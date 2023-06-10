@@ -1,22 +1,26 @@
 package io.github.seujorgenochurras.mapper.gradlew.tree.node;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class GradleNodeGroup {
-    private final List<GradleNode> nodes = new ArrayList<>();
-    private final List<GradleNodeGroup> childNodeGroups = new ArrayList<>();
+    private final Set<GradleNode> nodes = new HashSet<>();
+    private final Set<GradleNodeGroup> childNodeGroups = new HashSet<>();
     private String groupName;
     private int groupLineStartPosition;
     private int groupLineFinalPosition;
 
 
-    public List<GradleNode> getNodes() {
+    public Set<GradleNode> getNodes() {
         return nodes;
     }
 
     public void appendNodeGroup(GradleNodeGroup nodeGroup){
         this.childNodeGroups.add(nodeGroup);
+    }
+
+    public Set<GradleNodeGroup> getChildNodeGroups() {
+        return childNodeGroups;
     }
 
     public void addNode(GradleNode node){

@@ -1,6 +1,7 @@
 package io.github.seujorgenochurras.utils;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -62,20 +63,23 @@ public class StringUtils {
     }
 
     public static String getAllLineTextUsingCharIndex(int charIndex, String stringToGetLineFrom) {
-        AtomicInteger currentCharIndex = new AtomicInteger(-1);
-        StringBuilder stringBuilder = new StringBuilder();
-        stringToGetLineFrom.lines().forEach(line -> {
-            currentCharIndex.getAndAdd(line.length()-1);
-            if(currentCharIndex.get() >= charIndex) stringBuilder.append(line);
-        });
-        return stringBuilder.toString();
+        List<String> lines = stringToGetLineFrom.lines().toList();
+        int charCount = 0;
+        String lineFound = "";
+        for(String line : lines){
+            charCount += line.length()+1;
+            if(charCount >= charIndex) {
+                lineFound = line;
+                break;
+            }
+        }
+        return lineFound;
     }
+
     public static String getTextBefore(int charIndex, String stringToGetLineFrom){
         String allTextAtCharIndex = getAllLineTextUsingCharIndex(charIndex, stringToGetLineFrom);
         char charContents = stringToGetLineFrom.charAt(charIndex);
-        System.out.println("Char contents " + charContents);
-        System.out.println(charIndex + " \n\naa\n " + allTextAtCharIndex);
-        return allTextAtCharIndex.replace(allTextAtCharIndex.substring(allTextAtCharIndex.indexOf(charContents)), "");
+        return allTextAtCharIndex.substring(0, allTextAtCharIndex.indexOf(charContents));
     }
 
     public static boolean stringContainsAnyMatchesOf(String regex, String stringToCheck){

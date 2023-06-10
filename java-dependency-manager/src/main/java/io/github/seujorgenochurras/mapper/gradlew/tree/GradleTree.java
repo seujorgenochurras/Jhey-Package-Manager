@@ -15,7 +15,7 @@ public class GradleTree {
 
     public GradleNodeGroup getNodeGroupByName(String nodeGroupName) {
         return this.childNodeGroups.stream()
-                .filter(nodeGroup -> nodeGroup.getGroupName().equals(nodeGroupName))
+                .filter(nodeGroup -> nodeGroup.getGroupName().trim().equals(nodeGroupName))
                 .findFirst()
                 .orElseThrow(() -> new NotFoundException("No groups with name " + nodeGroupName + " found"));
     }
