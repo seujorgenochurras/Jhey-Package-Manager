@@ -34,9 +34,9 @@ public class DependencyDeclaration {
       if (dependency == null) {
 
          String cleanDeclaration = rawDeclaration.replaceAll(" {2}", "");
-         String dependencyType = cleanDeclaration.split("[(\"]")[0];
+         String dependencyType = cleanDeclaration.split("[(\"']")[0];
 
-         cleanDeclaration = cleanDeclaration.replaceAll("[(\")]", " ")
+         cleanDeclaration = cleanDeclaration.replaceAll("[(\"')]", " ")
                  .replaceFirst("^(.*?) ", "");
 
          String[] dependencyDeclarationComponents = cleanDeclaration.split(":");

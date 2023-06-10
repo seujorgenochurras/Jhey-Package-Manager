@@ -8,7 +8,6 @@ import io.github.seujorgenochurras.mapper.DependencyMapper;
 
 import java.io.File;
 
-
 public class Example {
    public static void main(String[] args)  {
      DependencyManagerFile dependencyManagerFile = DependencyMapper.mapFile(new File("java-dependency-manager/dependency-file-example/build.gradle"));

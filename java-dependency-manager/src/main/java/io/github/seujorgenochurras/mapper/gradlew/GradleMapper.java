@@ -5,6 +5,8 @@ import io.github.seujorgenochurras.domain.dependency.DependencyDeclaration;
 import io.github.seujorgenochurras.domain.manager.gradlew.GradleBuildFileBuilder;
 import io.github.seujorgenochurras.mapper.DependencyManagerFile;
 import io.github.seujorgenochurras.mapper.DependencyMapper;
+import io.github.seujorgenochurras.mapper.gradlew.tree.GradleTree;
+import io.github.seujorgenochurras.mapper.gradlew.tree.mapper.GradleTreeFileMapper;
 import io.github.seujorgenochurras.utils.FileUtils;
 
 import java.io.File;
@@ -17,88 +19,87 @@ import static io.github.seujorgenochurras.utils.StringUtils.*;
 
 public class GradleMapper extends DependencyMapper {
 
-   private List<DependencyDeclaration> dependencyDeclarations = new ArrayList<>();
-   private List<PluginDeclaration> pluginDeclarations = new ArrayList<>();
-   protected String gradleBuildFileAsString;
+    private List<DependencyDeclaration> dependencyDeclarations = new ArrayList<>();
+    private List<PluginDeclaration> pluginDeclarations = new ArrayList<>();
+    protected String gradleBuildFileAsString;
 
-   public GradleMapper(File rootFile) {
-      super(rootFile);
-      this.gradleBuildFileAsString = FileUtils.getFileAsString(rootFile);
-   }
+    public GradleMapper(File rootFile) {
+        super(rootFile);
+        this.gradleBuildFileAsString = FileUtils.getFileAsString(rootFile);
+    }
 
-   @Override
-   protected DependencyManagerFile map() {
-      this.removeComments();
-      mapDependencies();
-      mapPlugins();
+    @Override
+    protected DependencyManagerFile map() {
+        this.removeComments();
+        mapDependencies();
+        mapPlugins();
 
-      return GradleBuildFileBuilder.startBuild()
-              .dependenciesDeclaration(this.dependencyDeclarations)
-              .plugins(this.pluginDeclarations)
-              .originFile(this.rootFile)
-              .getBuild();
-   }
+        return GradleBuildFileBuilder.startBuild()
+                .dependenciesDeclaration(this.dependencyDeclarations)
+                .plugins(this.pluginDeclarations)
+                .originFile(this.rootFile)
+                .getBuild();
+    }
 
-   @Override
-   protected void mapDependencies() {
-      this.dependencyDeclarations = getDependencyDeclarations();
-   }
+    @Override
+    protected void mapDependencies() {
+        this.dependencyDeclarations = getDependencyDeclarations();
+    }
 
-   protected void mapPlugins() {
-      this.pluginDeclarations = getAllPluginDeclarations();
-   }
+    protected void mapPlugins() {
+        this.pluginDeclarations = getAllPluginDeclarations();
+    }
 
-   private void removeComments() {
-      String multiLineAndInLineCommentsRegex = "/\\*((.|\\n)*?)\\*/|//.*";
-      this.gradleBuildFileAsString = this.gradleBuildFileAsString.replaceAll(multiLineAndInLineCommentsRegex, "");
-   }
+    private void removeComments() {
+        String multiLineAndInLineCommentsRegex = "/\\*((.|\\n)*?)\\*/|//.*";
+        this.gradleBuildFileAsString = this.gradleBuildFileAsString.replaceAll(multiLineAndInLineCommentsRegex, "");
+    }
 
-   protected List<PluginDeclaration> getAllPluginDeclarations() {
-      List<PluginDeclaration> pluginsAsString = new ArrayList<>();
+    protected List<PluginDeclaration> getAllPluginDeclarations() {
+        List<PluginDeclaration> pluginsAsString = new ArrayList<>();
 
-      getLinesOfPluginsBlock().forEach((lineNumber, line) -> {
+        getLinesOfPluginsBlock().forEach((lineNumber, line) -> {
 
-         String pluginDeclarationRegex = "(?<=id).*['\"]";
-         Matcher matcher = generateStringMatcherFromRegex(line, pluginDeclarationRegex);
-         getAllMatchesOfMatcher(matcher).forEach((pluginDeclarationLine, pluginDeclaration) ->
-                 pluginsAsString.add(new PluginDeclaration(pluginDeclaration, pluginDeclarationLine)));
-      });
-      return pluginsAsString;
-   }
+            String pluginDeclarationRegex = "(?<=id).*['\"]";
+            Matcher matcher = generateStringMatcherFromRegex(line, pluginDeclarationRegex);
+            getAllMatchesOfMatcher(matcher).forEach((pluginDeclarationLine, pluginDeclaration) ->
+                    pluginsAsString.add(new PluginDeclaration(pluginDeclaration, pluginDeclarationLine)));
+        });
+        return pluginsAsString;
+    }
 
-   protected List<DependencyDeclaration> getDependencyDeclarations() {
+    protected List<DependencyDeclaration> getDependencyDeclarations() {
 
-      List<DependencyDeclaration> dependenciesAsString = new ArrayList<>();
+        List<DependencyDeclaration> dependenciesAsString = new ArrayList<>();
 
-      getLinesOfDependenciesBlock().forEach((lineNumber, line) -> {
-         String dependencyDeclarationRegex = "(testImplementation|implementation|runtime_only|testRuntimeOnly).*".trim();
-         Matcher dependencyDeclarationMatcher = generateStringMatcherFromRegex(line, dependencyDeclarationRegex);
+        GradleTree gradleTree = GradleTreeFileMapper.mapFile(rootFile);
+        gradleTree.getNodeGroupByName("dependencies").getNodes()
+                .stream()
+                .filter(probableDependencyDeclarationNode -> stringContainsAnyMatchesOf("(testImplementation|implementation|runtime_only|testRuntimeOnly).*",
+                        probableDependencyDeclarationNode.getTextContents()))
 
-         getAllMatchesOfMatcher(dependencyDeclarationMatcher)
-                 .forEach((dependencyDeclarationLineNumber, dependencyDeclarationLine) ->
-                         dependenciesAsString.add(new DependencyDeclaration(dependencyDeclarationLine, dependencyDeclarationLineNumber)));
-      });
-      return dependenciesAsString;
-   }
+                .forEach(dependencyDeclarationNode -> {
+                    int nodeLinePosition = dependencyDeclarationNode.getLinePosition();
+                    String nodeContents = dependencyDeclarationNode.getTextContents();
+                    dependenciesAsString.add(new DependencyDeclaration(nodeContents, nodeLinePosition));
+                });
+        return dependenciesAsString;
+    }
 
-   protected HashMap<Integer, String> getBlockLinesFromGradleFile(String blockName) {
+    protected HashMap<Integer, String> getBlockLinesFromGradleFile(String blockName) {
 
-      String blockRegex = generateRegexForCodeBlock(blockName);
-      Matcher matcher = generateGradleMatcherFromRegex(blockRegex);
+        String blockRegex = generateRegexForCodeBlock(blockName);
+        Matcher matcher = generateGradleMatcherFromRegex(blockRegex);
 
-      return getAllMatchesOfMatcher(matcher);
-   }
+        return getAllMatchesOfMatcher(matcher);
+    }
 
-   private Matcher generateGradleMatcherFromRegex(String regex) {
-      return generateStringMatcherFromRegex(gradleBuildFileAsString, regex);
-   }
+    private Matcher generateGradleMatcherFromRegex(String regex) {
+        return generateStringMatcherFromRegex(gradleBuildFileAsString, regex);
+    }
 
-   private HashMap<Integer, String> getLinesOfDependenciesBlock() {
-      return getBlockLinesFromGradleFile("dependencies");
-   }
-
-   private HashMap<Integer, String> getLinesOfPluginsBlock() {
-      return getBlockLinesFromGradleFile("plugins");
-   }
+    private HashMap<Integer, String> getLinesOfPluginsBlock() {
+        return getBlockLinesFromGradleFile("plugins");
+    }
 
 }
