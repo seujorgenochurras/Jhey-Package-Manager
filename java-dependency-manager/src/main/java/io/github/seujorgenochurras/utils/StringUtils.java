@@ -58,10 +58,12 @@ public class StringUtils {
         return lineFound;
     }
 
-    public static String getTextBefore(int charIndex, String stringToGetLineFrom){
+    public static String getTextBeforeChar(int charIndex, String stringToGetLineFrom){
         String allTextAtCharIndex = getAllLineTextUsingCharIndex(charIndex, stringToGetLineFrom);
         char charContents = stringToGetLineFrom.charAt(charIndex);
+
         return allTextAtCharIndex.substring(0, allTextAtCharIndex.indexOf(charContents));
+
     }
 
     public static boolean stringContainsAnyMatchesOf(String regex, String stringToCheck){

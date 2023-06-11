@@ -2,18 +2,16 @@ package io.github.seujorgenochurras.mapper.gradlew.tree.mapper;
 
 import io.github.seujorgenochurras.mapper.gradlew.tree.GradleTree;
 import io.github.seujorgenochurras.mapper.gradlew.tree.GradleTreeBuilder;
-import io.github.seujorgenochurras.mapper.gradlew.tree.node.GradleNode;
+import io.github.seujorgenochurras.mapper.gradlew.tree.mapper.chain.MapperResponsibilityChain;
+import io.github.seujorgenochurras.mapper.gradlew.tree.mapper.chain.TreeMapperPackage;
+import io.github.seujorgenochurras.mapper.gradlew.tree.mapper.chain.handler.OnCharIsCloseCurlyBraces;
+import io.github.seujorgenochurras.mapper.gradlew.tree.mapper.chain.handler.OnCharIsInsideNodeGroup;
+import io.github.seujorgenochurras.mapper.gradlew.tree.mapper.chain.handler.OnCharIsOpenCurlyBraces;
 import io.github.seujorgenochurras.mapper.gradlew.tree.node.GradleNodeGroup;
 import io.github.seujorgenochurras.utils.FileUtils;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.Set;
-import java.util.List;
-
-import static io.github.seujorgenochurras.utils.StringUtils.getAllLineTextUsingCharIndex;
-import static io.github.seujorgenochurras.utils.StringUtils.getTextBefore;
 
 public class GradleTreeFileMapper implements GradleTreeMapper {
 
@@ -38,48 +36,23 @@ public class GradleTreeFileMapper implements GradleTreeMapper {
    private Set<GradleNodeGroup> mapAllNodeGroups() {
       String fileToMapContents = FileUtils.getFileAsString(fileToMap);
 
-      Set<GradleNodeGroup> groupsFound = new LinkedHashSet<>();
-      int indexOfCurrentChar = -1;
-      int openCurlyBracesCount = 0;
-      List<GradleNodeGroup> previousNodeGroups = new ArrayList<>();
 
-      for (char character : fileToMapContents.toCharArray()) {
-         indexOfCurrentChar++;
+      TreeMapperPackage treeMapperPackage = new TreeMapperPackage()
+              .setFileToMapContents(fileToMapContents);
 
-         if (character == '{' || character == '}' || isInsideNodeGroup(openCurlyBracesCount)) {
-            GradleNodeGroup currentNodeGroup;
-            if (!previousNodeGroups.isEmpty()) {
-               currentNodeGroup = previousNodeGroups.get(previousNodeGroups.size() - 1);
-            } else {
-               currentNodeGroup = new GradleNodeGroup();
-            }
-            if (character == '{') {
-               previousNodeGroups.add(currentNodeGroup);
-               openCurlyBracesCount++;
-               currentNodeGroup.setGroupName(getTextBefore(indexOfCurrentChar, fileToMapContents));
+      MapperResponsibilityChain packageResponsibilityChain = MapperResponsibilityChain.startChain()
+              .addHandler(new OnCharIsOpenCurlyBraces())
+              .addHandler(new OnCharIsCloseCurlyBraces())
+              .addHandler(new OnCharIsInsideNodeGroup());
 
-               if (isInsideNodeGroup(openCurlyBracesCount)) {
-                  GradleNodeGroup fatherNodeGroup = previousNodeGroups.get(openCurlyBracesCount - 1);
-                  fatherNodeGroup.appendNodeGroup(currentNodeGroup);
-               }
 
-            } else if (character == '}') {
-               openCurlyBracesCount--;
-               previousNodeGroups.remove(openCurlyBracesCount);
-            } else {
-               currentNodeGroup.addNode(
-                       new GradleNode(getAllLineTextUsingCharIndex(indexOfCurrentChar, fileToMapContents).trim(), 0));
-            }
-            if (!isInsideNodeGroup(openCurlyBracesCount)) {
-               groupsFound.add(currentNodeGroup);
-            }
-         }
+      for (Character character : fileToMapContents.toCharArray()) {
+         treeMapperPackage.incrementIndexOfCurrentChar();
+         treeMapperPackage.updateWithChar(character);
+         if (character == '{' || character == '}' || treeMapperPackage.isInsideNodeGroup())
+            packageResponsibilityChain.handlePackage(treeMapperPackage);
       }
-      return groupsFound;
-   }
 
-
-   private boolean isInsideNodeGroup(int curlyBracesCount) {
-      return curlyBracesCount > 0;
+      return treeMapperPackage.getGroupsFound();
    }
 }

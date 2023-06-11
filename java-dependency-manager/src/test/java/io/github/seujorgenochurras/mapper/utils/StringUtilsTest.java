@@ -43,7 +43,7 @@ class StringUtilsTest {
            "    mavenCentral()\n" +
            "}\n" +
            "\n";
-      assertEquals("repositories ", StringUtils.getTextBefore(191 , lineToTest));
+      assertEquals("repositories ", StringUtils.getTextBeforeChar(191 , lineToTest));
    }
    @Test
    void isStringContainsAnyMatchesOfWorking(){

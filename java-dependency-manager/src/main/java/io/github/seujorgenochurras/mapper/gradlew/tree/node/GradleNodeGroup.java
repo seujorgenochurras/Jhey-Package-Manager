@@ -53,8 +53,9 @@ public class GradleNodeGroup {
     @Override
     public String toString() {
         return "GradleNodeGroup{" +
+                "nodes=" + nodes +
+                ", childNodeGroups=" + childNodeGroups +
                 ", groupName='" + groupName + '\'' +
-                ", Child nodes" + nodes +
                 ", groupLineStartPosition=" + groupLineStartPosition +
                 ", groupLineFinalPosition=" + groupLineFinalPosition +
                 '}';
