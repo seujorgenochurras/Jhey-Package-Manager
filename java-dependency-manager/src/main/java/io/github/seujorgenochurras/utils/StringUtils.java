@@ -83,6 +83,6 @@ public class StringUtils {
     }
 
     public static boolean stringContainsAnyMatchesOf(String regex, String stringToCheck){
-        return getAllMatchesOfMatcher(generateStringMatcherFromRegex(stringToCheck, regex)).size() > 1;
+        return !getAllMatchesOfMatcher(generateStringMatcherFromRegex(stringToCheck, regex)).isEmpty();
     }
 }

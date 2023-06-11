@@ -5,25 +5,27 @@ import io.github.seujorgenochurras.domain.dependency.Dependency;
 import io.github.seujorgenochurras.domain.dependency.DependencyBuilder;
 import io.github.seujorgenochurras.manager.DependencyManager;
 import io.github.seujorgenochurras.mapper.DependencyManagerFile;
+import io.github.seujorgenochurras.mapper.DependencyMapper;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class GradleMapperTest {
-   private static final DependencyManagerFile buildFile = DependencyManager.getDependencyManagerFile();
+
+   public static final DependencyManagerFile dependencyManagerFile =
+           DependencyMapper.mapFile(new File("java-dependency-manager/dependency-file-example/build.gradle"));
 
    @Test
    void isMappingDependencies(){
-      assertNotNull(buildFile.getDependencies());
-      assertNotEquals(0, buildFile.getDependencies().size());
+      assertEquals(12, dependencyManagerFile.getDependencies().size());
    }
    @Test
    void isMappingPlugins(){
-      assertNotNull(buildFile.getDependencies());
-      assertNotEquals(0, buildFile.getPlugins().size());
+      assertNotEquals(5, dependencyManagerFile.getPlugins().size());
    }
 
    @Test
@@ -33,21 +35,9 @@ class GradleMapperTest {
               .artifact("testImpl")
               .version("69.42.0")
               .buildResult();
-      buildFile.addDependency(dependency);
-
-      assertTrue(listContains(buildFile.getDependencies(), dependency));
+      dependencyManagerFile.addDependency(dependency);
+      assertTrue(dependencyManagerFile.getDependencies().contains(dependency));
    }
-
-   private <T> boolean listContains(List<T> list, T object){
-      if(object == null || list == null) return false;
-
-      AtomicBoolean listContainsElement = new AtomicBoolean(false);
-      list.forEach(element -> {
-            if(!listContainsElement.get()) listContainsElement.set(object.equals(element));
-      });
-      return listContainsElement.get();
-   }
-
 
 
 }

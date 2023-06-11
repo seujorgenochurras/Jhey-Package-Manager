@@ -49,4 +49,24 @@ public class GradleNodeGroup {
     public void setGroupLineFinalPosition(int groupLineFinalPosition) {
         this.groupLineFinalPosition = groupLineFinalPosition;
     }
+
+    @Override
+    public String toString() {
+        return "GradleNodeGroup{" +
+                ", groupName='" + groupName + '\'' +
+                ", Child nodes" + nodes +
+                ", groupLineStartPosition=" + groupLineStartPosition +
+                ", groupLineFinalPosition=" + groupLineFinalPosition +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof GradleNodeGroup that)) return false;
+
+        if (getGroupLineStartPosition() != that.getGroupLineStartPosition()) return false;
+        if (getGroupLineFinalPosition() != that.getGroupLineFinalPosition()) return false;
+        return getGroupName() != null ? getGroupName().equals(that.getGroupName()) : that.getGroupName() == null;
+    }
 }

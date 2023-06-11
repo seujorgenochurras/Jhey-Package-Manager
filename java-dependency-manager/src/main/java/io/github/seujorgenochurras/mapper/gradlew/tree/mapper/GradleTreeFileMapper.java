@@ -8,8 +8,8 @@ import io.github.seujorgenochurras.utils.FileUtils;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static io.github.seujorgenochurras.utils.StringUtils.getAllLineTextUsingCharIndex;
 import static io.github.seujorgenochurras.utils.StringUtils.getTextBefore;
@@ -28,25 +28,24 @@ public class GradleTreeFileMapper implements GradleTreeMapper {
 
    @Override
    public GradleTree map() {
-      List<GradleNodeGroup> nodeGroups = mapAllNodeGroups();
+      HashSet<GradleNodeGroup> nodeGroups = mapAllNodeGroups();
       return GradleTreeBuilder.startBuild()
               .childNodeGroups(nodeGroups)
               .getBuildResult();
    }
 
-   private List<GradleNodeGroup> mapAllNodeGroups() {
+   private HashSet<GradleNodeGroup> mapAllNodeGroups() {
       String fileToMapContents = FileUtils.getFileAsString(fileToMap);
 
-      List<GradleNodeGroup> groupsFound = new ArrayList<>();
-      AtomicInteger indexOfCurrentChar = new AtomicInteger(-1);
-      AtomicInteger openCurlyBracesCount = new AtomicInteger(0);
+      HashSet<GradleNodeGroup> groupsFound = new HashSet<>();
+      int indexOfCurrentChar = -1;
+      int openCurlyBracesCount = 0;
       List<GradleNodeGroup> previousNodeGroups = new ArrayList<>();
 
-      fileToMapContents.chars().forEach(character -> {
-         indexOfCurrentChar.getAndIncrement();
+      for (char character : fileToMapContents.toCharArray()) {
+         indexOfCurrentChar++;
 
-
-         if (character == '{' || character == '}' || isInsideNodeGroup(openCurlyBracesCount.get())) {
+         if (character == '{' || character == '}' || isInsideNodeGroup(openCurlyBracesCount)) {
             GradleNodeGroup currentNodeGroup;
             if (!previousNodeGroups.isEmpty()) {
                currentNodeGroup = previousNodeGroups.get(previousNodeGroups.size() - 1);
@@ -55,25 +54,26 @@ public class GradleTreeFileMapper implements GradleTreeMapper {
             }
             if (character == '{') {
                previousNodeGroups.add(currentNodeGroup);
-               openCurlyBracesCount.getAndIncrement();
-               currentNodeGroup.setGroupName(getTextBefore(indexOfCurrentChar.get(), fileToMapContents));
+               openCurlyBracesCount++;
+               currentNodeGroup.setGroupName(getTextBefore(indexOfCurrentChar, fileToMapContents));
 
-               if (isInsideNodeGroup(openCurlyBracesCount.get())) {
-                  GradleNodeGroup fatherNodeGroup = previousNodeGroups.get(openCurlyBracesCount.get() - 1);
+               if (isInsideNodeGroup(openCurlyBracesCount)) {
+                  GradleNodeGroup fatherNodeGroup = previousNodeGroups.get(openCurlyBracesCount - 1);
                   fatherNodeGroup.appendNodeGroup(currentNodeGroup);
                }
 
             } else if (character == '}') {
-               openCurlyBracesCount.decrementAndGet();
-               previousNodeGroups.remove(openCurlyBracesCount.get());
+               openCurlyBracesCount--;
+               previousNodeGroups.remove(openCurlyBracesCount);
             } else {
-               currentNodeGroup.addNode(new GradleNode(getAllLineTextUsingCharIndex(indexOfCurrentChar.get(), fileToMapContents)));
+               currentNodeGroup.addNode(
+                       new GradleNode(getAllLineTextUsingCharIndex(indexOfCurrentChar, fileToMapContents).trim(), 0));
             }
-            if (!isInsideNodeGroup(openCurlyBracesCount.get())) {
+            if (!isInsideNodeGroup(openCurlyBracesCount)) {
                groupsFound.add(currentNodeGroup);
             }
          }
-      });
+      }
       return groupsFound;
    }
 

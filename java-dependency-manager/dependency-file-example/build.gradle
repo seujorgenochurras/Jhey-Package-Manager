@@ -14,9 +14,17 @@ repositories {
 }
 
 dependencies {
-//implementation ("awiodjaw:ajwodijawoda:1.1.1.1")
-//implementation ("awiodjaw:ajwodijawoda:1.1.1.1")
     implementation ("org.seleniumhq.selenium:selenium-java:4.8.1")
     implementation ('com.google.code.gson:gson:2.10.1')
     implementation ('io.github.seujorgenochurras:selenium-custom-elements:0.1.0')
+    testImpelemtation ("LIGMA:BALLS:0.5.9")
+    runtimeOnly ("DAUMA:MAMADA:1.0.0")
+    testImplementation ("FUCK:YOU:1.2.3.69")
+    testRuntimeOnly ("FUCK:YOU:1.2.3.69")
+    testCompileOnly ("FUCK:YOU:1.2.3.69")
+    runtimeOnly ("FUCK:YOU:1.2.3.69")
+    implementation ("FUCK:YOU:1.2.3.69")
+    api ("FUCK:YOU:1.2.3.69")
+    compileOnly ("FUCK:YOU:1.2.3.69")
+    compileOnlyApi ("FUCK:YOU:1.2.3.69")
 }

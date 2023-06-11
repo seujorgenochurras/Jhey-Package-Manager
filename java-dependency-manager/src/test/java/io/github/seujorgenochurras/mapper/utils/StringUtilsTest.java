@@ -45,4 +45,26 @@ class StringUtilsTest {
            "\n";
       assertEquals("repositories ", StringUtils.getTextBefore(191 , lineToTest));
    }
+   @Test
+   void isStringContainsAnyMatchesOfWorking(){
+      String dependency1 = "implementation (\"org.seleniumhq.selenium:selenium-java:4.8.1\")";
+      String dependency2 = "implementation ('io.github.seujorgenochurras:selenium-custom-elements:0.1.0')";
+      String dependency3 = "implementation ('com.google.code.gson:gson:2.10.1')";
+      String notDependency1 = "MEU PAU DE ASAS";
+      String notDependency2 = "{}{})()()\"\" FODASSE!";
+      String notDependency3 = "rem ipsum dolor sit amet, consectetur ad";
+
+      String stringImplementationRegex = "(testImplementation|implementation|runtime_only|testRuntimeOnly).*";
+
+      assertTrue(StringUtils.stringContainsAnyMatchesOf(stringImplementationRegex, dependency1));
+      assertTrue(StringUtils.stringContainsAnyMatchesOf(stringImplementationRegex, dependency2));
+      assertTrue(StringUtils.stringContainsAnyMatchesOf(stringImplementationRegex, dependency3));
+
+      assertFalse(StringUtils.stringContainsAnyMatchesOf(stringImplementationRegex, notDependency1));
+      assertFalse(StringUtils.stringContainsAnyMatchesOf(stringImplementationRegex, notDependency2));
+      assertFalse(StringUtils.stringContainsAnyMatchesOf(stringImplementationRegex, notDependency3));
+
+
+
+   }
 }

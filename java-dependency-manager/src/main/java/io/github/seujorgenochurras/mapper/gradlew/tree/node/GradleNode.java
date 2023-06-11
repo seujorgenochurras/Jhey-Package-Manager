@@ -28,4 +28,28 @@ public class GradleNode {
     public GradleNode(String textContents) {
         this.textContents = textContents;
     }
+
+    @Override
+    public String toString() {
+        return "GradleNode{" +
+                "textContents='" + textContents + '\'' +
+                ", linePosition=" + linePosition +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof GradleNode that)) return false;
+
+        if (getLinePosition() != that.getLinePosition()) return false;
+        return getTextContents() != null ? getTextContents().equals(that.getTextContents()) : that.getTextContents() == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getTextContents() != null ? getTextContents().hashCode() : 0;
+        result = 31 * result + getLinePosition();
+        return result;
+    }
 }

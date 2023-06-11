@@ -9,16 +9,17 @@ import io.github.seujorgenochurras.mapper.DependencyMapper;
 import java.io.File;
 
 public class Example {
-   public static void main(String[] args)  {
-     DependencyManagerFile dependencyManagerFile = DependencyMapper.mapFile(new File("java-dependency-manager/dependency-file-example/build.gradle"));
+   public static void main(String[] args) {
+      DependencyManagerFile dependencyManagerFile = DependencyMapper.mapFile(new File("java-dependency-manager/dependency-file-example/build.gradle"));
 
-     Dependency dependency = DependencyBuilder.startBuild()
-             .group("awiodjaw")
-             .artifact("ajwodijawoda")
-             .version("1.1.1.1")
-             .dependencyType(DependencyType.IMPLEMENTATION)
-             .buildResult();
-     dependencyManagerFile.addDependency(dependency);
-     dependencyManagerFile.commentDependency(dependency);
+      Dependency dependency = DependencyBuilder.startBuild()
+              .group("awiodjaw")
+              .artifact("ajwodijawoda")
+              .version("1.1.1.1")
+              .dependencyType(DependencyType.IMPLEMENTATION)
+              .buildResult();
+      System.out.println(dependencyManagerFile.getDependencies());
+      dependencyManagerFile.addDependency(dependency);
+      dependencyManagerFile.commentDependency(dependency);
    }
 }
