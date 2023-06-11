@@ -3,13 +3,12 @@ package io.github.seujorgenochurras.mapper.gradlew.tree;
 import io.github.seujorgenochurras.mapper.gradlew.tree.node.GradleNodeGroup;
 import io.github.seujorgenochurras.utils.NotFoundException;
 
-import java.util.HashSet;
-import java.util.List;
+import java.util.Set;
 
 public class GradleTree {
-    private final HashSet<GradleNodeGroup> childNodeGroups;
+    private final Set<GradleNodeGroup> childNodeGroups;
 
-     GradleTree(HashSet<GradleNodeGroup> childNodeGroups) {
+     GradleTree(Set<GradleNodeGroup> childNodeGroups) {
         // Only by builder
         this.childNodeGroups = childNodeGroups;
     }
@@ -21,7 +20,7 @@ public class GradleTree {
                 .orElseThrow(() -> new NotFoundException("No groups with name " + nodeGroupName + " found"));
     }
 
-    public HashSet<GradleNodeGroup> getChildNodeGroups() {
+    public Set<GradleNodeGroup> getChildNodeGroups() {
         return childNodeGroups;
     }
 

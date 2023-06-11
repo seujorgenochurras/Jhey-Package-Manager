@@ -11,14 +11,13 @@ import io.github.seujorgenochurras.utils.FileUtils;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.regex.Matcher;
 
-import static io.github.seujorgenochurras.utils.StringUtils.*;
+import static io.github.seujorgenochurras.utils.StringUtils.stringContainsAnyMatchesOf;
 
 public class GradleMapper extends DependencyMapper {
 
+   private final GradleTree gradleTree;
    protected String gradleBuildFileAsString;
    private List<DependencyDeclaration> dependencyDeclarations = new ArrayList<>();
    private List<PluginDeclaration> pluginDeclarations = new ArrayList<>();
@@ -26,6 +25,7 @@ public class GradleMapper extends DependencyMapper {
    public GradleMapper(File rootFile) {
       super(rootFile);
       this.gradleBuildFileAsString = FileUtils.getFileAsString(rootFile);
+      this.gradleTree = GradleTreeFileMapper.mapFile(rootFile);
    }
 
    @Override
@@ -56,27 +56,26 @@ public class GradleMapper extends DependencyMapper {
    }
 
    protected List<PluginDeclaration> getAllPluginDeclarations() {
-      List<PluginDeclaration> pluginsAsString = new ArrayList<>();
+      List<PluginDeclaration> plugins = new ArrayList<>();
+      gradleTree.getNodeGroupByName("plugins").getNodes()
+              .stream()
+              .filter(possiblePluginDeclarationNode ->
+                      stringContainsAnyMatchesOf("(?<=id).*['\"]", possiblePluginDeclarationNode.getTextContents()))
 
-      getLinesOfPluginsBlock().forEach((lineNumber, line) -> {
+              .forEach(pluginDeclarationNode ->
+                      plugins.add(new PluginDeclaration(pluginDeclarationNode.getTextContents(), 0)));
 
-         String pluginDeclarationRegex = "(?<=id).*['\"]";
-         Matcher matcher = generateStringMatcherFromRegex(line, pluginDeclarationRegex);
-         getAllMatchesOfMatcher(matcher).forEach((pluginDeclarationLine, pluginDeclaration) ->
-                 pluginsAsString.add(new PluginDeclaration(pluginDeclaration, pluginDeclarationLine)));
-      });
-      return pluginsAsString;
+      return plugins;
    }
 
    protected List<DependencyDeclaration> getDependencyDeclarations() {
 
       List<DependencyDeclaration> dependenciesAsString = new ArrayList<>();
 
-      GradleTree gradleTree = GradleTreeFileMapper.mapFile(rootFile);
       gradleTree.getNodeGroupByName("dependencies").getNodes()
               .stream()
               .filter(probableDependencyDeclarationNode ->
-                      stringContainsAnyMatchesOf("(testImplementation|implementation|runtime_only|testRuntimeOnly).*",
+                      stringContainsAnyMatchesOf("(testImplementation|implementation|runtime_only|testRuntimeOnly|testCompileOnly|runtimeOnly|api|compileOnly|compileOnlyApi).*",
                               probableDependencyDeclarationNode.getTextContents()))
               .forEach(dependencyDeclarationNode -> {
                  int nodeLinePosition = dependencyDeclarationNode.getLinePosition();
@@ -84,22 +83,6 @@ public class GradleMapper extends DependencyMapper {
                  dependenciesAsString.add(new DependencyDeclaration(nodeContents, nodeLinePosition));
               });
       return dependenciesAsString;
-   }
-
-   protected HashMap<Integer, String> getBlockLinesFromGradleFile(String blockName) {
-
-      String blockRegex = generateRegexForCodeBlock(blockName);
-      Matcher matcher = generateGradleMatcherFromRegex(blockRegex);
-
-      return getAllMatchesOfMatcher(matcher);
-   }
-
-   private Matcher generateGradleMatcherFromRegex(String regex) {
-      return generateStringMatcherFromRegex(gradleBuildFileAsString, regex);
-   }
-
-   private HashMap<Integer, String> getLinesOfPluginsBlock() {
-      return getBlockLinesFromGradleFile("plugins");
    }
 
 }

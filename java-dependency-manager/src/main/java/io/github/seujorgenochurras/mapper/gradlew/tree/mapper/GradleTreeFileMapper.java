@@ -8,7 +8,8 @@ import io.github.seujorgenochurras.utils.FileUtils;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import java.util.List;
 
 import static io.github.seujorgenochurras.utils.StringUtils.getAllLineTextUsingCharIndex;
@@ -28,16 +29,16 @@ public class GradleTreeFileMapper implements GradleTreeMapper {
 
    @Override
    public GradleTree map() {
-      HashSet<GradleNodeGroup> nodeGroups = mapAllNodeGroups();
+      Set<GradleNodeGroup> nodeGroups = mapAllNodeGroups();
       return GradleTreeBuilder.startBuild()
               .childNodeGroups(nodeGroups)
               .getBuildResult();
    }
 
-   private HashSet<GradleNodeGroup> mapAllNodeGroups() {
+   private Set<GradleNodeGroup> mapAllNodeGroups() {
       String fileToMapContents = FileUtils.getFileAsString(fileToMap);
 
-      HashSet<GradleNodeGroup> groupsFound = new HashSet<>();
+      Set<GradleNodeGroup> groupsFound = new LinkedHashSet<>();
       int indexOfCurrentChar = -1;
       int openCurlyBracesCount = 0;
       List<GradleNodeGroup> previousNodeGroups = new ArrayList<>();

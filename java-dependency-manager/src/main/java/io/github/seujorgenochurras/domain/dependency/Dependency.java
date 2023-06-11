@@ -54,7 +54,7 @@ public class Dependency {
               ", artifact='" + artifact + '\'' +
               ", version='" + version + '\'' +
               ", dependencyType=" + dependencyType +
-              '}';
+              '}' + "\n";
    }
 
    @Override
