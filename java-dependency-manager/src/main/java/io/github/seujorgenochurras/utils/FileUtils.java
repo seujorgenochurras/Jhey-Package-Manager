@@ -20,7 +20,6 @@ public class FileUtils {
       } catch (FileNotFoundException e) {
          throw new NoSuchElementException(e);
       }
-
       return fileAsString.toString();
    }
 }
