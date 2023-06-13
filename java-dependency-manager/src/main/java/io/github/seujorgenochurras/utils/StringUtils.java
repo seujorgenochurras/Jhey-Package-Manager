@@ -30,6 +30,17 @@ public class StringUtils {
         matcher.find();
         return matcher.end();
     }
+    public static String getFirstMatchOfString(String regex, String string){
+        Matcher matcher = generateStringMatcherFromRegex(string, regex);
+        matcher.find();
+
+        try{
+            return matcher.group();
+        }catch (IndexOutOfBoundsException | IllegalStateException e){
+            return "null";
+        }
+
+    }
 
     public static char lastCharOfString(String string) {
         if (string.length() == 0) return '\0';
@@ -68,5 +79,8 @@ public class StringUtils {
 
     public static boolean stringContainsAnyMatchesOf(String regex, String stringToCheck){
         return !getAllMatchesOfMatcher(generateStringMatcherFromRegex(stringToCheck, regex)).isEmpty();
+    }
+    public static boolean stringStartsWithRegex(String regex, String stringToCheck){
+        return stringToCheck.startsWith(getFirstMatchOfString(regex, stringToCheck));
     }
 }
