@@ -1,5 +1,5 @@
 
 @echo off
 
-call gradlew fatjar -q
+call .\..\gradlew fatjar -q
 java -jar build/libs/CLI.jar %*

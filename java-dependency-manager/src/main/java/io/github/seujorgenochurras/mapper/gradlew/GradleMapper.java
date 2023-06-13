@@ -5,8 +5,8 @@ import io.github.seujorgenochurras.domain.dependency.DependencyDeclaration;
 import io.github.seujorgenochurras.domain.manager.gradlew.GradleBuildFileBuilder;
 import io.github.seujorgenochurras.mapper.DependencyManagerFile;
 import io.github.seujorgenochurras.mapper.DependencyMapper;
-import io.github.seujorgenochurras.mapper.gradlew.tree.GradleTree;
-import io.github.seujorgenochurras.mapper.gradlew.tree.mapper.GradleTreeFileMapper;
+import io.github.seujorgenochurras.mapper.gradlew.tree.GradleForest;
+import io.github.seujorgenochurras.mapper.gradlew.tree.mapper.GradleForestFileMapper;
 import io.github.seujorgenochurras.utils.FileUtils;
 
 import java.io.File;
@@ -17,7 +17,7 @@ import static io.github.seujorgenochurras.utils.StringUtils.stringContainsAnyMat
 
 public class GradleMapper extends DependencyMapper {
 
-   private final GradleTree gradleTree;
+   private final GradleForest gradleForest;
    protected String gradleBuildFileAsString;
    private List<DependencyDeclaration> dependencyDeclarations = new ArrayList<>();
    private List<PluginDeclaration> pluginDeclarations = new ArrayList<>();
@@ -25,7 +25,7 @@ public class GradleMapper extends DependencyMapper {
    public GradleMapper(File rootFile) {
       super(rootFile);
       this.gradleBuildFileAsString = FileUtils.getFileAsString(rootFile);
-      this.gradleTree = GradleTreeFileMapper.mapFile(rootFile);
+      this.gradleForest = GradleForestFileMapper.mapFile(rootFile);
    }
 
    @Override
@@ -57,7 +57,7 @@ public class GradleMapper extends DependencyMapper {
 
    protected List<PluginDeclaration> getAllPluginDeclarations() {
       List<PluginDeclaration> plugins = new ArrayList<>();
-      gradleTree.getNodeGroupByName("plugins").getNodes()
+      gradleForest.getTreeByName("plugins").getNodes()
               .stream()
               .filter(possiblePluginDeclarationNode ->
                       stringContainsAnyMatchesOf("(?<=id).*['\"]", possiblePluginDeclarationNode.getTextContents()))
@@ -72,15 +72,14 @@ public class GradleMapper extends DependencyMapper {
 
       List<DependencyDeclaration> dependenciesAsString = new ArrayList<>();
 
-      gradleTree.getNodeGroupByName("dependencies").getNodes()
+      gradleForest.getTreeByName("dependencies").getNodes()
               .stream()
               .filter(probableDependencyDeclarationNode ->
                       stringContainsAnyMatchesOf("(testImplementation|implementation|runtime_only|testRuntimeOnly|testCompileOnly|runtimeOnly|api|compileOnly|compileOnlyApi).*",
                               probableDependencyDeclarationNode.getTextContents()))
               .forEach(dependencyDeclarationNode -> {
-                 int nodeLinePosition = dependencyDeclarationNode.getLinePosition();
                  String nodeContents = dependencyDeclarationNode.getTextContents();
-                 dependenciesAsString.add(new DependencyDeclaration(nodeContents, nodeLinePosition));
+                 dependenciesAsString.add(new DependencyDeclaration(nodeContents));
               });
       return dependenciesAsString;
    }

@@ -7,6 +7,7 @@ version = "unspecified"
 
 repositories {
     mavenCentral()
+    mavenLocal()
 }
 
 dependencies {

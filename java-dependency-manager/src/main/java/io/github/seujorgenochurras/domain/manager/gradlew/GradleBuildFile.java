@@ -75,7 +75,7 @@ public class GradleBuildFile implements DependencyManagerFile {
 
       int indexOfDependenciesBlock = getIndexOfDependenciesBlock();
       addTextToOriginFile(declaration, indexOfDependenciesBlock);
-      this.dependencies.add(new DependencyDeclaration(declaration.replace("\n", ""), indexOfDependenciesBlock));
+      this.dependencies.add(new DependencyDeclaration(declaration.replace("\n", "")));
    }
 
    @Override
@@ -112,7 +112,7 @@ public class GradleBuildFile implements DependencyManagerFile {
    @Override
    public void commentDependency(Dependency dependency) {
       DependencyDeclaration dependencyDeclaration = getDeclarationOfDependency(dependency);
-      commentLine(dependencyDeclaration.getDeclarationLine());
+      commentLine(0);
    }
 
    private void commentLine(int lineIndex){
