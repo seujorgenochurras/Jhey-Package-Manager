@@ -3,7 +3,7 @@ package io.github.seujorgenochurras.mapper.gradlew.tree.mapper.chain.handler;
 import io.github.seujorgenochurras.mapper.gradlew.tree.mapper.chain.GradleTreeMapperChainHandler;
 import io.github.seujorgenochurras.mapper.gradlew.tree.mapper.chain.MapperResponsibilityChain;
 import io.github.seujorgenochurras.mapper.gradlew.tree.mapper.chain.TreeMapperPackage;
-import io.github.seujorgenochurras.mapper.gradlew.tree.node.GradleNodeGroup;
+import io.github.seujorgenochurras.mapper.gradlew.tree.node.GradleTree;
 
 
 public class OnCharIsOpenCurlyBraces implements GradleTreeMapperChainHandler {
@@ -13,15 +13,18 @@ public class OnCharIsOpenCurlyBraces implements GradleTreeMapperChainHandler {
       TreeMapperPackage treeMapperPackage = currentChain.getTreeMapperPackage();
 
       treeMapperPackage.incrementOpenCurlyBracesCount();
-      GradleNodeGroup currentNodeGroup = new GradleNodeGroup();
-      treeMapperPackage.setCurrentNodeGroup(currentNodeGroup);
-      currentNodeGroup.setGroupName(treeMapperPackage.getAllTextBeforeCurrentChar());
-      treeMapperPackage.addToPreviousNodeGroups(treeMapperPackage.getCurrentNodeGroup());
+      GradleTree currentTree = new GradleTree();
+      treeMapperPackage.setCurrentGradleTree(currentTree);
 
-      treeMapperPackage.addCurrentNodeGroupToPreviousNodeGroup();
-      currentChain.setHasBeenHandled(true);
-      if(treeMapperPackage.getOpenCurlyBracesCount() == 1){
-         treeMapperPackage.getGroupsFound().add(treeMapperPackage.getCurrentNodeGroup());
+      currentTree.setTreeName(treeMapperPackage.getAllTextBeforeCurrentChar());
+
+      treeMapperPackage.addToPreviousTrees(currentTree);
+
+      if (treeMapperPackage.isInsideTree()){
+         treeMapperPackage.appendCurrentTreeToFatherTree();
+      }else{
+         treeMapperPackage.getGradleTreesFound().add(currentTree);
       }
+      currentChain.setHasBeenHandled(true);
    }
 }

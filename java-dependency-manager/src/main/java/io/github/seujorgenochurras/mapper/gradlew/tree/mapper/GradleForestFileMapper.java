@@ -1,39 +1,39 @@
 package io.github.seujorgenochurras.mapper.gradlew.tree.mapper;
 
-import io.github.seujorgenochurras.mapper.gradlew.tree.GradleTree;
+import io.github.seujorgenochurras.mapper.gradlew.tree.GradleForest;
 import io.github.seujorgenochurras.mapper.gradlew.tree.GradleTreeBuilder;
 import io.github.seujorgenochurras.mapper.gradlew.tree.mapper.chain.MapperResponsibilityChain;
 import io.github.seujorgenochurras.mapper.gradlew.tree.mapper.chain.TreeMapperPackage;
 import io.github.seujorgenochurras.mapper.gradlew.tree.mapper.chain.handler.OnCharIsCloseCurlyBraces;
 import io.github.seujorgenochurras.mapper.gradlew.tree.mapper.chain.handler.OnCharIsInsideNodeGroup;
 import io.github.seujorgenochurras.mapper.gradlew.tree.mapper.chain.handler.OnCharIsOpenCurlyBraces;
-import io.github.seujorgenochurras.mapper.gradlew.tree.node.GradleNodeGroup;
+import io.github.seujorgenochurras.mapper.gradlew.tree.node.GradleTree;
 import io.github.seujorgenochurras.utils.FileUtils;
 
 import java.io.File;
 import java.util.Set;
 
-public class GradleTreeFileMapper implements GradleTreeMapper {
+public class GradleForestFileMapper implements GradleForestMapper {
 
    private final File fileToMap;
 
-   private GradleTreeFileMapper(File fileToMap) {
+   private GradleForestFileMapper(File fileToMap) {
       this.fileToMap = fileToMap;
    }
 
-   public static GradleTree mapFile(File file) {
-      return new GradleTreeFileMapper(file).map();
+   public static GradleForest mapFile(File file) {
+      return new GradleForestFileMapper(file).map();
    }
 
    @Override
-   public GradleTree map() {
-      Set<GradleNodeGroup> nodeGroups = mapAllNodeGroups();
+   public GradleForest map() {
+      Set<GradleTree> gradleTrees = mapAllNodeGroups();
       return GradleTreeBuilder.startBuild()
-              .childNodeGroups(nodeGroups)
+              .gradleTrees(gradleTrees)
               .getBuildResult();
    }
 
-   private Set<GradleNodeGroup> mapAllNodeGroups() {
+   private Set<GradleTree> mapAllNodeGroups() {
       String fileToMapContents = FileUtils.getFileAsString(fileToMap);
 
 
@@ -49,10 +49,10 @@ public class GradleTreeFileMapper implements GradleTreeMapper {
       for (Character character : fileToMapContents.toCharArray()) {
          treeMapperPackage.incrementIndexOfCurrentChar();
          treeMapperPackage.updateWithChar(character);
-         if (character == '{' || character == '}' || treeMapperPackage.isInsideNodeGroup())
+         if (character == '{' || character == '}' || treeMapperPackage.isMappingTree())
             packageResponsibilityChain.handlePackage(treeMapperPackage);
       }
 
-      return treeMapperPackage.getGroupsFound();
+      return treeMapperPackage.getGradleTreesFound();
    }
 }

@@ -27,7 +27,7 @@ class GradleMapperTest {
    void isMappingDependencyTypes() {
       List<Dependency> dependencies = dependencyManagerFile.getDependencies();
 
-      assertEquals(DependencyType.IMPLEMENTATION, dependencies.get(0).getDependencyType());
+      assertEquals(DependencyType.RUNTIME_ONLY, dependencies.get(0).getDependencyType());
       assertEquals(DependencyType.TEST_RUNTIME_ONLY, dependencies.get(3).getDependencyType());
       assertEquals(DependencyType.IMPLEMENTATION, dependencies.get(4).getDependencyType());
       assertEquals(DependencyType.API, dependencies.get(5).getDependencyType());
