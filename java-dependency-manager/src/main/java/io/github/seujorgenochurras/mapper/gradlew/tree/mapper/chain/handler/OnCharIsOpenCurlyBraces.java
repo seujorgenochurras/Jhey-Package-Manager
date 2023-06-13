@@ -13,15 +13,18 @@ public class OnCharIsOpenCurlyBraces implements GradleTreeMapperChainHandler {
       TreeMapperPackage treeMapperPackage = currentChain.getTreeMapperPackage();
 
       treeMapperPackage.incrementOpenCurlyBracesCount();
-      GradleTree currentNodeGroup = new GradleTree();
-      treeMapperPackage.setCurrentGradleTree(currentNodeGroup);
-      currentNodeGroup.setTreeName(treeMapperPackage.getAllTextBeforeCurrentChar());
-      treeMapperPackage.addToPreviousNodeGroups(treeMapperPackage.getCurrentGradleTree());
+      GradleTree currentTree = new GradleTree();
+      treeMapperPackage.setCurrentGradleTree(currentTree);
 
-      treeMapperPackage.addCurrentNodeGroupToPreviousNodeGroup();
-      currentChain.setHasBeenHandled(true);
-      if(treeMapperPackage.getOpenCurlyBracesCount() == 1){
-         treeMapperPackage.getGradleTreesFound().add(treeMapperPackage.getCurrentGradleTree());
+      currentTree.setTreeName(treeMapperPackage.getAllTextBeforeCurrentChar());
+
+      treeMapperPackage.addToPreviousTrees(currentTree);
+
+      if (treeMapperPackage.isInsideTree()){
+         treeMapperPackage.appendCurrentTreeToFatherTree();
+      }else{
+         treeMapperPackage.getGradleTreesFound().add(currentTree);
       }
+      currentChain.setHasBeenHandled(true);
    }
 }

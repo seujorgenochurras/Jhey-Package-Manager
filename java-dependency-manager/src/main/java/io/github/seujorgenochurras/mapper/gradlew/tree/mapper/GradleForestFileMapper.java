@@ -49,7 +49,7 @@ public class GradleForestFileMapper implements GradleForestMapper {
       for (Character character : fileToMapContents.toCharArray()) {
          treeMapperPackage.incrementIndexOfCurrentChar();
          treeMapperPackage.updateWithChar(character);
-         if (character == '{' || character == '}' || treeMapperPackage.isInsideTree())
+         if (character == '{' || character == '}' || treeMapperPackage.isMappingTree())
             packageResponsibilityChain.handlePackage(treeMapperPackage);
       }
 

@@ -19,6 +19,10 @@ public class TreeMapperPackage {
    private GradleTree currentGradleTree;
 
    public boolean isInsideTree() {
+      return openCurlyBracesCount > 1;
+   }
+
+   public boolean isMappingTree() {
       return openCurlyBracesCount > 0;
    }
 
@@ -27,9 +31,8 @@ public class TreeMapperPackage {
       return currentGradleTree;
    }
 
-   public TreeMapperPackage setCurrentGradleTree(GradleTree currentGradleTree) {
+   public void setCurrentGradleTree(GradleTree currentGradleTree) {
       this.currentGradleTree = currentGradleTree;
-      return this;
    }
 
    public String getTextOfCurrentLine() {
@@ -37,12 +40,12 @@ public class TreeMapperPackage {
    }
 
    public String getAllTextBeforeCurrentChar() {
-
       return StringUtils.getTextBeforeChar(indexOfCurrentChar, fileToMapContents);
    }
 
-   public void addCurrentNodeGroupToPreviousNodeGroup() {
+   public void appendCurrentTreeToFatherTree() {
       if (openCurlyBracesCount <= 1) return;
+
       GradleTree fatherNodeGroup = previousGradleTree.get(openCurlyBracesCount - 2);
       if (!fatherNodeGroup.equals(getCurrentGradleTree())) {
          fatherNodeGroup.appendNodeGroup(getCurrentGradleTree());
@@ -74,10 +77,6 @@ public class TreeMapperPackage {
       return this;
    }
 
-   public Integer getOpenCurlyBracesCount() {
-      return openCurlyBracesCount;
-   }
-
    public Character getCurrentChar() {
       return currentChar;
    }
@@ -86,7 +85,7 @@ public class TreeMapperPackage {
       return previousGradleTree;
    }
 
-   public void addToPreviousNodeGroups(GradleTree group) {
+   public void addToPreviousTrees(GradleTree group) {
       this.previousGradleTree.add(group);
    }
 
