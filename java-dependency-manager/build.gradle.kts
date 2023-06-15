@@ -12,8 +12,8 @@ repositories {
 }
 
 dependencies {
-    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.14.2")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.2")
+    testImplementation("junit:junit:4.13.1")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.2")
 }
 

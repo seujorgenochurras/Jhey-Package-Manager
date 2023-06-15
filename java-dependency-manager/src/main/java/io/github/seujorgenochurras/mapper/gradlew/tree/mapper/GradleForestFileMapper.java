@@ -15,44 +15,39 @@ import java.util.Set;
 
 public class GradleForestFileMapper implements GradleForestMapper {
 
-   private final File fileToMap;
+    private final File fileToMap;
 
-   private GradleForestFileMapper(File fileToMap) {
-      this.fileToMap = fileToMap;
-   }
+    private GradleForestFileMapper(File fileToMap) {
+        this.fileToMap = fileToMap;
+    }
 
-   public static GradleForest mapFile(File file) {
-      return new GradleForestFileMapper(file).map();
-   }
+    public static GradleForest mapFile(File file) {
+        return new GradleForestFileMapper(file).map();
+    }
 
-   @Override
-   public GradleForest map() {
-      Set<GradleTree> gradleTrees = mapAllNodeGroups();
-      return GradleTreeBuilder.startBuild()
-              .gradleTrees(gradleTrees)
-              .getBuildResult();
-   }
+    @Override
+    public GradleForest map() {
+        Set<GradleTree> gradleTrees = mapAllNodeGroups();
+        return GradleTreeBuilder.startBuild()
+                .gradleTrees(gradleTrees)
+                .getBuildResult();
+    }
 
-   private Set<GradleTree> mapAllNodeGroups() {
-      String fileToMapContents = FileUtils.getFileAsString(fileToMap);
+    private Set<GradleTree> mapAllNodeGroups() {
+        String fileToMapContents = FileUtils.getFileAsString(fileToMap);
 
+        TreeMapperPackage treeMapperPackage = new TreeMapperPackage();
 
-      TreeMapperPackage treeMapperPackage = new TreeMapperPackage()
-              .setFileToMapContents(fileToMapContents);
+        MapperResponsibilityChain packageResponsibilityChain = MapperResponsibilityChain.startChain()
+                .addHandler(new OnCharIsOpenCurlyBraces())
+                .addHandler(new OnCharIsCloseCurlyBraces())
+                .addHandler(new OnCharIsInsideNodeGroup());
 
-      MapperResponsibilityChain packageResponsibilityChain = MapperResponsibilityChain.startChain()
-              .addHandler(new OnCharIsOpenCurlyBraces())
-              .addHandler(new OnCharIsCloseCurlyBraces())
-              .addHandler(new OnCharIsInsideNodeGroup());
-
-
-      for (Character character : fileToMapContents.toCharArray()) {
-         treeMapperPackage.incrementIndexOfCurrentChar();
-         treeMapperPackage.updateWithChar(character);
-         if (character == '{' || character == '}' || treeMapperPackage.isMappingTree())
+        for (String line : fileToMapContents.lines().toList()) {
+            treeMapperPackage.setLine(line);
             packageResponsibilityChain.handlePackage(treeMapperPackage);
-      }
+        }
 
-      return treeMapperPackage.getGradleTreesFound();
-   }
+        return treeMapperPackage.getGradleTreesFound();
+    }
 }

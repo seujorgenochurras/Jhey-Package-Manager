@@ -11,11 +11,8 @@ import java.util.Set;
 public class TreeMapperPackage {
    private final Set<GradleTree> gradleTreesFound = new LinkedHashSet<>();
    private final List<GradleTree> previousGradleTree = new ArrayList<>();
-   private String fileToMapContents;
-   private Integer indexOfCurrentChar = -1;
    private Integer openCurlyBracesCount = 0;
-   private Character currentChar;
-
+   private String line;
    private GradleTree currentGradleTree;
 
    public boolean isInsideTree() {
@@ -35,12 +32,9 @@ public class TreeMapperPackage {
       this.currentGradleTree = currentGradleTree;
    }
 
-   public String getTextOfCurrentLine() {
-      return StringUtils.getAllLineTextUsingCharIndex(indexOfCurrentChar, fileToMapContents);
-   }
-
-   public String getAllTextBeforeCurrentChar() {
-      return StringUtils.getTextBeforeChar(indexOfCurrentChar, fileToMapContents);
+   public String getAllTextBeforeOpenCurlyBraces() {
+      if(!line.contains("{")) return "";
+      return StringUtils.getTextBeforeChar(line.indexOf("{"), line);
    }
 
    public void appendCurrentTreeToFatherTree() {
@@ -52,12 +46,12 @@ public class TreeMapperPackage {
       }
    }
 
-   public void updateWithChar(Character character) {
-      this.currentChar = character;
+   public void setLine(String line){
+      this.line = line;
    }
 
-   public void incrementIndexOfCurrentChar() {
-      indexOfCurrentChar++;
+   public String getLine() {
+      return line;
    }
 
    public void incrementOpenCurlyBracesCount() {
@@ -70,15 +64,6 @@ public class TreeMapperPackage {
 
    public void removeLastNodeGroupFromPreviousNodeGroups() {
       this.getPreviousGradleTree().remove(openCurlyBracesCount.intValue());
-   }
-
-   public TreeMapperPackage setFileToMapContents(String fileToMapContents) {
-      this.fileToMapContents = fileToMapContents;
-      return this;
-   }
-
-   public Character getCurrentChar() {
-      return currentChar;
    }
 
    public List<GradleTree> getPreviousGradleTree() {
@@ -96,11 +81,8 @@ public class TreeMapperPackage {
    @Override
    public String toString() {
       return "TreeMapperPackage{" +
-              "fileToMapContents='" + fileToMapContents + '\'' +
               ", groupsFound=" + gradleTreesFound +
-              ", indexOfCurrentChar=" + indexOfCurrentChar +
               ", openCurlyBracesCount=" + openCurlyBracesCount +
-              ", currentChar=" + currentChar +
               ", previousNodeGroups=" + previousGradleTree +
               '}' + "\n\n\n";
    }

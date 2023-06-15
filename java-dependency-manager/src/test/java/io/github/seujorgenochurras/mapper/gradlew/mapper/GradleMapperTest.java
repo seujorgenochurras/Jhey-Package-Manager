@@ -27,17 +27,17 @@ class GradleMapperTest {
    void isMappingDependencyTypes() {
       List<Dependency> dependencies = dependencyManagerFile.getDependencies();
 
-      assertEquals(DependencyType.RUNTIME_ONLY, dependencies.get(0).getDependencyType());
-      assertEquals(DependencyType.TEST_RUNTIME_ONLY, dependencies.get(3).getDependencyType());
-      assertEquals(DependencyType.IMPLEMENTATION, dependencies.get(4).getDependencyType());
-      assertEquals(DependencyType.API, dependencies.get(5).getDependencyType());
-      assertEquals(DependencyType.TEST_IMPLEMENTATION, dependencies.get(6).getDependencyType());
+      assertEquals(DependencyType.IMPLEMENTATION, dependencies.get(0).getDependencyType());
+      assertEquals(DependencyType.TEST_IMPLEMENTATION, dependencies.get(3).getDependencyType());
+      assertEquals(DependencyType.RUNTIME_ONLY, dependencies.get(4).getDependencyType());
+      assertEquals(DependencyType.TEST_IMPLEMENTATION, dependencies.get(5).getDependencyType());
+      assertEquals(DependencyType.TEST_RUNTIME_ONLY, dependencies.get(6).getDependencyType());
       assertEquals(DependencyType.TEST_COMPILE_ONLY, dependencies.get(7).getDependencyType());
       assertEquals(DependencyType.RUNTIME_ONLY, dependencies.get(8).getDependencyType());
-      assertEquals(DependencyType.TEST_IMPLEMENTATION, dependencies.get(9).getDependencyType());
-      assertEquals(DependencyType.COMPILE_ONLY, dependencies.get(10).getDependencyType());
-      assertEquals(DependencyType.COMPILE_ONLY_API, dependencies.get(11).getDependencyType());
-      assertEquals(DependencyType.RUNTIME_ONLY, dependencies.get(12).getDependencyType());
+      assertEquals(DependencyType.IMPLEMENTATION, dependencies.get(9).getDependencyType());
+      assertEquals(DependencyType.API, dependencies.get(10).getDependencyType());
+      assertEquals(DependencyType.COMPILE_ONLY, dependencies.get(11).getDependencyType());
+      assertEquals(DependencyType.COMPILE_ONLY_API, dependencies.get(12).getDependencyType());
    }
 
    @Test

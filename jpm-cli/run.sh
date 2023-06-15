@@ -1,5 +1,5 @@
 #!/bin/bash
 
-./gradlew fatjar -q
-
-java -jar build/libs/CLI.jar "$@"
+echo pwd
+../.graldew fatjar -q
+java -jar jpm-cli/build/libs/CLI.jar "$@"

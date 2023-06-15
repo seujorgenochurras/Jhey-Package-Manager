@@ -9,14 +9,14 @@ import io.github.seujorgenochurras.mapper.gradlew.tree.node.GradleTree;
 public class OnCharIsOpenCurlyBraces implements GradleTreeMapperChainHandler {
    @Override
    public void handle(MapperResponsibilityChain currentChain) {
-      if (currentChain.getTreeMapperPackage().getCurrentChar() != '{') return;
+      if (!currentChain.getTreeMapperPackage().getLine().contains("{")) return;
       TreeMapperPackage treeMapperPackage = currentChain.getTreeMapperPackage();
 
       treeMapperPackage.incrementOpenCurlyBracesCount();
       GradleTree currentTree = new GradleTree();
       treeMapperPackage.setCurrentGradleTree(currentTree);
 
-      currentTree.setTreeName(treeMapperPackage.getAllTextBeforeCurrentChar());
+      currentTree.setTreeName(treeMapperPackage.getAllTextBeforeOpenCurlyBraces());
 
       treeMapperPackage.addToPreviousTrees(currentTree);
 
