@@ -16,7 +16,7 @@ public class OnCharIsOpenCurlyBraces implements GradleTreeMapperChainHandler {
       GradleTree currentTree = new GradleTree();
       treeMapperPackage.setCurrentGradleTree(currentTree);
 
-      currentTree.setTreeName(treeMapperPackage.getAllTextBeforeOpenCurlyBraces());
+      currentTree.setTreeName(getTextBeforeOpenCurlyBraces(treeMapperPackage));
 
       treeMapperPackage.addToPreviousTrees(currentTree);
 
@@ -27,4 +27,10 @@ public class OnCharIsOpenCurlyBraces implements GradleTreeMapperChainHandler {
       }
       currentChain.setHasBeenHandled(true);
    }
+   private String getTextBeforeOpenCurlyBraces(TreeMapperPackage treeMapperPackage) {
+      String line = treeMapperPackage.getLine();
+      if(!line.contains("{")) return "";
+      return line.substring(0, line.indexOf('{'));
+   }
+
 }

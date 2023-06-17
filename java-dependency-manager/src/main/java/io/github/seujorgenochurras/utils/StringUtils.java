@@ -55,28 +55,6 @@ public class StringUtils {
         return trimmedStringArr;
     }
 
-    public static String getAllLineTextUsingCharIndex(int charIndex, String stringToGetLineFrom) {
-        List<String> lines = stringToGetLineFrom.lines().toList();
-        int charCount = 0;
-        String lineFound = "";
-        for(String line : lines){
-            charCount += line.length()+1;
-            if(charCount >= charIndex) {
-                lineFound = line;
-                break;
-            }
-        }
-        return lineFound;
-    }
-
-    public static String getTextBeforeChar(int charIndex, String stringToGetLineFrom){
-        String allTextAtCharIndex = getAllLineTextUsingCharIndex(charIndex, stringToGetLineFrom);
-        char charContents = stringToGetLineFrom.charAt(charIndex);
-
-        return allTextAtCharIndex.substring(0, allTextAtCharIndex.indexOf(charContents));
-
-    }
-
     public static boolean stringContainsAnyMatchesOf(String regex, String stringToCheck){
         return !getAllMatchesOfMatcher(generateStringMatcherFromRegex(stringToCheck, regex)).isEmpty();
     }

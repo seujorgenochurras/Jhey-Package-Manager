@@ -32,10 +32,6 @@ public class TreeMapperPackage {
       this.currentGradleTree = currentGradleTree;
    }
 
-   public String getAllTextBeforeOpenCurlyBraces() {
-      if(!line.contains("{")) return "";
-      return StringUtils.getTextBeforeChar(line.indexOf("{"), line);
-   }
 
    public void appendCurrentTreeToFatherTree() {
       if (openCurlyBracesCount <= 1) return;

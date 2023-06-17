@@ -17,45 +17,6 @@ class StringUtilsTest {
    }
 
    @Test
-   void isGettingAllLineTextUsingCharIndex() {
-      String lineToTest = "awijdaoiwjdoaiw{\n" +
-              "plugins {meuPau\n" +
-              "id 'org.springframework.boot' version '3.0.2'\n" +
-              "id 'java-library'\n" +
-              "id 'maven-publish'\n" +
-              "id 'signing'\n" +
-              "}\n" +
-              "awijdaoiwjdoaiw{\n" +
-              "aulavaa {meuPau\n" +
-              "id 'EMAUHDIAUWDAW\n" +
-              "id 'AWDA-AWD'\n" +
-              "id 'AWDA-publish'\n" +
-              "id 'DAWDA'\n" +
-              "}";
-      assertEquals("aulavaa {meuPau", getAllLineTextUsingCharIndex(163, lineToTest));
-   }
-
-   @Test
-   void isGettingTextBefore() {
-      String lineToTest = "plugins \n" +
-              "    id 'org.springframework.boot' version '3.0.2'\n" +
-              "    id 'java-library'\n" +
-              "    id 'maven-publish'\n" +
-              "    id 'signing'\n" +
-              "}\n" +
-              "\n" +
-              "group 'io.github.seujorgenochurras'\n" +
-              "version '1.2.1'\n" +
-              "\n" +
-              "\n" +
-              "repositories {\n" +
-              "    mavenCentral()\n" +
-              "}\n" +
-              "\n";
-      assertEquals("repositories ", getTextBeforeChar(191, lineToTest));
-   }
-
-   @Test
    void isStringContainsAnyMatchesOfWorking() {
       String dependency1 = "implementation (\"org.seleniumhq.selenium:selenium-java:4.8.1\")";
       String dependency2 = "implementation ('io.github.seujorgenochurras:selenium-custom-elements:0.1.0')";
