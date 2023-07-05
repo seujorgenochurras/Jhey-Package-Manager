@@ -6,6 +6,10 @@ import io.github.seujorgenochurras.domain.dependency.Dependency;
 import io.github.seujorgenochurras.domain.dependency.DependencyDeclaration;
 import io.github.seujorgenochurras.file.DependencyNotFoundException;
 import io.github.seujorgenochurras.mapper.DependencyManagerFile;
+import io.github.seujorgenochurras.mapper.gradlew.tree.GradleForest;
+import io.github.seujorgenochurras.mapper.gradlew.tree.GradleForestTransformer;
+import io.github.seujorgenochurras.mapper.gradlew.tree.node.GradleNode;
+import io.github.seujorgenochurras.mapper.gradlew.tree.node.GradleTree;
 import io.github.seujorgenochurras.utils.FileUtils;
 
 import java.io.File;
@@ -14,16 +18,11 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static io.github.seujorgenochurras.utils.StringUtils.getIndexOfStringWithRegex;
-
 public class GradleBuildFile implements DependencyManagerFile {
-
-   //TODO learn about trees and change this to a tree
+   private GradleForest gradleForest;
    private List<DependencyDeclaration> dependencies;
    private List<PluginDeclaration> plugins;
 
-   //TODO learn more about transformers and build a fucking Bumblebee
-   //Just kidding, transformers are used to transform file contents
    private File originFile;
    private String originFileAsString;
 
@@ -41,15 +40,11 @@ public class GradleBuildFile implements DependencyManagerFile {
    @Override
    public List<AbstractPlugin> getPlugins() {
       return plugins.stream()
-              .map(PluginDeclaration::toPluginObject).toList();
+              .map(PluginDeclaration::toPluginObject).collect(Collectors.toList());
    }
 
    public void setPlugins(List<PluginDeclaration> plugins) {
       this.plugins = plugins;
-   }
-
-   public File getOriginFile() {
-      return originFile;
    }
 
    public void setOriginFile(File originFile) {
@@ -61,10 +56,9 @@ public class GradleBuildFile implements DependencyManagerFile {
       return tryInstantiateFileWriterFromFile(originFile);
    }
 
-
    @Override
    public void addDependency(Dependency dependency) {
-      String declaration = "\n" + dependency.getDependencyType().typeName + " (\""
+      String declaration = dependency.getDependencyType().typeName + " (\""
               + dependency.getGroupName().trim()
               + ":"
               + dependency.getArtifact().trim()
@@ -72,20 +66,21 @@ public class GradleBuildFile implements DependencyManagerFile {
               + dependency.getVersion().trim()
               + "\")";
 
-
-      int indexOfDependenciesBlock = getIndexOfDependenciesBlock();
-      addTextToOriginFile(declaration, indexOfDependenciesBlock);
+      GradleTree dependenciesTree = gradleForest.getTreeByName("dependencies");
+      dependenciesTree.addNode(new GradleNode(declaration));
+      GradleForestTransformer.transform(gradleForest, originFile);
       this.dependencies.add(new DependencyDeclaration(declaration.replace("\n", "")));
    }
+
 
    @Override
    public <T extends AbstractPlugin> void addPlugin(T plugin) {
       String declaration = "id '" + plugin.getId().trim() + "'\n";
 
-      int indexOfPluginBlock = getIndexOfStringWithRegex(originFileAsString, "plugins");
-      addTextToOriginFile(declaration, indexOfPluginBlock);
-      tryRewriteOriginFile();
-      this.plugins.add(new PluginDeclaration(declaration, indexOfPluginBlock));
+      GradleTree pluginsTree = gradleForest.getTreeByName("plugins");
+      pluginsTree.addNode(new GradleNode(declaration));
+      GradleForestTransformer.transform(gradleForest, originFile);
+      this.plugins.add(new PluginDeclaration(declaration, 1));
    }
 
    @Override
@@ -98,7 +93,7 @@ public class GradleBuildFile implements DependencyManagerFile {
    private DependencyDeclaration getDeclarationOfDependency(Dependency dependency) {
       return this.dependencies.stream()
               .filter(dependencyDeclaration ->
-                  dependencyDeclaration.toDependencyObject().equals(dependency))
+                      dependencyDeclaration.toDependencyObject().equals(dependency))
               .findFirst()
               .orElseThrow(() ->
                       new DependencyNotFoundException("Dependency " + dependency.getArtifact() + " not found"));
@@ -115,13 +110,9 @@ public class GradleBuildFile implements DependencyManagerFile {
       commentLine(0);
    }
 
-   private void commentLine(int lineIndex){
+   private void commentLine(int lineIndex) {
       addTextToOriginFile("//", lineIndex + 1);
       tryRewriteOriginFile();
-   }
-
-   private int getIndexOfDependenciesBlock() {
-      return getIndexOfStringWithRegex(originFileAsString, "dependencies.*\\{");
    }
 
    private void addTextToOriginFile(String text, int indexOfWhereToWrite) {
@@ -151,5 +142,10 @@ public class GradleBuildFile implements DependencyManagerFile {
               "plugins=" + plugins +
               ", dependencies=" + dependencies +
               '}';
+   }
+
+   public GradleBuildFile setGradleForest(GradleForest gradleForest) {
+      this.gradleForest = gradleForest;
+      return this;
    }
 }

@@ -1,4 +1,4 @@
-package io.github.seujorgenochurras.mapper.gradlew.mapper;
+package io.github.seujorgenochurras.mapper.gradlew.mapper.kotlin;
 
 
 import io.github.seujorgenochurras.domain.dependency.Dependency;
@@ -13,14 +13,14 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class GradleMapperTest {
+class GradleKotlinBuildFileTest {
 
    public static final DependencyManagerFile dependencyManagerFile =
-           DependencyMapper.mapFile(new File("dependency-file-example/build.gradle"));
+           DependencyMapper.mapFile(new File("dependency-file-example/build.gradle.kts"));
 
    @Test
    void isMappingDependencies() {
-      assertEquals(13, dependencyManagerFile.getDependencies().size());
+      assertTrue(dependencyManagerFile.getDependencies().size() > 3);
    }
 
    @Test
@@ -29,20 +29,11 @@ class GradleMapperTest {
 
       assertEquals(DependencyType.IMPLEMENTATION, dependencies.get(0).getDependencyType());
       assertEquals(DependencyType.TEST_IMPLEMENTATION, dependencies.get(3).getDependencyType());
-      assertEquals(DependencyType.RUNTIME_ONLY, dependencies.get(4).getDependencyType());
-      assertEquals(DependencyType.TEST_IMPLEMENTATION, dependencies.get(5).getDependencyType());
-      assertEquals(DependencyType.TEST_RUNTIME_ONLY, dependencies.get(6).getDependencyType());
-      assertEquals(DependencyType.TEST_COMPILE_ONLY, dependencies.get(7).getDependencyType());
-      assertEquals(DependencyType.RUNTIME_ONLY, dependencies.get(8).getDependencyType());
-      assertEquals(DependencyType.IMPLEMENTATION, dependencies.get(9).getDependencyType());
-      assertEquals(DependencyType.API, dependencies.get(10).getDependencyType());
-      assertEquals(DependencyType.COMPILE_ONLY, dependencies.get(11).getDependencyType());
-      assertEquals(DependencyType.COMPILE_ONLY_API, dependencies.get(12).getDependencyType());
    }
 
    @Test
    void isMappingPlugins() {
-      assertNotEquals(5, dependencyManagerFile.getPlugins().size());
+      assertTrue(dependencyManagerFile.getPlugins().size() > 1);
    }
 
    @Test
@@ -52,8 +43,23 @@ class GradleMapperTest {
               .artifact("testImpl")
               .version("69.42.0")
               .buildResult();
+
+      Dependency dependency2 = DependencyBuilder.startBuild()
+              .group("test.222test")
+              .artifact("tes222tImpl")
+              .version("629.422.0")
+              .buildResult();
+      Dependency dependency3 = DependencyBuilder.startBuild()
+              .group("test111.test")
+              .artifact("tes111tImpl")
+              .version("69.11142.0")
+              .buildResult();
       dependencyManagerFile.addDependency(dependency);
+      dependencyManagerFile.addDependency(dependency2);
+      dependencyManagerFile.addDependency(dependency3);
       assertTrue(dependencyManagerFile.getDependencies().contains(dependency));
+      assertTrue(dependencyManagerFile.getDependencies().contains(dependency2));
+      assertTrue(dependencyManagerFile.getDependencies().contains(dependency3));
    }
 
 

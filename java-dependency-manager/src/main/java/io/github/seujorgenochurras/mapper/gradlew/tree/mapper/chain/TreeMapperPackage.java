@@ -1,7 +1,6 @@
 package io.github.seujorgenochurras.mapper.gradlew.tree.mapper.chain;
 
 import io.github.seujorgenochurras.mapper.gradlew.tree.node.GradleTree;
-import io.github.seujorgenochurras.utils.StringUtils;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -80,6 +79,6 @@ public class TreeMapperPackage {
               ", groupsFound=" + gradleTreesFound +
               ", openCurlyBracesCount=" + openCurlyBracesCount +
               ", previousNodeGroups=" + previousGradleTree +
-              '}' + "\n\n\n";
+              '}' + "\n";
    }
 }

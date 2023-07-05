@@ -2,6 +2,7 @@ package io.github.seujorgenochurras.domain.manager.gradlew;
 
 import io.github.seujorgenochurras.domain.PluginDeclaration;
 import io.github.seujorgenochurras.domain.dependency.DependencyDeclaration;
+import io.github.seujorgenochurras.mapper.gradlew.tree.GradleForest;
 
 import java.io.File;
 import java.util.List;
@@ -28,6 +29,10 @@ public class GradleBuildFileBuilder {
 
    public GradleBuildFileBuilder originFile(File file) {
       this.gradleBuildFile.setOriginFile(file);
+      return this;
+   }
+   public GradleBuildFileBuilder gradleForest(GradleForest gradleForest){
+      gradleBuildFile.setGradleForest(gradleForest);
       return this;
    }
 

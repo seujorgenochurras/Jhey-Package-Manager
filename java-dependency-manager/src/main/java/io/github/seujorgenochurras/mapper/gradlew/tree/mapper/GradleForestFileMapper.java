@@ -1,7 +1,6 @@
 package io.github.seujorgenochurras.mapper.gradlew.tree.mapper;
 
 import io.github.seujorgenochurras.mapper.gradlew.tree.GradleForest;
-import io.github.seujorgenochurras.mapper.gradlew.tree.GradleTreeBuilder;
 import io.github.seujorgenochurras.mapper.gradlew.tree.mapper.chain.MapperResponsibilityChain;
 import io.github.seujorgenochurras.mapper.gradlew.tree.mapper.chain.TreeMapperPackage;
 import io.github.seujorgenochurras.mapper.gradlew.tree.mapper.chain.handler.OnCharIsCloseCurlyBraces;
@@ -28,9 +27,7 @@ public class GradleForestFileMapper implements GradleForestMapper {
     @Override
     public GradleForest map() {
         Set<GradleTree> gradleTrees = mapAllNodeGroups();
-        return GradleTreeBuilder.startBuild()
-                .gradleTrees(gradleTrees)
-                .getBuildResult();
+        return new GradleForest(gradleTrees);
     }
 
     private Set<GradleTree> mapAllNodeGroups() {
