@@ -1,7 +1,7 @@
 package io.github.seujorgenochurras.domain.manager.gradlew;
 
-import io.github.seujorgenochurras.domain.PluginDeclaration;
-import io.github.seujorgenochurras.domain.dependency.DependencyDeclaration;
+import io.github.seujorgenochurras.domain.plugin.Plugin;
+import io.github.seujorgenochurras.domain.dependency.Dependency;
 import io.github.seujorgenochurras.mapper.gradlew.tree.GradleForest;
 
 import java.io.File;
@@ -17,12 +17,12 @@ public class GradleBuildFileBuilder {
       return new GradleBuildFileBuilder();
    }
 
-   public GradleBuildFileBuilder dependenciesDeclaration(List<DependencyDeclaration> dependencyList) {
+   public GradleBuildFileBuilder dependencies(List<Dependency> dependencyList) {
       this.gradleBuildFile.setDependencies(dependencyList);
       return this;
    }
 
-   public GradleBuildFileBuilder plugins(List<PluginDeclaration> plugins) {
+   public GradleBuildFileBuilder plugins(List<Plugin> plugins) {
       this.gradleBuildFile.setPlugins(plugins);
       return this;
    }

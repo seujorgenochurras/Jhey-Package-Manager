@@ -6,7 +6,6 @@ repositories {
     mavenCentral()
 }
 dependencies {
-    implementation("org.seleniumhq.selenium:selenium-java:4.8.1")
     implementation('com.google.code.gson:gson:2.10.1')
     implementation('io.github.seujorgenochurras:selenium-custom-elements:0.1.0')
     testImplementation("LIGMA:BALLS:0.5.9")
@@ -19,4 +18,12 @@ dependencies {
     api("FUCK:X:1.2.3.69")
     compileOnly("Y:YOU:1.2.3.69")
     compileOnlyApi("FUCK:Z:1.2.3.69")
+implementation ("test111.test:tes111tImpl:69.11142.0")
+implementation ("test111.test:tes111tImpl:69.11142.0")
+implementation ("test.test:testImpl:69.42.0")
+implementation ("test.222test:tes222tImpl:629.422.0")
+implementation ("test111.test:tes111tImpl:69.11142.0")
+implementation ("test.test:testImpl:69.42.0")
+implementation ("test.222test:tes222tImpl:629.422.0")
+implementation ("test111.test:tes111tImpl:69.11142.0")
 }

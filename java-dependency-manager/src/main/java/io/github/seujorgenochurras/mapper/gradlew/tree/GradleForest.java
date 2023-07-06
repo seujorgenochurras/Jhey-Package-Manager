@@ -16,9 +16,7 @@ public record GradleForest(Set<GradleTree> gradleTrees) {
    public String rawToString(){
       StringBuilder result = new StringBuilder();
 
-      this.gradleTrees.forEach(tree -> {
-         result.append(tree.getRawString());
-      });
+      this.gradleTrees.forEach(tree -> result.append(tree.getRawString()));
       return result.toString();
    }
 

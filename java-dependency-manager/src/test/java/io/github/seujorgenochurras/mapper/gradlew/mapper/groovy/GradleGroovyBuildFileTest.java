@@ -69,23 +69,21 @@ class GradleGroovyBuildFileTest {
       assertTrue(dependencyManagerFile.getDependencies().contains(dependency3));
    }
 
-   //Remove dependencies is not implemented yet
+      @Test
+      void isRemovingDependencies(){
+         Dependency firstDependency = dependencyManagerFile.getDependencies().get(0);
+         Dependency secondDependency = dependencyManagerFile.getDependencies().get(1);
+         Dependency thirdDependency = dependencyManagerFile.getDependencies().get(2);
+         assertTrue(dependencyManagerFile.getDependencies().contains(firstDependency));
+         assertTrue(dependencyManagerFile.getDependencies().contains(secondDependency));
+         assertTrue(dependencyManagerFile.getDependencies().contains(thirdDependency));
 
-   //   @Test
-   //   void isRemovingDependencies(){
-   //      Dependency firstDependency = dependencyManagerFile.getDependencies().get(0);
-   //      Dependency secondDependency = dependencyManagerFile.getDependencies().get(1);
-   //      Dependency thirdDependency = dependencyManagerFile.getDependencies().get(2);
-   //      assertTrue(dependencyManagerFile.getDependencies().contains(firstDependency));
-   //      assertTrue(dependencyManagerFile.getDependencies().contains(secondDependency));
-   //      assertTrue(dependencyManagerFile.getDependencies().contains(thirdDependency));
-   //
-   //      dependencyManagerFile.removeDependency(firstDependency);
-   //      dependencyManagerFile.removeDependency(secondDependency);
-   //      dependencyManagerFile.removeDependency(thirdDependency);
-   //
-   //      assertFalse(dependencyManagerFile.getDependencies().contains(firstDependency));
-   //      assertFalse(dependencyManagerFile.getDependencies().contains(secondDependency));
-   //      assertFalse(dependencyManagerFile.getDependencies().contains(thirdDependency));
-   //   }
+         dependencyManagerFile.removeDependency(firstDependency);
+         dependencyManagerFile.removeDependency(secondDependency);
+         dependencyManagerFile.removeDependency(thirdDependency);
+
+         assertFalse(dependencyManagerFile.getDependencies().contains(firstDependency));
+         assertFalse(dependencyManagerFile.getDependencies().contains(secondDependency));
+         assertFalse(dependencyManagerFile.getDependencies().contains(thirdDependency));
+      }
 }

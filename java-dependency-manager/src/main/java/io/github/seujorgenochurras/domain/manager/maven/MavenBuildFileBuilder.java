@@ -1,6 +1,6 @@
 package io.github.seujorgenochurras.domain.manager.maven;
 
-import io.github.seujorgenochurras.domain.AbstractPlugin;
+import io.github.seujorgenochurras.domain.plugin.Plugin;
 import io.github.seujorgenochurras.domain.dependency.Dependency;
 
 import java.io.File;
@@ -10,7 +10,7 @@ import java.util.List;
 public class MavenBuildFileBuilder {
    private File rootFile;
    private List<Dependency> dependencies = new ArrayList<>();
-   private List<AbstractPlugin> plugins = new ArrayList<>();
+   private List<Plugin> plugins = new ArrayList<>();
    private MavenBuildFileBuilder() {
    }
 
@@ -34,7 +34,7 @@ public class MavenBuildFileBuilder {
       return this;
    }
 
-   public MavenBuildFileBuilder plugins(List<AbstractPlugin> plugins) {
+   public MavenBuildFileBuilder plugins(List<Plugin> plugins) {
       this.plugins = plugins;
       return this;
    }

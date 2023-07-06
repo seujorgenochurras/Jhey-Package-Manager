@@ -1,7 +1,6 @@
 package io.github.seujorgenochurras.utils;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -25,7 +24,6 @@ public class StringUtils {
     }
 
     public static int getIndexOfStringWithRegex(String string, String regex) {
-
         Matcher matcher = Pattern.compile(regex).matcher(string);
         matcher.find();
         return matcher.end();
@@ -60,5 +58,16 @@ public class StringUtils {
     }
     public static boolean stringStartsWithRegex(String regex, String stringToCheck){
         return stringToCheck.startsWith(getFirstMatchOfString(regex, stringToCheck));
+    }
+
+    /**
+     * @param a
+     * @param b
+     * @return true if {@code a} happens in {@code b} in order, it just doesn't care about spaces or other letters before or after
+     */
+    public static boolean weakEquals(String a, String b){
+       b = b.replace(" ", "");
+        a = a.replace(" ", "");
+        return a.contains(b);
     }
 }

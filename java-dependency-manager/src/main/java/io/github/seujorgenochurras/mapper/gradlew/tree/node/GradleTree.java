@@ -47,12 +47,17 @@ public class GradleTree {
     }
     public String getRawString(){
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(getTreeRawName()).append("\n");
-        nodes.forEach(node -> stringBuilder.append(node.getTextContents()).append("\n"));
-        childGradleTrees.forEach(childTrees -> stringBuilder.append(childTrees.getRawString()).append("\n"));
+        stringBuilder.append(this.treeName);
+
+        for (GradleNode node : this.nodes){
+            stringBuilder.append(node.getTextContents()).append("\n");
+        }
+        for (GradleTree childTree : childGradleTrees) {
+            stringBuilder.append(childTree.getRawString());
+        }
+
         return stringBuilder.toString().concat("}\n");
     }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

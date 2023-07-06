@@ -1,8 +1,10 @@
 package io.github.seujorgenochurras.mapper.gradlew;
 
-import io.github.seujorgenochurras.domain.PluginDeclaration;
-import io.github.seujorgenochurras.domain.dependency.DependencyDeclaration;
+import io.github.seujorgenochurras.domain.plugin.Plugin;
+import io.github.seujorgenochurras.domain.dependency.Dependency;
+import io.github.seujorgenochurras.domain.dependency.util.StringToDependencyParser;
 import io.github.seujorgenochurras.domain.manager.gradlew.GradleBuildFileBuilder;
+import io.github.seujorgenochurras.domain.plugin.util.StringToPluginParser;
 import io.github.seujorgenochurras.mapper.DependencyManagerFile;
 import io.github.seujorgenochurras.mapper.DependencyMapper;
 import io.github.seujorgenochurras.mapper.gradlew.tree.GradleForest;
@@ -17,8 +19,8 @@ import java.util.List;
 public class GradleMapper extends DependencyMapper {
 
    private final GradleForest gradleForest;
-   private List<DependencyDeclaration> dependencyDeclarations = new ArrayList<>();
-   private List<PluginDeclaration> pluginDeclarations = new ArrayList<>();
+   private List<Dependency> dependencyDeclarations = new ArrayList<>();
+   private List<Plugin> pluginDeclarations = new ArrayList<>();
 
    public GradleMapper(File rootFile) {
       super(rootFile);
@@ -31,7 +33,7 @@ public class GradleMapper extends DependencyMapper {
       mapPlugins();
 
       return GradleBuildFileBuilder.startBuild()
-              .dependenciesDeclaration(this.dependencyDeclarations)
+              .dependencies(this.dependencyDeclarations)
               .plugins(this.pluginDeclarations)
               .originFile(this.rootFile)
               .gradleForest(gradleForest)
@@ -47,22 +49,22 @@ public class GradleMapper extends DependencyMapper {
       this.pluginDeclarations = getAllPluginDeclarations();
    }
 
-   protected List<PluginDeclaration> getAllPluginDeclarations() {
+   protected List<Plugin> getAllPluginDeclarations() {
       GradleValidatorChain<String> pluginDeclarationValidator = GradleValidatorChain
               .initialValidator(new StringValidator())
               .addValidator(new StringHasSizeGreaterThan(5))
               .addValidator(new StringStartsWithRegex("id"));
 
-      List<PluginDeclaration> plugins = new ArrayList<>();
+      List<Plugin> plugins = new ArrayList<>();
       gradleForest.getTreeByName("plugins").getNodes()
               .stream()
               .filter(possiblePluginDeclarationNode -> pluginDeclarationValidator.validate(possiblePluginDeclarationNode.getTextContents()))
               .forEach(pluginDeclarationNode ->
-                      plugins.add(new PluginDeclaration(pluginDeclarationNode.getTextContents(), 0)));
+                      plugins.add(StringToPluginParser.stringToPlugin(pluginDeclarationNode.getTextContents())));
       return plugins;
    }
 
-   protected List<DependencyDeclaration> getDependencyDeclarations() {
+   protected List<Dependency> getDependencyDeclarations() {
       String implementationDeclarationRegex = "(testImplementation|implementation|runtime_only|testRuntimeOnly|testCompileOnly|runtimeOnly|api|compileOnly|compileOnlyApi).*";
 
       GradleValidatorChain<String> dependencyDeclarationValidator = GradleValidatorChain
@@ -71,7 +73,7 @@ public class GradleMapper extends DependencyMapper {
               .addValidator(new StringStartsWithRegex(implementationDeclarationRegex))
               .addValidator(new WhenStringSplittedWith(":").arraySizeGreaterThen(1));
 
-      List<DependencyDeclaration> dependenciesDeclarations = new ArrayList<>();
+      List<Dependency> dependenciesDeclarations = new ArrayList<>();
 
       gradleForest.getTreeByName("dependencies").getNodes()
               .stream()
@@ -79,7 +81,7 @@ public class GradleMapper extends DependencyMapper {
                       dependencyDeclarationValidator.validate(probableDependencyDeclarationNode.getTextContents()))
               .forEach(dependencyDeclarationNode -> {
                  String nodeContents = dependencyDeclarationNode.getTextContents();
-                 dependenciesDeclarations.add(new DependencyDeclaration(nodeContents));
+                 dependenciesDeclarations.add(StringToDependencyParser.stringToDependency(nodeContents));
               });
       return dependenciesDeclarations;
    }

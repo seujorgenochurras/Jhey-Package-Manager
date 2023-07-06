@@ -18,6 +18,6 @@ public class Example {
               .version("1.1.1.1")
               .dependencyType(DependencyType.IMPLEMENTATION)
               .buildResult();
-      System.out.println(dependencyManagerFile.getDependencies());
+      dependencyManagerFile.removeDependency(dependency);
    }
 }

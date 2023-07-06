@@ -1,6 +1,6 @@
 package io.github.seujorgenochurras.domain.manager.maven;
 
-import io.github.seujorgenochurras.domain.AbstractPlugin;
+import io.github.seujorgenochurras.domain.plugin.Plugin;
 import io.github.seujorgenochurras.domain.dependency.Dependency;
 import io.github.seujorgenochurras.mapper.DependencyManagerFile;
 import org.w3c.dom.Document;
@@ -30,7 +30,7 @@ public class MavenBuildFile implements DependencyManagerFile {
    private DOMSource domSource;
 
    private List<Dependency> dependencies = new ArrayList<>();
-   private List<AbstractPlugin> plugins = new ArrayList<>();
+   private List<Plugin> plugins = new ArrayList<>();
 
    private Document pomFileDocument;
 
@@ -77,16 +77,16 @@ public class MavenBuildFile implements DependencyManagerFile {
 
 
    @Override
-   public <T extends AbstractPlugin> void addPlugin(T plugin) {
+   public <T extends Plugin> void addPlugin(T plugin) {
       //nope
    }
 
    @Override
-   public List<? extends AbstractPlugin> getPlugins() {
+   public List<? extends Plugin> getPlugins() {
       return plugins;
    }
 
-   public MavenBuildFile setPlugins(List<AbstractPlugin> plugins) {
+   public MavenBuildFile setPlugins(List<Plugin> plugins) {
       this.plugins = plugins;
       return this;
    }
@@ -112,7 +112,7 @@ public class MavenBuildFile implements DependencyManagerFile {
    }
 
    @Override
-   public <T extends AbstractPlugin> void removePlugin(T plugin) {
+   public <T extends Plugin> void removePlugin(T plugin) {
       //fuck you
    }
 

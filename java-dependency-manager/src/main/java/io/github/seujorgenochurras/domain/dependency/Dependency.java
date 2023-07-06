@@ -1,5 +1,7 @@
 package io.github.seujorgenochurras.domain.dependency;
 
+import java.util.Objects;
+
 public class Dependency {
    private String groupName;
    private String artifact;
@@ -46,7 +48,12 @@ public class Dependency {
       this.version = version;
       return this;
    }
-
+   public String getDeclaration(){
+       String result = this.dependencyType.typeName + "(\"" + groupName + ":" + artifact;
+        if(!Objects.isNull(version)) result+= ":" + version;
+        result += "\")";
+        return result;
+   }
    @Override
    public String toString() {
       return "Dependency{" +
