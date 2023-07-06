@@ -1,5 +1,5 @@
 # Jhey-Package-Manager
-jpm (jhey package manager) is a CLI tool to add maven dependencies in your projects
+jpm (Jhey Package Manager) is a CLI tool to add maven dependencies in your projects
 <br> <br>
 
 # Usage
@@ -8,7 +8,7 @@ jpm (jhey package manager) is a CLI tool to add maven dependencies in your proje
    ```java -jar <jar name> jpm -i=<dependency name> ``` in a terminal inside your project.<br>
    The jar needs to be in the same folder where the dependency manager file is.
 # Why?
-  I've always found annoying the way gralde/maven works when dealing with implementing dependencies. <br>
+  I've always found annoying the way gradle/maven works when dealing with implementing dependencies. <br>
   I never remember the f\*cking implementation string (which is like io.github.google.code.gson:gson:1.0.0)<br><br>
   What I think most of you do is searching in google (*like in stone age*) the implementation string. <br>
   This process ends up taking at minimum 5 seconds (+ downloading and implementing the dependency) <br>
@@ -33,14 +33,21 @@ jpm (jhey package manager) is a CLI tool to add maven dependencies in your proje
    - Cleaner jpm response
    - Spread dirty code >:(
 
+## Alpha 0.4.0
+   - Refactor whole gradlew mapping
+     - From pure regex to a tree based mapping
+   - Added more tests
+   - Speed
+   - Fixed lots of bugs
+
+
 # Known bugs/defects  
   - Doesn't work with zsh
-  - Only works with groovy if you're using the right syntax (Kotlin)
   - Only works if you've defined a dependency block (gradle/maven)
-  - If you're using pom.xml it won't be beautiful...
-  - Fucking bad code
-  - So slow that it almost break the point of using the thing
-  - No tests (I'll probably start doing them now)
+  - It'll fuck with your close curly braces...
+  - Bad code
+  - Kinda slow
+  - Lacking tests
   - No auto-update/update command
   - No error checking (if something goes wrong you are receiving the whole stack trace)
   - Primitive af

@@ -6,14 +6,15 @@ plugins {
 
 
 val group = "io.github.seujorgenochurras"
-val versionNum = "0.5.0"
+val versionNum = "0.6.0"
 repositories {
+    mavenLocal()
     mavenCentral()
 }
 
 dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.2")
-    testImplementation("junit:junit:4.13.1")
+    testImplementation("junit:junit:4.13.2")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.2")
 }
 
