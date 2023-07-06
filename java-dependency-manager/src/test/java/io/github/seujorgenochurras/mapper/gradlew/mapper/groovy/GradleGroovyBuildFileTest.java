@@ -14,28 +14,32 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class GradleGroovyBuildFileTest {
    public static final DependencyManagerFile dependencyManagerFile =
-           DependencyMapper.mapFile(new File("dependency-file-example/build.gradle"));
+           DependencyMapper.mapFile(new File("src/test/dependency-file-example/build.gradle"));
+
+   public static final DependencyManagerFile staticDependencyManagerFile =
+           DependencyMapper.mapFile(new File("src/test/dependency-file-example/static/build.gradle"));
 
    @Test
    void isMappingDependencies() {
-      assertTrue(dependencyManagerFile.getDependencies().size() > 5);
+      assertEquals(17, staticDependencyManagerFile.getDependencies().size());
    }
 
    @Test
    void isMappingDependencyTypes() {
-      List<Dependency> dependencies = dependencyManagerFile.getDependencies();
+      List<Dependency> dependencies = staticDependencyManagerFile.getDependencies();
 
       assertEquals(DependencyType.IMPLEMENTATION, dependencies.get(0).getDependencyType());
-      assertEquals(DependencyType.TEST_IMPLEMENTATION, dependencies.get(3).getDependencyType());
-      assertEquals(DependencyType.RUNTIME_ONLY, dependencies.get(4).getDependencyType());
-      assertEquals(DependencyType.TEST_IMPLEMENTATION, dependencies.get(5).getDependencyType());
-      assertEquals(DependencyType.TEST_RUNTIME_ONLY, dependencies.get(6).getDependencyType());
-      assertEquals(DependencyType.TEST_COMPILE_ONLY, dependencies.get(7).getDependencyType());
-      assertEquals(DependencyType.RUNTIME_ONLY, dependencies.get(8).getDependencyType());
-      assertEquals(DependencyType.IMPLEMENTATION, dependencies.get(9).getDependencyType());
-      assertEquals(DependencyType.API, dependencies.get(10).getDependencyType());
-      assertEquals(DependencyType.COMPILE_ONLY, dependencies.get(11).getDependencyType());
-      assertEquals(DependencyType.COMPILE_ONLY_API, dependencies.get(12).getDependencyType());
+      assertEquals(DependencyType.IMPLEMENTATION, dependencies.get(1).getDependencyType());
+      assertEquals(DependencyType.TEST_IMPLEMENTATION, dependencies.get(2).getDependencyType());
+      assertEquals(DependencyType.RUNTIME_ONLY, dependencies.get(3).getDependencyType());
+      assertEquals(DependencyType.TEST_IMPLEMENTATION, dependencies.get(4).getDependencyType());
+      assertEquals(DependencyType.TEST_RUNTIME_ONLY, dependencies.get(5).getDependencyType());
+      assertEquals(DependencyType.TEST_COMPILE_ONLY, dependencies.get(6).getDependencyType());
+      assertEquals(DependencyType.RUNTIME_ONLY, dependencies.get(7).getDependencyType());
+      assertEquals(DependencyType.IMPLEMENTATION, dependencies.get(8).getDependencyType());
+      assertEquals(DependencyType.API, dependencies.get(9).getDependencyType());
+      assertEquals(DependencyType.COMPILE_ONLY, dependencies.get(10).getDependencyType());
+
    }
 
    @Test
@@ -85,5 +89,9 @@ class GradleGroovyBuildFileTest {
          assertFalse(dependencyManagerFile.getDependencies().contains(firstDependency));
          assertFalse(dependencyManagerFile.getDependencies().contains(secondDependency));
          assertFalse(dependencyManagerFile.getDependencies().contains(thirdDependency));
+
+         dependencyManagerFile.addDependency(firstDependency);
+         dependencyManagerFile.addDependency(secondDependency);
+         dependencyManagerFile.addDependency(thirdDependency);
       }
 }

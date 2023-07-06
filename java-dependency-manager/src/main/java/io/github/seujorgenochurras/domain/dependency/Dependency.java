@@ -48,11 +48,16 @@ public class Dependency {
       this.version = version;
       return this;
    }
-   public String getDeclaration(){
+   public String getRawDeclaration(){
        String result = this.dependencyType.typeName + "(\"" + groupName + ":" + artifact;
         if(!Objects.isNull(version)) result+= ":" + version;
         result += "\")";
         return result;
+   }
+   public String getDeclaration(){
+      String declaration = groupName + ":" + artifact;
+      if(version != null) declaration+= ":" + version;
+      return declaration;
    }
    @Override
    public String toString() {

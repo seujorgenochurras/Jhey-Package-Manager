@@ -8,7 +8,6 @@ import io.github.seujorgenochurras.mapper.gradlew.tree.GradleForestTransformer;
 import io.github.seujorgenochurras.mapper.gradlew.tree.node.GradleNode;
 import io.github.seujorgenochurras.mapper.gradlew.tree.node.GradleTree;
 import io.github.seujorgenochurras.utils.NotFoundException;
-import io.github.seujorgenochurras.utils.StringUtils;
 
 import java.io.File;
 import java.util.List;
@@ -81,7 +80,9 @@ public class GradleBuildFile implements DependencyManagerFile {
       dependenciesNode.remove(dependenciesNode.stream()
               .filter(node -> weakEquals(node.getTextContents(), dependencyDeclaration))
               .findFirst()
-              .orElseThrow(() -> new NotFoundException("Dependency not found")));
+              .orElseThrow(() -> new NotFoundException("Dependency :'" + dependency.getDeclaration() + "' not found")));
+      dependencies.remove(dependency);
+
       GradleForestTransformer.transform(gradleForest, originFile);
    }
 

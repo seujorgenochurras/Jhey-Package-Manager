@@ -47,14 +47,10 @@ public class GradleTree {
     }
     public String getRawString(){
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(this.treeName);
+        stringBuilder.append(getTreeRawName()).append("\n");
 
-        for (GradleNode node : this.nodes){
-            stringBuilder.append(node.getTextContents()).append("\n");
-        }
-        for (GradleTree childTree : childGradleTrees) {
-            stringBuilder.append(childTree.getRawString());
-        }
+        nodes.forEach(node -> stringBuilder.append(node.getTextContents()).append("\n"));
+        childGradleTrees.forEach(childTree -> stringBuilder.append(childTree.getRawString()));
 
         return stringBuilder.toString().concat("}\n");
     }

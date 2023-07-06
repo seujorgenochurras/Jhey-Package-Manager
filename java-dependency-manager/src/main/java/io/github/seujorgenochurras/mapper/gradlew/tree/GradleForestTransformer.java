@@ -10,7 +10,7 @@ public class GradleForestTransformer {
    private GradleForestTransformer(){}
    public static void transform(GradleForest gradleForest, File file) {
       String gradleForestBody = gradleForest.rawToString();
-      //tryWriteFile(gradleForestBody, file);
+      tryWriteFile(gradleForestBody, file);
    }
 
    private static void tryWriteFile(String thingToWrite, File file) {

@@ -18,12 +18,4 @@ dependencies {
     api("FUCK:X:1.2.3.69")
     compileOnly("Y:YOU:1.2.3.69")
     compileOnlyApi("FUCK:Z:1.2.3.69")
-implementation ("test111.test:tes111tImpl:69.11142.0")
-implementation ("test111.test:tes111tImpl:69.11142.0")
-implementation ("test.test:testImpl:69.42.0")
-implementation ("test.222test:tes222tImpl:629.422.0")
-implementation ("test111.test:tes111tImpl:69.11142.0")
-implementation ("test.test:testImpl:69.42.0")
-implementation ("test.222test:tes222tImpl:629.422.0")
-implementation ("test111.test:tes111tImpl:69.11142.0")
 }

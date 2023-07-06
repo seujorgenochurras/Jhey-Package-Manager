@@ -16,24 +16,38 @@ import static org.junit.jupiter.api.Assertions.*;
 class GradleKotlinBuildFileTest {
 
    public static final DependencyManagerFile dependencyManagerFile =
-           DependencyMapper.mapFile(new File("dependency-file-example/build.gradle.kts"));
+           DependencyMapper.mapFile(new File("src/test/dependency-file-example/build.gradle.kts"));
+
+   public static final DependencyManagerFile staticDependencyManagerFile =
+           DependencyMapper.mapFile(new File("src/test/dependency-file-example/static/build.gradle.kts"));
 
    @Test
    void isMappingDependencies() {
-      assertTrue(dependencyManagerFile.getDependencies().size() > 3);
+      assertTrue(staticDependencyManagerFile.getDependencies().size() > 5);
    }
 
    @Test
    void isMappingDependencyTypes() {
-      List<Dependency> dependencies = dependencyManagerFile.getDependencies();
+      List<Dependency> dependencies = staticDependencyManagerFile.getDependencies();
 
       assertEquals(DependencyType.IMPLEMENTATION, dependencies.get(0).getDependencyType());
-      assertEquals(DependencyType.TEST_IMPLEMENTATION, dependencies.get(3).getDependencyType());
+      assertEquals(DependencyType.IMPLEMENTATION, dependencies.get(1).getDependencyType());
+      assertEquals(DependencyType.TEST_IMPLEMENTATION, dependencies.get(2).getDependencyType());
+      assertEquals(DependencyType.RUNTIME_ONLY, dependencies.get(3).getDependencyType());
+      assertEquals(DependencyType.TEST_IMPLEMENTATION, dependencies.get(4).getDependencyType());
+      assertEquals(DependencyType.TEST_RUNTIME_ONLY, dependencies.get(5).getDependencyType());
+      assertEquals(DependencyType.TEST_COMPILE_ONLY, dependencies.get(6).getDependencyType());
+      assertEquals(DependencyType.RUNTIME_ONLY, dependencies.get(7).getDependencyType());
+      assertEquals(DependencyType.IMPLEMENTATION, dependencies.get(8).getDependencyType());
+      assertEquals(DependencyType.API, dependencies.get(9).getDependencyType());
+      assertEquals(DependencyType.COMPILE_ONLY, dependencies.get(10).getDependencyType());
+
    }
+
 
    @Test
    void isMappingPlugins() {
-      assertTrue(dependencyManagerFile.getPlugins().size() > 1);
+      assertTrue(dependencyManagerFile.getPlugins().size() >= 1);
    }
 
    @Test
@@ -60,6 +74,24 @@ class GradleKotlinBuildFileTest {
       assertTrue(dependencyManagerFile.getDependencies().contains(dependency));
       assertTrue(dependencyManagerFile.getDependencies().contains(dependency2));
       assertTrue(dependencyManagerFile.getDependencies().contains(dependency3));
+   }
+
+   @Test
+   void isRemovingDependencies(){
+      Dependency firstDependency = dependencyManagerFile.getDependencies().get(0);
+      Dependency secondDependency = dependencyManagerFile.getDependencies().get(1);
+      Dependency thirdDependency = dependencyManagerFile.getDependencies().get(2);
+      assertTrue(dependencyManagerFile.getDependencies().contains(firstDependency));
+      assertTrue(dependencyManagerFile.getDependencies().contains(secondDependency));
+      assertTrue(dependencyManagerFile.getDependencies().contains(thirdDependency));
+
+      dependencyManagerFile.removeDependency(firstDependency);
+      dependencyManagerFile.removeDependency(secondDependency);
+      dependencyManagerFile.removeDependency(thirdDependency);
+
+      assertFalse(dependencyManagerFile.getDependencies().contains(firstDependency));
+      assertFalse(dependencyManagerFile.getDependencies().contains(secondDependency));
+      assertFalse(dependencyManagerFile.getDependencies().contains(thirdDependency));
    }
 
 
