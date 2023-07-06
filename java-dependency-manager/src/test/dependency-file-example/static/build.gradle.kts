@@ -3,20 +3,29 @@ plugins {
     id("maven-publish")
     id("signing")
 }
-
-
-val group = "io.github.seujorgenochurras"
-val versionNum = "0.4.1"
 repositories {
     mavenCentral()
 }
-
 dependencies {
-    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.14.2")
+    implementation('com.google.code.gson:gson:2.10.1')
+    implementation('io.github.seujorgenochurras:selenium-custom-elements:0.1.0')
+    testImplementation("LIGMA:BALLS:0.5.9")
+    runtimeOnly("DAUMA:MAMADA:1.0.0")
+    testImplementation("da:YOU:1.2.3.69")
+    testRuntimeOnly("UMA:YOU:1.2.3.69")
+    testCompileOnly("FUCK:SUAD:1.2.3.69")
+    runtimeOnly("FUCK:YOU:1.2.3.69")
+    implementation("AQ:YOU:1.2.3.69")
+    api("FUCK:X:1.2.3.69")
+    compileOnly("Y:YOU:1.2.3.69")
+    compileOnlyApi("FUCK:Z:1.2.3.69")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.2")
+    testImplementation("junit:junit:4.13.1")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.2")
+    implementation("test.test:testImpl:69.42.0")
+    implementation("test.222test:tes222tImpl:629.422.0")
+    implementation("test111.test:tes111tImpl:69.11142.0")
 }
-
 publishing {
     publications {
         create<MavenPublication>("mavenJava") {
@@ -53,6 +62,7 @@ publishing {
     }
     repositories {
         maven {
+
             name = "OSSRH"
             url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
             credentials {
@@ -62,7 +72,6 @@ publishing {
         }
     }
 }
-
 java {
     withJavadocJar()
     withSourcesJar()
@@ -70,7 +79,6 @@ java {
 signing {
     sign(publishing.publications["mavenJava"])
 }
-
 tasks.getByName<Test>("test") {
     useJUnitPlatform()
 }

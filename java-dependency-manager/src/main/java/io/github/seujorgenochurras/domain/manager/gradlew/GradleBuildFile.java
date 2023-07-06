@@ -1,70 +1,55 @@
 package io.github.seujorgenochurras.domain.manager.gradlew;
 
-import io.github.seujorgenochurras.domain.AbstractPlugin;
-import io.github.seujorgenochurras.domain.PluginDeclaration;
+import io.github.seujorgenochurras.domain.plugin.Plugin;
 import io.github.seujorgenochurras.domain.dependency.Dependency;
-import io.github.seujorgenochurras.domain.dependency.DependencyDeclaration;
-import io.github.seujorgenochurras.file.DependencyNotFoundException;
 import io.github.seujorgenochurras.mapper.DependencyManagerFile;
-import io.github.seujorgenochurras.utils.FileUtils;
+import io.github.seujorgenochurras.mapper.gradlew.tree.GradleForest;
+import io.github.seujorgenochurras.mapper.gradlew.tree.GradleForestTransformer;
+import io.github.seujorgenochurras.mapper.gradlew.tree.node.GradleNode;
+import io.github.seujorgenochurras.mapper.gradlew.tree.node.GradleTree;
+import io.github.seujorgenochurras.utils.NotFoundException;
 
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import static io.github.seujorgenochurras.utils.StringUtils.getIndexOfStringWithRegex;
+import static io.github.seujorgenochurras.utils.StringUtils.weakEquals;
 
 public class GradleBuildFile implements DependencyManagerFile {
-
-   //TODO learn about trees and change this to a tree
-   private List<DependencyDeclaration> dependencies;
-   private List<PluginDeclaration> plugins;
-
-   //TODO learn more about transformers and build a fucking Bumblebee
-   //Just kidding, transformers are used to transform file contents
+   private GradleForest gradleForest;
+   private List<Dependency> dependencies;
+   private List<Plugin> plugins;
    private File originFile;
-   private String originFileAsString;
 
-   @Override
-   public List<Dependency> getDependencies() {
-      return dependencies.stream()
-              .map(DependencyDeclaration::toDependencyObject)
-              .collect(Collectors.toList());
-   }
+   private GradleTree dependenciesTree;
+   private GradleTree pluginsTree;
 
-   public void setDependencies(List<DependencyDeclaration> dependencies) {
+   public GradleBuildFile setDependencies(List<Dependency> dependencies) {
       this.dependencies = dependencies;
-   }
-
-   @Override
-   public List<AbstractPlugin> getPlugins() {
-      return plugins.stream()
-              .map(PluginDeclaration::toPluginObject).toList();
-   }
-
-   public void setPlugins(List<PluginDeclaration> plugins) {
-      this.plugins = plugins;
-   }
-
-   public File getOriginFile() {
-      return originFile;
+      return this;
    }
 
    public void setOriginFile(File originFile) {
       this.originFile = originFile;
-      this.originFileAsString = FileUtils.getFileAsString(originFile);
    }
 
-   public FileWriter instantiateFileWriter() {
-      return tryInstantiateFileWriterFromFile(originFile);
+   @Override
+   public List<? extends Plugin> getPlugins() {
+      return plugins;
    }
 
+   @Override
+   public List<Dependency> getDependencies() {
+      return dependencies;
+   }
+
+   public GradleBuildFile setPlugins(List<Plugin> plugins) {
+      this.plugins = plugins;
+      return this;
+   }
 
    @Override
    public void addDependency(Dependency dependency) {
-      String declaration = "\n" + dependency.getDependencyType().typeName + " (\""
+      String declaration = dependency.getDependencyType().typeName + " (\""
               + dependency.getGroupName().trim()
               + ":"
               + dependency.getArtifact().trim()
@@ -72,77 +57,50 @@ public class GradleBuildFile implements DependencyManagerFile {
               + dependency.getVersion().trim()
               + "\")";
 
-
-      int indexOfDependenciesBlock = getIndexOfDependenciesBlock();
-      addTextToOriginFile(declaration, indexOfDependenciesBlock);
-      this.dependencies.add(new DependencyDeclaration(declaration.replace("\n", "")));
+      dependenciesTree.addNode(new GradleNode(declaration));
+      GradleForestTransformer.transform(gradleForest, originFile);
+      this.dependencies.add(dependency);
    }
 
+
    @Override
-   public <T extends AbstractPlugin> void addPlugin(T plugin) {
+   public <T extends Plugin> void addPlugin(T plugin) {
       String declaration = "id '" + plugin.getId().trim() + "'\n";
 
-      int indexOfPluginBlock = getIndexOfStringWithRegex(originFileAsString, "plugins");
-      addTextToOriginFile(declaration, indexOfPluginBlock);
-      tryRewriteOriginFile();
-      this.plugins.add(new PluginDeclaration(declaration, indexOfPluginBlock));
+      pluginsTree.addNode(new GradleNode(declaration));
+
+      GradleForestTransformer.transform(gradleForest, originFile);
+      this.plugins.add(plugin);
    }
 
    @Override
    public void removeDependency(Dependency dependency) {
-      commentDependency(dependency); //TODO find a way to do this *without coding like monkey*
-      //DUDE IS THAT BANANA?
-   }
-
-
-   private DependencyDeclaration getDeclarationOfDependency(Dependency dependency) {
-      return this.dependencies.stream()
-              .filter(dependencyDeclaration ->
-                  dependencyDeclaration.toDependencyObject().equals(dependency))
+      List<GradleNode> dependenciesNode = dependenciesTree.getNodes();
+      String dependencyDeclaration = dependency.getDeclaration();
+      dependenciesNode.remove(dependenciesNode.stream()
+              .filter(node -> weakEquals(node.getTextContents(), dependencyDeclaration))
               .findFirst()
-              .orElseThrow(() ->
-                      new DependencyNotFoundException("Dependency " + dependency.getArtifact() + " not found"));
+              .orElseThrow(() -> new NotFoundException("Dependency :'" + dependency.getDeclaration() + "' not found")));
+      dependencies.remove(dependency);
+
+      GradleForestTransformer.transform(gradleForest, originFile);
    }
+
 
    @Override
-   public <T extends AbstractPlugin> void removePlugin(T plugin) {
+   public <T extends Plugin> void removePlugin(T plugin) {
       //Fuck you
    }
 
    @Override
    public void commentDependency(Dependency dependency) {
-      DependencyDeclaration dependencyDeclaration = getDeclarationOfDependency(dependency);
-      commentLine(0);
-   }
+      List<GradleNode> dependenciesNode = dependenciesTree.getNodes();
+      String dependencyDeclaration = dependency.getDeclaration();
+      dependenciesNode.remove(dependenciesNode.stream()
+              .filter(node -> weakEquals(node.getTextContents(), dependencyDeclaration))
+              .findFirst()
+              .orElseThrow(() -> new NotFoundException("Dependency not found")));
 
-   private void commentLine(int lineIndex){
-      addTextToOriginFile("//", lineIndex + 1);
-      tryRewriteOriginFile();
-   }
-
-   private int getIndexOfDependenciesBlock() {
-      return getIndexOfStringWithRegex(originFileAsString, "dependencies.*\\{");
-   }
-
-   private void addTextToOriginFile(String text, int indexOfWhereToWrite) {
-      String secondOriginFileHalf = text + originFileAsString.substring(indexOfWhereToWrite);
-      originFileAsString = originFileAsString.substring(0, indexOfWhereToWrite) + secondOriginFileHalf;
-   }
-
-   private void tryRewriteOriginFile() {
-      try (FileWriter originFileWriter = instantiateFileWriter()) {
-         originFileWriter.write(originFileAsString);
-      } catch (IOException e) {
-         throw new IllegalStateException(e);
-      }
-   }
-
-   private FileWriter tryInstantiateFileWriterFromFile(File file) {
-      try {
-         return new FileWriter(file);
-      } catch (IOException e) {
-         throw new IllegalStateException(e);
-      }
    }
 
    @Override
@@ -151,5 +109,12 @@ public class GradleBuildFile implements DependencyManagerFile {
               "plugins=" + plugins +
               ", dependencies=" + dependencies +
               '}';
+   }
+
+   public GradleBuildFile setGradleForest(GradleForest gradleForest) {
+      this.gradleForest = gradleForest;
+      this.pluginsTree = gradleForest.getTreeByName("plugins");
+      this.dependenciesTree = gradleForest.getTreeByName("dependencies");
+      return this;
    }
 }

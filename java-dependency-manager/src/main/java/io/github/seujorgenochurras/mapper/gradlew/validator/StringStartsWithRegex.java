@@ -11,6 +11,6 @@ public class StringStartsWithRegex implements GradleValidator<String>{
 
    @Override
    public boolean validate(String s) {
-      return StringUtils.stringStartsWithRegex(regex, s);
+      return StringUtils.stringStartsWithRegex(regex, s.trim());
    }
 }

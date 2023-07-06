@@ -1,6 +1,6 @@
 package io.github.seujorgenochurras.mapper.maven;
 
-import io.github.seujorgenochurras.domain.AbstractPlugin;
+import io.github.seujorgenochurras.domain.plugin.Plugin;
 import io.github.seujorgenochurras.domain.dependency.Dependency;
 import io.github.seujorgenochurras.domain.dependency.DependencyBuilder;
 import io.github.seujorgenochurras.domain.manager.maven.MavenBuildFileBuilder;
@@ -27,7 +27,7 @@ public class MavenPomMapper extends DependencyMapper {
    private static final Logger logger = Logger.getLogger(MavenPomMapper.class.getName());
    private Document pomFileDocument;
    private List<Dependency> dependencies = new ArrayList<>();
-   private final List<AbstractPlugin> plugins = new ArrayList<>();
+   private final List<Plugin> plugins = new ArrayList<>();
 
    public MavenPomMapper(File rootFile) {
       super(rootFile);

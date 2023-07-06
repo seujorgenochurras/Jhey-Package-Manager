@@ -1,26 +1,20 @@
 plugins {
     id 'signing'
+    id 'awdawdijawoid'
 }
-
-group 'io.github.seujorgenochurras'
-version '1.2.1'
-
-
 repositories {
     mavenCentral()
 }
-
 dependencies {
-    implementation("org.seleniumhq.selenium:selenium-java:4.8.1")
     implementation('com.google.code.gson:gson:2.10.1')
     implementation('io.github.seujorgenochurras:selenium-custom-elements:0.1.0')
     testImplementation("LIGMA:BALLS:0.5.9")
     runtimeOnly("DAUMA:MAMADA:1.0.0")
-    testImplementation ("da:YOU:1.2.3.69")
-    testRuntimeOnly ("UMA:YOU:1.2.3.69")
+    testImplementation("da:YOU:1.2.3.69")
+    testRuntimeOnly("UMA:YOU:1.2.3.69")
     testCompileOnly("FUCK:SUAD:1.2.3.69")
     runtimeOnly("FUCK:YOU:1.2.3.69")
-    implementation ("AQ:YOU:1.2.3.69")
+    implementation("AQ:YOU:1.2.3.69")
     api("FUCK:X:1.2.3.69")
     compileOnly("Y:YOU:1.2.3.69")
     compileOnlyApi("FUCK:Z:1.2.3.69")

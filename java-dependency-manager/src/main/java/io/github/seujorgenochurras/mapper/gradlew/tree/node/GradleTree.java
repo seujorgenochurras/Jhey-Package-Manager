@@ -1,14 +1,16 @@
 package io.github.seujorgenochurras.mapper.gradlew.tree.node;
 
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 public class GradleTree {
-    private final Set<GradleNode> nodes = new LinkedHashSet<>();
+    private final List<GradleNode> nodes = new ArrayList<>();
     private final Set<GradleTree> childGradleTrees = new LinkedHashSet<>();
     private String treeName;
 
-    public Set<GradleNode> getNodes() {
+    public List<GradleNode> getNodes() {
         return nodes;
     }
 
@@ -25,7 +27,10 @@ public class GradleTree {
     }
 
     public String getTreeName() {
-        return treeName;
+        return treeName.replace("{", "").replace("}","");
+    }
+    public String getTreeRawName(){
+        return treeName.concat("{");
     }
 
     public void setTreeName(String treeName) {
@@ -40,7 +45,15 @@ public class GradleTree {
                 ", groupName='" + treeName + '\'' +
                 '}';
     }
+    public String getRawString(){
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(getTreeRawName()).append("\n");
 
+        nodes.forEach(node -> stringBuilder.append(node.getTextContents()).append("\n"));
+        childGradleTrees.forEach(childTree -> stringBuilder.append(childTree.getRawString()));
+
+        return stringBuilder.toString().concat("}\n");
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

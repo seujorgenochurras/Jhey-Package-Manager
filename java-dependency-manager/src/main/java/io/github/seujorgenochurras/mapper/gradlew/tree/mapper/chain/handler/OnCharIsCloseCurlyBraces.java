@@ -10,9 +10,6 @@ public class OnCharIsCloseCurlyBraces implements GradleTreeMapperChainHandler {
         if (!currentChain.getTreeMapperPackage().getLine().contains("}")) return;
         TreeMapperPackage treeMapperPackage = currentChain.getTreeMapperPackage();
 
-        if (treeMapperPackage.isInsideTree()) {
-            treeMapperPackage.appendCurrentTreeToFatherTree();
-        }
         treeMapperPackage.decrementOpenCurlyBracesCount();
 
         treeMapperPackage.removeLastNodeGroupFromPreviousNodeGroups();

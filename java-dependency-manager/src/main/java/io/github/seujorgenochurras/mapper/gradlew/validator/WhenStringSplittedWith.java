@@ -10,7 +10,7 @@ public class WhenStringSplittedWith implements GradleValidator<String> {
       this.splitString = splitString;
    }
 
-   public WhenStringSplittedWith sizeGreaterThen(int size) {
+   public WhenStringSplittedWith arraySizeGreaterThen(int size) {
       this.innerValidator = stringArr -> stringArr.length > size;
       return this;
    }

@@ -23,8 +23,10 @@ public class GradleValidatorChain<T> {
 
    public boolean validate(T t) {
       boolean isValid = false;
-      for (GradleValidator<T> gradleValidator : gradleValidators)
+      for (GradleValidator<T> gradleValidator : gradleValidators){
          isValid = gradleValidator.validate(t);
+         if(!isValid) break;
+      }
       return isValid;
    }
 

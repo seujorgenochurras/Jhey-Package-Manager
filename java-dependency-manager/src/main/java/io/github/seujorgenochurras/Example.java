@@ -10,14 +10,25 @@ import java.io.File;
 
 public class Example {
    public static void main(String[] args) {
-      DependencyManagerFile dependencyManagerFile = DependencyMapper.mapFile(new File("java-dependency-manager/dependency-file-example/build.gradle"));
-
-      Dependency dependency = DependencyBuilder.startBuild()
-              .group("awiodjaw")
-              .artifact("ajwodijawoda")
-              .version("1.1.1.1")
-              .dependencyType(DependencyType.IMPLEMENTATION)
-              .buildResult();
-      System.out.println(dependencyManagerFile.getDependencies());
+//      DependencyManagerFile dependencyManagerFile = DependencyMapper.mapFile(new File("java-dependency-manager/dependency-file-example/build.gradle"));
+//
+//      Dependency dependency = DependencyBuilder.startBuild()
+//              .group("awiodjaw")
+//              .artifact("ajwodijawoda")
+//              .version("1.1.1.1")
+//              .dependencyType(DependencyType.IMPLEMENTATION)
+//              .buildResult();
+//      dependencyManagerFile.removeDependency(dependency);
+      System.out.println(("implementation\n" +
+              "implementation\n" +
+              "testImplementation\n" +
+              "runtimeOnly\n" +
+              "testImplementation\n" +
+              "testRuntimeOnly\n" +
+              "testCompileOnly\n" +
+              "runtimeOnly\n" +
+              "implementation\n" +
+              "api\n" +
+              "compileOnly").toUpperCase());
    }
 }

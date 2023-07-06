@@ -1,0 +1,27 @@
+plugins {
+    id 'signing'
+    id 'awdawdijawoid'
+}
+repositories {
+    mavenCentral()
+}
+dependencies {
+    runtimeOnly("DAUMA:MAMADA:1.0.0")
+    testImplementation("da:YOU:1.2.3.69")
+    testRuntimeOnly("UMA:YOU:1.2.3.69")
+    implementation("test.test:testImpl:69.42.0")
+    implementation("test.222test:tes222tImpl:629.422.0")
+    implementation("test111.test:tes111tImpl:69.11142.0")
+    implementation("test.test:testImpl:69.42.0")
+    implementation("test.222test:tes222tImpl:629.422.0")
+    implementation("test111.test:tes111tImpl:69.11142.0")
+    implementation("test.test:testImpl:69.42.0")
+    implementation("test.222test:tes222tImpl:629.422.0")
+    implementation("test111.test:tes111tImpl:69.11142.0")
+    implementation("com.google.code.gson:gson:2.10.1")
+    implementation("io.github.seujorgenochurras:selenium-custom-elements:0.1.0")
+    testImplementation("LIGMA:BALLS:0.5.9")
+    implementation("test.test:testImpl:69.42.0")
+    implementation("test.222test:tes222tImpl:629.422.0")
+    implementation("test111.test:tes111tImpl:69.11142.0")
+}
