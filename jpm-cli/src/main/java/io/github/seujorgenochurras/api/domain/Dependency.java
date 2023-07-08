@@ -1,18 +1,30 @@
 package io.github.seujorgenochurras.api.domain;
 
+import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
+import io.github.seujorgenochurras.api.gson. SonatypeLatestVersionAdapter;
 
 public class Dependency implements IDependency {
-   @SerializedName("g")
+   @SerializedName(value = "g", alternate = "namespace")
    private String groupName;
-   @SerializedName("a")
+   @SerializedName(value = "a", alternate = "name")
    private String artifact;
-   @SerializedName("latestVersion")
-   private String latestVersion;
+   @SerializedName(value = "latestVersion", alternate = {"latestVersionInfo", "v"})
+   @JsonAdapter(SonatypeLatestVersionAdapter.class)
+   private String version;
+
+   public Dependency(String groupName, String artifact, String version) {
+      this.groupName = groupName;
+      this.artifact = artifact;
+      this.version = version;
+   }
+
+   public Dependency() {
+   }
 
    @Override
    public String getVersion() {
-      return latestVersion;
+      return version;
    }
 
    @Override
@@ -30,7 +42,7 @@ public class Dependency implements IDependency {
       return "Dependency{" +
               "groupName='" + groupName + '\'' +
               ", artifact='" + artifact + '\'' +
-              ", latestVersion='" + latestVersion + '\'' +
+              ", version='" + version + '\'' +
               '}';
    }
 }

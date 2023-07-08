@@ -1,9 +1,7 @@
 package io.github.seujorgenochurras.utils;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.*;
 import java.util.NoSuchElementException;
-import java.util.Scanner;
 
 public class FileUtils {
    private FileUtils(){}
@@ -11,15 +9,16 @@ public class FileUtils {
    public static String getFileAsString(File file){
       StringBuilder fileAsString = new StringBuilder();
 
-      try(Scanner scanner = new Scanner(file)){
-
-         while (scanner.hasNextLine()){
-            fileAsString.append(scanner.nextLine()).append("\n");
+      try(BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(file)))){
+         String currentLine;
+         while ((currentLine = bufferedReader.readLine()) != null){
+            fileAsString.append(currentLine).append("\n");
          }
 
-      } catch (FileNotFoundException e) {
+      } catch (IOException e) {
          throw new NoSuchElementException(e);
       }
       return fileAsString.toString();
    }
+
 }
