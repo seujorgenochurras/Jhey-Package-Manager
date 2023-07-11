@@ -1,6 +1,7 @@
 package io.github.seujorgenochurras.api.command.jpm.prompt;
 
 import de.codeshelf.consoleui.elements.ConfirmChoice;
+import io.github.seujorgenochurras.api.domain.Dependency;
 import io.github.seujorgenochurras.api.domain.IDependency;
 import io.github.seujorgenochurras.api.service.DependencyService;
 import io.github.seujorgenochurras.api.service.MavenService;
@@ -10,6 +11,7 @@ import io.github.seujorgenochurras.command.toolbox.builders.ConsoleListBuilder;
 import static io.github.seujorgenochurras.api.service.MavenService.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class SingleDependencyPrompter {
    private IDependency resultedDependency;
@@ -28,7 +30,7 @@ public class SingleDependencyPrompter {
 
    public SingleDependencyPrompter promptVersion() {
       if(!isCurrentVersionRight()) {
-         ArrayList<SimpleDependency> dependencyVersionsToPrompt = mavenService.searchVersionsOf(resultedDependency);
+         List<Dependency> dependencyVersionsToPrompt = mavenService.searchVersionsOf(resultedDependency);
 
          DependencyService dependencyService = new DependencyService(dependencyVersionsToPrompt);
 
@@ -51,7 +53,7 @@ public class SingleDependencyPrompter {
                  .defaultValue(ConfirmChoice.ConfirmationValue.YES));
    }
 
-   private ConsoleListBuilder getListBuilderOfDependencies(ArrayList<? extends IDependency> dependencies){
+   private ConsoleListBuilder getListBuilderOfDependencies(List<? extends IDependency> dependencies){
       ConsoleListBuilder listBuilder = console
               .addNewListPrompt()
               .message("Chose version")

@@ -8,6 +8,7 @@ import io.github.seujorgenochurras.utils.StringUtils;
 
 import java.io.File;
 
+
 public class DependencyManager {
 
    private DependencyManager() {
@@ -26,6 +27,9 @@ public class DependencyManager {
       }
 
       return DependencyMapper.mapFile(getDependencyManagerAsFile(filePath));
+   }
+   public static DependencyManagerFile getDependencyManagerFile(File file){
+      return DependencyMapper.mapFile(file);
    }
 
 

@@ -1,7 +1,7 @@
 package io.github.seujorgenochurras.domain.manager.gradlew;
 
-import io.github.seujorgenochurras.domain.plugin.Plugin;
 import io.github.seujorgenochurras.domain.dependency.Dependency;
+import io.github.seujorgenochurras.domain.plugin.Plugin;
 import io.github.seujorgenochurras.mapper.DependencyManagerFile;
 import io.github.seujorgenochurras.mapper.gradlew.tree.GradleForest;
 import io.github.seujorgenochurras.mapper.gradlew.tree.GradleForestTransformer;
@@ -19,14 +19,8 @@ public class GradleBuildFile implements DependencyManagerFile {
    private List<Dependency> dependencies;
    private List<Plugin> plugins;
    private File originFile;
-
    private GradleTree dependenciesTree;
    private GradleTree pluginsTree;
-
-   public GradleBuildFile setDependencies(List<Dependency> dependencies) {
-      this.dependencies = dependencies;
-      return this;
-   }
 
    public void setOriginFile(File originFile) {
       this.originFile = originFile;
@@ -37,13 +31,18 @@ public class GradleBuildFile implements DependencyManagerFile {
       return plugins;
    }
 
+   public GradleBuildFile setPlugins(List<Plugin> plugins) {
+      this.plugins = plugins;
+      return this;
+   }
+
    @Override
    public List<Dependency> getDependencies() {
       return dependencies;
    }
 
-   public GradleBuildFile setPlugins(List<Plugin> plugins) {
-      this.plugins = plugins;
+   public GradleBuildFile setDependencies(List<Dependency> dependencies) {
+      this.dependencies = dependencies;
       return this;
    }
 
@@ -77,12 +76,13 @@ public class GradleBuildFile implements DependencyManagerFile {
    public void removeDependency(Dependency dependency) {
       List<GradleNode> dependenciesNode = dependenciesTree.getNodes();
       String dependencyDeclaration = dependency.getDeclaration();
+
       dependenciesNode.remove(dependenciesNode.stream()
               .filter(node -> weakEquals(node.getTextContents(), dependencyDeclaration))
               .findFirst()
               .orElseThrow(() -> new NotFoundException("Dependency :'" + dependency.getDeclaration() + "' not found")));
-      dependencies.remove(dependency);
 
+      this.dependencies.remove(dependency);
       GradleForestTransformer.transform(gradleForest, originFile);
    }
 

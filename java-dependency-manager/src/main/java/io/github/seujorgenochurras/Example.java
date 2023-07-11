@@ -1,23 +1,30 @@
 package io.github.seujorgenochurras;
 
-import io.github.seujorgenochurras.domain.dependency.Dependency;
-import io.github.seujorgenochurras.domain.dependency.DependencyBuilder;
-import io.github.seujorgenochurras.domain.dependency.DependencyType;
+import io.github.seujorgenochurras.manager.DependencyManager;
 import io.github.seujorgenochurras.mapper.DependencyManagerFile;
-import io.github.seujorgenochurras.mapper.DependencyMapper;
 
 import java.io.File;
 
 public class Example {
-   public static void main(String[] args) {
-      DependencyManagerFile dependencyManagerFile = DependencyMapper.mapFile(new File("java-dependency-manager/dependency-file-example/build.gradle"));
+    public static void main(String[] args)  {
+       System.out.println("meu pau que tre cutuca");
+      long start = System.currentTimeMillis();
+      mapFiles(1000000);
+      long end = System.currentTimeMillis();
+      System.out.println("took " + (end - start) + " ms");
+   }
+   static File[] filesToMap = {
+           new File("java-dependency-manager/src/test/dependency-file-example/build.gradle.kts"),
+           new File("java-dependency-manager/src/test/dependency-file-example/build.gradle"),
+           new File("java-dependency-manager/src/test/dependency-file-example/pom.xml")
+   };
 
-      Dependency dependency = DependencyBuilder.startBuild()
-              .group("awiodjaw")
-              .artifact("ajwodijawoda")
-              .version("1.1.1.1")
-              .dependencyType(DependencyType.IMPLEMENTATION)
-              .buildResult();
-      dependencyManagerFile.removeDependency(dependency);
+   public static void mapFiles(int mapQuantity){
+      for(int i = 0; i < mapQuantity; i++){
+         for(int j = 0; j< 3; j++){
+            DependencyManagerFile dependencyManagerFile = DependencyManager.getDependencyManagerFile(filesToMap[j]);
+            dependencyManagerFile.getDependencies();
+         }
+      }
    }
 }

@@ -9,6 +9,7 @@ import java.net.http.HttpResponse;
 import java.util.logging.Logger;
 
 public class RequestUtils {
+   private static final HttpClient client = HttpClient.newHttpClient();
 
    private RequestUtils() {
    }
@@ -16,14 +17,26 @@ public class RequestUtils {
    private static final Logger logger = Logger.getLogger(RequestUtils.class.getName());
 
    public static HttpResponse<String> makeGetRequestTo(String uri) {
-      HttpClient client = HttpClient.newHttpClient();
       HttpRequest request = HttpRequest
               .newBuilder()
               .GET()
               .uri(tryGetUriFromString(uri))
               .build();
+      return sendRequest(request);
+   }
+   public static HttpResponse<String> makePostRequestTo(String uri, HttpRequest.BodyPublisher bodyPublisher){
+      HttpRequest request = HttpRequest
+              .newBuilder()
+              .setHeader("Content-Type", "application/json")
+              .POST(bodyPublisher)
+              .uri(tryGetUriFromString(uri))
+              .build();
+      return sendRequest(request);
+   }
+
+   public static HttpResponse<String> sendRequest(HttpRequest httpRequest){
       try {
-         return client.send(request, HttpResponse.BodyHandlers.ofString());
+         return client.send(httpRequest, HttpResponse.BodyHandlers.ofString());
 
       } catch (IOException | InterruptedException e) {
          logger.severe("Something went wrong " + e.getMessage());

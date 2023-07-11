@@ -5,14 +5,16 @@ import io.github.seujorgenochurras.mapper.gradlew.tree.mapper.chain.MapperRespon
 import io.github.seujorgenochurras.mapper.gradlew.tree.mapper.chain.TreeMapperPackage;
 
 public class OnCharIsCloseCurlyBraces implements GradleTreeMapperChainHandler {
-    @Override
-    public void handle(MapperResponsibilityChain currentChain) {
-        if (!currentChain.getTreeMapperPackage().getLine().contains("}")) return;
-        TreeMapperPackage treeMapperPackage = currentChain.getTreeMapperPackage();
+   @Override
+   public void handle(MapperResponsibilityChain currentChain) {
+      if (currentChain.getTreeMapperPackage().getLine().contains("}")) {
 
-        treeMapperPackage.decrementOpenCurlyBracesCount();
+         TreeMapperPackage treeMapperPackage = currentChain.getTreeMapperPackage();
 
-        treeMapperPackage.removeLastNodeGroupFromPreviousNodeGroups();
-        currentChain.setHasBeenHandled(true);
-    }
+         treeMapperPackage.decrementOpenCurlyBracesCount();
+
+         treeMapperPackage.removeLastNodeGroupFromPreviousNodeGroups();
+         currentChain.setHasBeenHandled(true);
+      }
+   }
 }

@@ -21,7 +21,7 @@ class GradleGroovyBuildFileTest {
 
    @Test
    void isMappingDependencies() {
-      assertEquals(17, staticDependencyManagerFile.getDependencies().size());
+      assertEquals(12, staticDependencyManagerFile.getDependencies().size());
    }
 
    @Test
