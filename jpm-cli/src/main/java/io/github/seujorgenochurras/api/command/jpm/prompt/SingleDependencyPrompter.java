@@ -8,9 +8,6 @@ import io.github.seujorgenochurras.api.service.MavenService;
 import io.github.seujorgenochurras.command.toolbox.CommandConsole;
 import io.github.seujorgenochurras.command.toolbox.builders.ConsoleListBuilder;
 
-import static io.github.seujorgenochurras.api.service.MavenService.*;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class SingleDependencyPrompter {

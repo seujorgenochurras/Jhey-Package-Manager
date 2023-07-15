@@ -6,10 +6,9 @@ import io.github.seujorgenochurras.api.domain.Dependency;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
-public class MavenDependencyAdapter implements JsonDeserializer<Dependency[]> {
+public class MavenDependencyAdapter implements JsonDeserializer<ArrayList<Dependency>> {
    @Override
-   public Dependency[] deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-      Dependency[] dependencies = new Dependency[5];
+   public ArrayList<Dependency> deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
       ArrayList<Dependency> dependenciesFound = new ArrayList<>();
       JsonArray serializedDependencies;
       if (json.isJsonObject()) {
@@ -20,6 +19,6 @@ public class MavenDependencyAdapter implements JsonDeserializer<Dependency[]> {
       serializedDependencies.forEach(jsonElement ->
               dependenciesFound.add(context.deserialize(jsonElement.getAsJsonObject(), Dependency.class)));
 
-      return dependenciesFound.toArray(dependencies);
+      return dependenciesFound;
    }
 }

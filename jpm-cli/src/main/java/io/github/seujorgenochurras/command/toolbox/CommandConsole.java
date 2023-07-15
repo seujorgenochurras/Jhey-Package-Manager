@@ -13,9 +13,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 public class CommandConsole extends ConsolePrompt {
-
    private static final Logger logger = Logger.getLogger(CommandConsole.class.getName());
-
 
    public ConsolePromptAnswer prompt(CommandConsoleBuilder builder) {
       return new ConsolePromptAnswer(prompt(builder.build()));

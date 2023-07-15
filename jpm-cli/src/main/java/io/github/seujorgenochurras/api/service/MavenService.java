@@ -3,15 +3,18 @@ package io.github.seujorgenochurras.api.service;
 import com.google.gson.Gson;
 import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
-import io.github.seujorgenochurras.api.gson.MavenDependencyAdapter;
-import io.github.seujorgenochurras.api.util.RequestUtils;
 import io.github.seujorgenochurras.api.domain.Dependency;
 import io.github.seujorgenochurras.api.domain.IDependency;
+import io.github.seujorgenochurras.api.gson.MavenDependencyAdapter;
+import io.github.seujorgenochurras.api.util.RequestUtils;
 
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class MavenService {
 
@@ -20,9 +23,17 @@ public class MavenService {
    //Sonatype results are ordered by relevance which is way more relevant to our project
    private static final String SONATYPE_API_INTERNAL = "https://central.sonatype.com/api/internal/browse/components";
    private static final String MAVEN_DOMAIN = "https://search.maven.org/solrsearch/";
+   private AsyncMavenService asyncMavenService;
 
    public ArrayList<Dependency> searchForDependency(String dependencyName) {
       return searchForDependency(dependencyName, 10);
+   }
+
+   public AsyncMavenService async() {
+      if (asyncMavenService == null || asyncMavenService.executorService.isShutdown()) {
+         this.asyncMavenService = new AsyncMavenService();
+      }
+      return asyncMavenService;
    }
 
    public ArrayList<Dependency> searchForDependency(String dependencyName, int maximumNumberOfResults) {
@@ -34,11 +45,11 @@ public class MavenService {
 
       Gson gson = new Gson();
       HttpResponse<String> response = RequestUtils.makePostRequestTo(SONATYPE_API_INTERNAL, bodyPublisher);
-       assert response != null : "Couldn't send request to sonatype api internal";
+      assert response != null : "Couldn't send request to sonatype api internal";
 
       SearchResponse mavenResponse = gson.fromJson(response.body(), SearchResponse.class);
 
-      return new ArrayList<>(List.of(mavenResponse.dependencies));
+      return mavenResponse.dependencies;
    }
 
    public List<Dependency> searchVersionsOf(IDependency dependency) {
@@ -52,12 +63,33 @@ public class MavenService {
 
       Gson gson = new Gson();
       SearchResponse searchResponse = gson.fromJson(response.body(), SearchResponse.class);
-      return List.of(searchResponse.dependencies);
+      return searchResponse.dependencies;
    }
-   private static final class SearchResponse{
+
+   private static final class SearchResponse {
       @SerializedName(value = "components", alternate = "response")
       @JsonAdapter(MavenDependencyAdapter.class)
-      private Dependency[] dependencies;
+      ArrayList<Dependency> dependencies;
 
+   }
+
+   public final class AsyncMavenService {
+      private final ExecutorService executorService = Executors.newFixedThreadPool(2);
+
+      public CompletableFuture<ArrayList<Dependency>> searchForDependencyAsync(String dependencyName) {
+         CompletableFuture<ArrayList<Dependency>> future = new CompletableFuture<>();
+         executorService.submit(() -> {
+            future.completeAsync(() -> searchForDependency(dependencyName));
+         });
+         return future;
+      }
+
+      public CompletableFuture<List<Dependency>> searchVersionsOfAsync(IDependency dependency) {
+         CompletableFuture<List<Dependency>> future = new CompletableFuture<>();
+         executorService.submit(() -> {
+            future.completeAsync(() -> searchVersionsOf(dependency));
+         });
+         return future;
+      }
    }
 }
