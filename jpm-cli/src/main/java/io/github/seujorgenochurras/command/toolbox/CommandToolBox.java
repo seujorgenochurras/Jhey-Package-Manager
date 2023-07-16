@@ -10,36 +10,37 @@ import java.util.concurrent.Executors;
 
 public class CommandToolBox {
 
-   private static final ExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
-   private final CommandArgs commandArgs;
-   private final String currentDirPath = System.getProperty("user.dir");
-   private DependencyManagerFile dependencyManager;
-   public CommandToolBox(CommandArgs commandArgs) {
-      this.commandArgs = commandArgs;
-      generateDependencyManagerAsync().whenComplete((result, throwable) ->
-              this.dependencyManager = result);
-      executorService.shutdown();
-   }
+    private static final ExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+    private final CommandArgs commandArgs;
+    private final String currentDirPath = System.getProperty("user.dir");
+    private DependencyManagerFile dependencyManager;
 
-   private CompletableFuture<DependencyManagerFile> generateDependencyManagerAsync() {
-      CompletableFuture<DependencyManagerFile> future = new CompletableFuture<>();
-      executorService.submit(() ->
-              future.complete(DependencyManager.getDependencyManagerFile(currentDirPath))
-      );
-      executorService.shutdown();
-      return future;
-   }
+    public CommandToolBox(CommandArgs commandArgs) {
+        this.commandArgs = commandArgs;
+        generateDependencyManagerAsync().whenComplete((result, throwable) ->
+                this.dependencyManager = result);
+        executorService.shutdown();
+    }
 
-   public CommandArgs getCommandArgs() {
-      return commandArgs;
-   }
+    private CompletableFuture<DependencyManagerFile> generateDependencyManagerAsync() {
+        CompletableFuture<DependencyManagerFile> future = new CompletableFuture<>();
+        executorService.submit(() ->
+                future.complete(DependencyManager.getDependencyManagerFile(currentDirPath))
+        );
+        executorService.shutdown();
+        return future;
+    }
 
-   public String getCurrentDirPath() {
-      return currentDirPath;
-   }
+    public CommandArgs getCommandArgs() {
+        return commandArgs;
+    }
 
-   public DependencyManagerFile getDependencyManager() {
-      return dependencyManager;
-   }
+    public String getCurrentDirPath() {
+        return currentDirPath;
+    }
+
+    public DependencyManagerFile getDependencyManager() {
+        return dependencyManager;
+    }
 
 }

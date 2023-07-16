@@ -38,3 +38,5 @@ gradle
 jars
 META-INF
 out
+bin
+object

@@ -7,7 +7,8 @@ import io.github.seujorgenochurras.api.service.MavenService;
 import io.github.seujorgenochurras.command.ICommand;
 import io.github.seujorgenochurras.command.arg.CommandArgumentBuilder;
 import io.github.seujorgenochurras.command.arg.flag.pattern.FlagPatternCollection;
-import io.github.seujorgenochurras.command.reflections.common.ValidFlagArgumentTypes;
+import io.github.seujorgenochurras.command.arg.flag.ValidFlagArgumentTypes;
+import io.github.seujorgenochurras.command.cli.utils.ansi.LoadingAnimation;
 import io.github.seujorgenochurras.command.toolbox.CommandToolBox;
 import io.github.seujorgenochurras.domain.dependency.DependencyBuilder;
 import io.github.seujorgenochurras.mapper.DependencyManagerFile;
@@ -22,15 +23,16 @@ public class JpmCommand implements ICommand {
     public void invoke(CommandToolBox toolBox) {
         String libName = toolBox.getCommandArgs().getFlagByName("i").getValueAsString();
 
-        ArrayList<Dependency> dependenciesFound = mavenService.searchForDependency(libName);
-        CompletableFuture<ArrayList<Dependency>> dependenciesFakeCompletable = new CompletableFuture<>();
-        dependenciesFakeCompletable.complete(dependenciesFound);
+        CompletableFuture<ArrayList<Dependency>> dependenciesFound = mavenService.async().searchForDependencyAsync(libName);
+
+        mavenService.async().stopExecutors();
 
         IDependency dependencyChosen = DependencyCollectionPrompter.startPrompt()
-                .promptDependenciesAsync(dependenciesFakeCompletable)
+                .promptDependenciesAsync(dependenciesFound)
                 .getDependencyChosen()
                 .promptVersion()
                 .getResultedDependency();
+
 
         DependencyManagerFile dependencyManagerFile = toolBox.getDependencyManager();
         dependencyManagerFile.addDependency(DependencyBuilder.startBuild()

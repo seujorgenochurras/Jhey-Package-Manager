@@ -9,7 +9,7 @@ public class Example {
    public static void main(String[] args) {
       System.out.println("meu pau que tre cutuca");
       long start = System.currentTimeMillis();
-      mapFiles(1000000);
+      mapFiles(1000);
       long end = System.currentTimeMillis();
       System.out.println("took " + (end - start) + " ms");
    }
