@@ -3,7 +3,7 @@ plugins {
 }
 
 group = "io.github.seujorgenochurras"
-version = "unspecified"
+version = "0.5.0"
 
 repositories {
     mavenCentral()
