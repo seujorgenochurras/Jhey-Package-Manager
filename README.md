@@ -40,11 +40,16 @@ jpm (Jhey Package Manager) is a CLI tool to add maven dependencies in your proje
    - Speed
    - Fixed lots of bugs
 
+## Alpha 0.5.0
+   - Added a loading animation
+   - Async web response
+   - Way better responses
+   - Lighter (totally removed reflections)
 
 # Known bugs/defects  
   - Doesn't work with zsh
   - Only works if you've defined a dependency block (gradle/maven)
-  - It'll fuck with your close curly braces...
+  - It'll fuck with your tags or close curly braces...
   - Bad code
   - Kinda slow
   - Lacking tests

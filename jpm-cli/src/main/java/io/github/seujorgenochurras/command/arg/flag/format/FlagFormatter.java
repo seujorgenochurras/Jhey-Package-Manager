@@ -1,12 +1,12 @@
 package io.github.seujorgenochurras.command.arg.flag.format;
 
-import static io.github.seujorgenochurras.command.reflections.common.ValidFlagArgumentTypes.*;
+import static io.github.seujorgenochurras.command.arg.flag.ValidFlagArgumentTypes.*;
 
 import io.github.seujorgenochurras.command.arg.CommandArgs;
 import io.github.seujorgenochurras.command.arg.flag.Flag;
 import io.github.seujorgenochurras.command.arg.flag.pattern.FlagPattern;
 import io.github.seujorgenochurras.command.arg.flag.pattern.FlagPatternCollection;
-import io.github.seujorgenochurras.command.reflections.common.ValidFlagArgumentTypes;
+import io.github.seujorgenochurras.command.arg.flag.ValidFlagArgumentTypes;
 
 public class FlagFormatter {
    private final FlagPatternCollection flagPatterns;
