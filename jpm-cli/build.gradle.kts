@@ -14,6 +14,9 @@ dependencies {
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.2")
     implementation ("de.codeshelf.consoleui:consoleui:0.0.13")
     implementation ("com.google.code.gson:gson:2.10.1")
+    implementation ("info.picocli:picocli:4.7.4")
+    annotationProcessor ("info.picocli:picocli-codegen:4.7.4")
+
     implementation ("io.github.seujorgenochurras:java-dependency-manager:0.6.0")
 }
 

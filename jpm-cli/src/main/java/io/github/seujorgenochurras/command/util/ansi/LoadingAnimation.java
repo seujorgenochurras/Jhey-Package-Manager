@@ -1,4 +1,4 @@
-package io.github.seujorgenochurras.command.cli.utils.ansi;
+package io.github.seujorgenochurras.command.util.ansi;
 
 public class LoadingAnimation {
     private LoadingAnimation() {

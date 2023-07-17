@@ -4,27 +4,31 @@ import io.github.seujorgenochurras.api.command.jpm.prompt.DependencyCollectionPr
 import io.github.seujorgenochurras.api.domain.Dependency;
 import io.github.seujorgenochurras.api.domain.IDependency;
 import io.github.seujorgenochurras.api.service.MavenService;
-import io.github.seujorgenochurras.command.ICommand;
-import io.github.seujorgenochurras.command.arg.CommandArgumentBuilder;
-import io.github.seujorgenochurras.command.arg.flag.pattern.FlagPatternCollection;
-import io.github.seujorgenochurras.command.arg.flag.ValidFlagArgumentTypes;
-import io.github.seujorgenochurras.command.cli.utils.ansi.LoadingAnimation;
 import io.github.seujorgenochurras.command.toolbox.CommandToolBox;
 import io.github.seujorgenochurras.domain.dependency.DependencyBuilder;
 import io.github.seujorgenochurras.mapper.DependencyManagerFile;
+import picocli.CommandLine;
 
 import java.util.ArrayList;
 import java.util.concurrent.CompletableFuture;
 
-public class JpmCommand implements ICommand {
+@CommandLine.Command(name = "jpm", description = "Manages your dependency manager file", version = "0.5.0", mixinStandardHelpOptions = true)
+public class JpmCommand implements Runnable {
     private final MavenService mavenService = new MavenService();
 
+    private final CommandToolBox commandToolBox;
+
+    public JpmCommand(CommandToolBox commandToolBox) {
+        this.commandToolBox = commandToolBox;
+    }
+
+    @CommandLine.Option(names = {"-i", "--install"}, description = "The dependency name that you want to install",
+            required = true)
+    private String dependencyName;
+
     @Override
-    public void invoke(CommandToolBox toolBox) {
-        String libName = toolBox.getCommandArgs().getFlagByName("i").getValueAsString();
-
-        CompletableFuture<ArrayList<Dependency>> dependenciesFound = mavenService.async().searchForDependencyAsync(libName);
-
+    public void run() {
+        CompletableFuture<ArrayList<Dependency>> dependenciesFound = mavenService.async().searchForDependencyAsync(dependencyName);
         mavenService.async().stopExecutors();
 
         IDependency dependencyChosen = DependencyCollectionPrompter.startPrompt()
@@ -33,8 +37,7 @@ public class JpmCommand implements ICommand {
                 .promptVersion()
                 .getResultedDependency();
 
-
-        DependencyManagerFile dependencyManagerFile = toolBox.getDependencyManager();
+        DependencyManagerFile dependencyManagerFile = commandToolBox.getDependencyManager();
         dependencyManagerFile.addDependency(DependencyBuilder.startBuild()
                 .group(dependencyChosen.getGroupName())
                 .artifact(dependencyChosen.getArtifactName())
@@ -43,22 +46,4 @@ public class JpmCommand implements ICommand {
 
         System.out.println("Successfully installed " + dependencyChosen.getFullName());
     }
-
-    @Override
-    public FlagPatternCollection commandArgsPattern() {
-        return CommandArgumentBuilder
-                .startBuild()
-                .newFlag()
-                .aliases("-i", "--install")
-                .argType(ValidFlagArgumentTypes.STRING)
-                .addFlag()
-
-                .build();
-    }
-
-    @Override
-    public String[] getNames() {
-        return new String[]{"jpm"};
-    }
-
 }

@@ -1,6 +1,5 @@
 package io.github.seujorgenochurras.command.toolbox;
 
-import io.github.seujorgenochurras.command.arg.CommandArgs;
 import io.github.seujorgenochurras.manager.DependencyManager;
 import io.github.seujorgenochurras.mapper.DependencyManagerFile;
 
@@ -11,12 +10,10 @@ import java.util.concurrent.Executors;
 public class CommandToolBox {
 
     private static final ExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
-    private final CommandArgs commandArgs;
     private final String currentDirPath = System.getProperty("user.dir");
     private DependencyManagerFile dependencyManager;
 
-    public CommandToolBox(CommandArgs commandArgs) {
-        this.commandArgs = commandArgs;
+    public CommandToolBox() {
         generateDependencyManagerAsync().whenComplete((result, throwable) ->
                 this.dependencyManager = result);
         executorService.shutdown();
@@ -29,14 +26,6 @@ public class CommandToolBox {
         );
         executorService.shutdown();
         return future;
-    }
-
-    public CommandArgs getCommandArgs() {
-        return commandArgs;
-    }
-
-    public String getCurrentDirPath() {
-        return currentDirPath;
     }
 
     public DependencyManagerFile getDependencyManager() {

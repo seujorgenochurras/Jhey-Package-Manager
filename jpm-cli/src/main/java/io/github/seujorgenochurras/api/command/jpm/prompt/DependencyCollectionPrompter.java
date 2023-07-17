@@ -2,7 +2,7 @@ package io.github.seujorgenochurras.api.command.jpm.prompt;
 
 import io.github.seujorgenochurras.api.domain.IDependency;
 import io.github.seujorgenochurras.api.service.DependencyService;
-import io.github.seujorgenochurras.command.cli.utils.ansi.LoadingAnimation;
+import io.github.seujorgenochurras.command.util.ansi.LoadingAnimation;
 import io.github.seujorgenochurras.command.toolbox.CommandConsole;
 import io.github.seujorgenochurras.command.toolbox.builders.ConsoleListBuilder;
 

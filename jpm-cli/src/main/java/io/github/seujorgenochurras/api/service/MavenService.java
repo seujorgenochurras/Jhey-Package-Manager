@@ -37,7 +37,7 @@ public class MavenService {
     }
 
     public ArrayList<Dependency> searchForDependency(String dependencyName, int maximumNumberOfResults) {
-        HttpRequest.BodyPublisher bodyPublisher = HttpRequest.BodyPublishers.ofString("" +
+        HttpRequest.BodyPublisher bodyPublisher = HttpRequest.BodyPublishers.ofString(
                 "{\"page\": 0," +
                 "\"size\":" + maximumNumberOfResults + "," +
                 "\"searchTerm\": \"" + dependencyName + "\"," +
