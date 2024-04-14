@@ -2,6 +2,23 @@
 jpm (Jhey Package Manager) is a CLI tool to add maven dependencies in your projects
 <br> <br>
 
+# Current Project State
+  It has been a long time since I worked on this project.
+  And like most of open source projects I have burnt out of this one. <br><br>
+  
+  Although I had the most fun while coding it, this project have many design flaws 
+  such as lack of tests, no error handling pattern, and not counting all of the bugs and broken features.<br>
+  Even though it is quite broken, I'm still using JPM on almost all of my projects, and deep inside I do recommend you try it out. <br>
+  I still want to keep developing JPM as it has accomplished some of its goals.<br><br>
+
+  There are some features that I want to add such as: 
+  - Add a .toml like file to store dependencies
+  - Add tests
+  - Add a error handling pattern
+  - Uploading JPM to linux packages handlers such as apt or pacman 
+  - Add docs
+
+<br><br>  
 # Usage
   ![](https://github.com/seujorgenochurras/Jhey-Package-Manager/blob/main/jpm-showcase.gif) 
   <br>
