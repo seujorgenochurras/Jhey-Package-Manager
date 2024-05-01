@@ -1,8 +1,6 @@
 # Jhey-Package-Manager
 jpm (Jhey Package Manager) is a CLI tool to add maven dependencies in your projects
-<br> <br>
 
-<br><br>  
 # Usage
   ![](https://github.com/seujorgenochurras/Jhey-Package-Manager/blob/main/jpm-showcase.gif) 
   <br>
